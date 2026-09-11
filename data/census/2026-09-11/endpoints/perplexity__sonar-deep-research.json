@@ -1,0 +1,64 @@
+{
+  "data": {
+    "id": "perplexity/sonar-deep-research",
+    "name": "Perplexity: Sonar Deep Research",
+    "created": 1741311246,
+    "description": "Sonar Deep Research is a research-focused model designed for multi-step retrieval, synthesis, and reasoning across complex topics. It autonomously searches, reads, and evaluates sources, refining its approach as it gathers...",
+    "architecture": {
+      "tokenizer": "Other",
+      "instruct_type": "deepseek-r1",
+      "modality": "text->text",
+      "input_modalities": [
+        "text"
+      ],
+      "output_modalities": [
+        "text"
+      ]
+    },
+    "endpoints": [
+      {
+        "name": "Perplexity | perplexity/sonar-deep-research",
+        "model_id": "perplexity/sonar-deep-research",
+        "model_name": "Perplexity: Sonar Deep Research",
+        "context_length": 128000,
+        "pricing": {
+          "prompt": "0.000002",
+          "completion": "0.000008",
+          "web_search": "0.005",
+          "internal_reasoning": "0.000003",
+          "discount": 0
+        },
+        "provider_name": "Perplexity",
+        "tag": "perplexity",
+        "quantization": "unknown",
+        "max_completion_tokens": 115200,
+        "max_prompt_tokens": null,
+        "supported_parameters": [
+          "reasoning",
+          "include_reasoning",
+          "max_tokens",
+          "temperature",
+          "top_p",
+          "top_k",
+          "frequency_penalty",
+          "presence_penalty",
+          "web_search_options"
+        ],
+        "supports_tool_choice": {
+          "none": true,
+          "auto": true,
+          "required": true,
+          "function": true
+        },
+        "status": 0,
+        "uptime_last_30m": null,
+        "uptime_last_5m": null,
+        "uptime_last_1d": 99.85652797704448,
+        "supports_implicit_caching": false,
+        "supports_voice_cloning": false,
+        "latency_last_30m": null,
+        "throughput_last_30m": null
+      }
+    ]
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "data": {
+    "id": "google/gemma-4-31b-it:batch",
+    "name": "Google: Gemma 4 31B (batch)",
+    "created": 1775148486,
+    "description": "Gemma 4 31B Instruct is Google DeepMind's 30.7B dense multimodal model supporting text and image input with text output. Features a 256K token context window, configurable thinking/reasoning mode, native function...",
+    "architecture": {
+      "tokenizer": "Gemma",
+      "instruct_type": null,
+      "modality": "text+image+video->text",
+      "input_modalities": [
+        "image",
+        "text",
+        "video"
+      ],
+      "output_modalities": [
+        "text"
+      ]
+    },
+    "endpoints": [
+      {
+        "name": "Together | google/gemma-4-31b-it-20260402:batch",
+        "model_id": "google/gemma-4-31b-it:batch",
+        "model_name": "Google: Gemma 4 31B",
+        "context_length": 262144,
+        "pricing": {
+          "prompt": "0.00000039",
+          "completion": "0.00000097",
+          "discount": 0
+        },
+        "provider_name": "Together",
+        "tag": "together",
+        "quantization": "unknown",
+        "max_completion_tokens": 235929,
+        "max_prompt_tokens": null,
+        "supported_parameters": [
+          "reasoning",
+          "include_reasoning",
+          "max_tokens",
+          "temperature",
+          "top_p",
+          "stop",
+          "frequency_penalty",
+          "presence_penalty",
+          "top_k",
+          "repetition_penalty",
+          "logit_bias",
+          "min_p",
+          "structured_outputs",
+          "response_format",
+          "tool_choice",
+          "tools"
+        ],
+        "supports_tool_choice": {
+          "none": false,
+          "auto": true,
+          "required": true,
+          "function": true
+        },
+        "status": 0,
+        "uptime_last_30m": null,
+        "uptime_last_5m": null,
+        "uptime_last_1d": null,
+        "supports_implicit_caching": false,
+        "supports_voice_cloning": false,
+        "latency_last_30m": null,
+        "throughput_last_30m": null
+      }
+    ]
+  }
+}

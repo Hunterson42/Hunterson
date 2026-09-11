@@ -1,0 +1,22 @@
+{
+  "data": {
+    "id": "~openai/gpt-sol-latest",
+    "name": "OpenAI GPT Sol Latest",
+    "created": 1789130928,
+    "description": "This model always redirects to the latest model in the OpenAI GPT Sol family.",
+    "architecture": {
+      "tokenizer": "Router",
+      "instruct_type": null,
+      "modality": "text+image+file->text",
+      "input_modalities": [
+        "file",
+        "image",
+        "text"
+      ],
+      "output_modalities": [
+        "text"
+      ]
+    },
+    "endpoints": []
+  }
+}

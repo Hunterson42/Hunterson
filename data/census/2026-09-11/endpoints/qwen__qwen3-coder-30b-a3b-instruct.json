@@ -1,0 +1,203 @@
+{
+  "data": {
+    "id": "qwen/qwen3-coder-30b-a3b-instruct",
+    "name": "Qwen: Qwen3 Coder 30B A3B Instruct",
+    "created": 1753972379,
+    "description": "Qwen3-Coder-30B-A3B-Instruct is a 30.5B parameter Mixture-of-Experts (MoE) model with 128 experts (8 active per forward pass), designed for advanced code generation, repository-scale understanding, and agentic tool use. Built on the...",
+    "architecture": {
+      "tokenizer": "Qwen3",
+      "instruct_type": null,
+      "modality": "text->text",
+      "input_modalities": [
+        "text"
+      ],
+      "output_modalities": [
+        "text"
+      ]
+    },
+    "endpoints": [
+      {
+        "name": "Novita | qwen/qwen3-coder-30b-a3b-instruct",
+        "model_id": "qwen/qwen3-coder-30b-a3b-instruct",
+        "model_name": "Qwen: Qwen3 Coder 30B A3B Instruct",
+        "context_length": 160000,
+        "pricing": {
+          "prompt": "0.00000007",
+          "completion": "0.00000027",
+          "discount": 0
+        },
+        "provider_name": "Novita",
+        "tag": "novita/fp8",
+        "quantization": "fp8",
+        "max_completion_tokens": 32768,
+        "max_prompt_tokens": null,
+        "supported_parameters": [
+          "max_tokens",
+          "temperature",
+          "top_p",
+          "stop",
+          "frequency_penalty",
+          "presence_penalty",
+          "seed",
+          "top_k",
+          "repetition_penalty",
+          "tools",
+          "tool_choice",
+          "response_format",
+          "structured_outputs"
+        ],
+        "supports_tool_choice": {
+          "none": true,
+          "auto": true,
+          "required": true,
+          "function": true
+        },
+        "status": 0,
+        "uptime_last_30m": 99.71550497866288,
+        "uptime_last_5m": 99.24812030075188,
+        "uptime_last_1d": 97.39487516425756,
+        "supports_implicit_caching": false,
+        "supports_voice_cloning": false,
+        "latency_last_30m": null,
+        "throughput_last_30m": null
+      },
+      {
+        "name": "SiliconFlow | qwen/qwen3-coder-30b-a3b-instruct",
+        "model_id": "qwen/qwen3-coder-30b-a3b-instruct",
+        "model_name": "Qwen: Qwen3 Coder 30B A3B Instruct",
+        "context_length": 262144,
+        "pricing": {
+          "prompt": "0.00000007",
+          "completion": "0.00000028",
+          "discount": 0
+        },
+        "provider_name": "SiliconFlow",
+        "tag": "siliconflow/fp8",
+        "quantization": "fp8",
+        "max_completion_tokens": 235929,
+        "max_prompt_tokens": null,
+        "supported_parameters": [
+          "structured_outputs",
+          "response_format",
+          "temperature",
+          "top_p",
+          "top_k",
+          "frequency_penalty",
+          "tools",
+          "tool_choice",
+          "max_tokens"
+        ],
+        "supports_tool_choice": {
+          "none": true,
+          "auto": true,
+          "required": true,
+          "function": true
+        },
+        "status": 0,
+        "uptime_last_30m": 96.54088050314465,
+        "uptime_last_5m": 98.9795918367347,
+        "uptime_last_1d": 98.2586731044349,
+        "supports_implicit_caching": false,
+        "supports_voice_cloning": false,
+        "latency_last_30m": null,
+        "throughput_last_30m": null
+      },
+      {
+        "name": "Amazon Bedrock | qwen/qwen3-coder-30b-a3b-instruct",
+        "model_id": "qwen/qwen3-coder-30b-a3b-instruct",
+        "model_name": "Qwen: Qwen3 Coder 30B A3B Instruct",
+        "context_length": 0,
+        "pricing": {
+          "prompt": "0.00000015",
+          "completion": "0.0000006",
+          "discount": 0
+        },
+        "provider_name": "Amazon Bedrock",
+        "tag": "amazon-bedrock",
+        "quantization": "unknown",
+        "max_completion_tokens": 0,
+        "max_prompt_tokens": null,
+        "supported_parameters": [
+          "max_tokens",
+          "temperature",
+          "top_p",
+          "top_k",
+          "stop",
+          "tool_choice",
+          "tools"
+        ],
+        "supports_tool_choice": {
+          "none": true,
+          "auto": true,
+          "required": true,
+          "function": true
+        },
+        "status": 0,
+        "uptime_last_30m": null,
+        "uptime_last_5m": null,
+        "uptime_last_1d": null,
+        "supports_implicit_caching": false,
+        "supports_voice_cloning": false,
+        "latency_last_30m": null,
+        "throughput_last_30m": null
+      },
+      {
+        "name": "Alibaba | qwen/qwen3-coder-30b-a3b-instruct",
+        "model_id": "qwen/qwen3-coder-30b-a3b-instruct",
+        "model_name": "Qwen: Qwen3 Coder 30B A3B Instruct",
+        "context_length": 262144,
+        "pricing": {
+          "prompt": "0.0000002925",
+          "completion": "0.0000014625",
+          "discount": 0,
+          "overrides": [
+            {
+              "min_prompt_tokens": 32000,
+              "prompt": "0.0000004875",
+              "completion": "0.0000024375"
+            },
+            {
+              "min_prompt_tokens": 128000,
+              "prompt": "0.00000078",
+              "completion": "0.0000039"
+            }
+          ]
+        },
+        "provider_name": "Alibaba",
+        "tag": "alibaba",
+        "quantization": "unknown",
+        "max_completion_tokens": 65536,
+        "max_prompt_tokens": 204800,
+        "supported_parameters": [
+          "max_tokens",
+          "temperature",
+          "top_p",
+          "seed",
+          "presence_penalty",
+          "response_format",
+          "tools",
+          "tool_choice",
+          "logprobs",
+          "top_logprobs",
+          "top_k",
+          "frequency_penalty",
+          "stop"
+        ],
+        "supports_tool_choice": {
+          "none": true,
+          "auto": true,
+          "required": true,
+          "function": true
+        },
+        "status": 0,
+        "uptime_last_30m": null,
+        "uptime_last_5m": null,
+        "uptime_last_1d": 99.97589199614272,
+        "supports_implicit_caching": false,
+        "supports_voice_cloning": false,
+        "latency_last_30m": null,
+        "throughput_last_30m": null
+      }
+    ]
+  }
+}

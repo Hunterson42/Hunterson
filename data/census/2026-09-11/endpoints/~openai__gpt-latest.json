@@ -1,0 +1,22 @@
+{
+  "data": {
+    "id": "~openai/gpt-latest",
+    "name": "OpenAI GPT Latest",
+    "created": 1777318334,
+    "description": "This model always redirects to the latest model in the OpenAI GPT family.",
+    "architecture": {
+      "tokenizer": "Router",
+      "instruct_type": null,
+      "modality": "text+image+file->text",
+      "input_modalities": [
+        "file",
+        "image",
+        "text"
+      ],
+      "output_modalities": [
+        "text"
+      ]
+    },
+    "endpoints": []
+  }
+}
