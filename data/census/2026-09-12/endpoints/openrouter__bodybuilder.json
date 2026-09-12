@@ -1,0 +1,20 @@
+{
+  "data": {
+    "id": "openrouter/bodybuilder",
+    "name": "Body Builder (beta)",
+    "created": 1764903653,
+    "description": "Transform your natural language requests into structured OpenRouter API request objects. Describe what you want to accomplish with AI models, and Body Builder will construct the appropriate API calls. Example:...",
+    "architecture": {
+      "tokenizer": "Router",
+      "instruct_type": null,
+      "modality": "text->text",
+      "input_modalities": [
+        "text"
+      ],
+      "output_modalities": [
+        "text"
+      ]
+    },
+    "endpoints": []
+  }
+}

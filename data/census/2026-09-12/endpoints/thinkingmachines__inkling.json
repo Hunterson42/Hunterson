@@ -1,0 +1,209 @@
+{
+  "data": {
+    "id": "thinkingmachines/inkling",
+    "name": "Thinking Machines: Inkling",
+    "created": 1784325956,
+    "description": "Inkling is an open-weight multimodal mixture-of-experts model from Thinking Machines Lab, with 41B active parameters out of 975B total. It is designed for general-purpose reasoning, coding, agentic and tool-use systems,...",
+    "architecture": {
+      "tokenizer": "Other",
+      "instruct_type": null,
+      "modality": "text+image+audio->text",
+      "input_modalities": [
+        "text",
+        "image",
+        "audio"
+      ],
+      "output_modalities": [
+        "text"
+      ]
+    },
+    "endpoints": [
+      {
+        "name": "DeepInfra | thinkingmachines/inkling-20260715",
+        "model_id": "thinkingmachines/inkling",
+        "model_name": "Thinking Machines: Inkling",
+        "context_length": 524288,
+        "pricing": {
+          "prompt": "0.00000095",
+          "completion": "0.00000405",
+          "input_cache_read": "0.00000016",
+          "discount": 0
+        },
+        "provider_name": "DeepInfra",
+        "tag": "deepinfra/fp8",
+        "quantization": "fp8",
+        "max_completion_tokens": 262144,
+        "max_prompt_tokens": null,
+        "supported_parameters": [
+          "reasoning",
+          "include_reasoning",
+          "max_tokens",
+          "temperature",
+          "top_p",
+          "stop",
+          "frequency_penalty",
+          "presence_penalty",
+          "repetition_penalty",
+          "top_k",
+          "seed",
+          "min_p",
+          "response_format",
+          "tools",
+          "tool_choice",
+          "logit_bias",
+          "reasoning_effort"
+        ],
+        "supports_tool_choice": {
+          "none": true,
+          "auto": true,
+          "required": true,
+          "function": true
+        },
+        "status": -2,
+        "uptime_last_30m": 86.74242424242425,
+        "uptime_last_5m": 43.103448275862064,
+        "uptime_last_1d": 90.88820220267809,
+        "supports_implicit_caching": false,
+        "supports_voice_cloning": false,
+        "latency_last_30m": null,
+        "throughput_last_30m": null
+      },
+      {
+        "name": "BaseTen | thinkingmachines/inkling-20260715",
+        "model_id": "thinkingmachines/inkling",
+        "model_name": "Thinking Machines: Inkling",
+        "context_length": 1048576,
+        "pricing": {
+          "prompt": "0.000001",
+          "completion": "0.00000405",
+          "input_cache_read": "0.00000017",
+          "discount": 0
+        },
+        "provider_name": "BaseTen",
+        "tag": "baseten/fp8",
+        "quantization": "fp8",
+        "max_completion_tokens": 32768,
+        "max_prompt_tokens": null,
+        "supported_parameters": [
+          "reasoning",
+          "include_reasoning",
+          "max_tokens",
+          "temperature",
+          "top_p",
+          "stop",
+          "frequency_penalty",
+          "presence_penalty",
+          "tools",
+          "tool_choice",
+          "reasoning_effort"
+        ],
+        "supports_tool_choice": {
+          "none": true,
+          "auto": true,
+          "required": false,
+          "function": false
+        },
+        "status": 0,
+        "uptime_last_30m": 98.34920634920636,
+        "uptime_last_5m": 89.0295358649789,
+        "uptime_last_1d": 99.77059182428309,
+        "supports_implicit_caching": false,
+        "supports_voice_cloning": false,
+        "latency_last_30m": null,
+        "throughput_last_30m": null
+      },
+      {
+        "name": "Together | thinkingmachines/inkling-20260715",
+        "model_id": "thinkingmachines/inkling",
+        "model_name": "Thinking Machines: Inkling",
+        "context_length": 524288,
+        "pricing": {
+          "prompt": "0.000001",
+          "completion": "0.00000405",
+          "input_cache_read": "0.00000017",
+          "discount": 0
+        },
+        "provider_name": "Together",
+        "tag": "together",
+        "quantization": "unknown",
+        "max_completion_tokens": 471859,
+        "max_prompt_tokens": null,
+        "supported_parameters": [
+          "reasoning",
+          "include_reasoning",
+          "max_tokens",
+          "temperature",
+          "top_p",
+          "stop",
+          "frequency_penalty",
+          "presence_penalty",
+          "top_k",
+          "repetition_penalty",
+          "logit_bias",
+          "min_p",
+          "tools",
+          "tool_choice",
+          "reasoning_effort"
+        ],
+        "supports_tool_choice": {
+          "none": true,
+          "auto": true,
+          "required": true,
+          "function": true
+        },
+        "status": 0,
+        "uptime_last_30m": 99.67845659163987,
+        "uptime_last_5m": 100,
+        "uptime_last_1d": 98.45252889804395,
+        "supports_implicit_caching": false,
+        "supports_voice_cloning": false,
+        "latency_last_30m": null,
+        "throughput_last_30m": null
+      },
+      {
+        "name": "BaseTen | thinkingmachines/inkling-20260715",
+        "model_id": "thinkingmachines/inkling",
+        "model_name": "Thinking Machines: Inkling",
+        "context_length": 1048576,
+        "pricing": {
+          "prompt": "0.000001",
+          "completion": "0.00000405",
+          "input_cache_read": "0.00000017",
+          "discount": 0
+        },
+        "provider_name": "BaseTen",
+        "tag": "baseten/fp8",
+        "quantization": "fp8",
+        "max_completion_tokens": 32768,
+        "max_prompt_tokens": null,
+        "supported_parameters": [
+          "reasoning",
+          "include_reasoning",
+          "max_tokens",
+          "temperature",
+          "top_p",
+          "stop",
+          "frequency_penalty",
+          "presence_penalty",
+          "tools",
+          "tool_choice",
+          "reasoning_effort"
+        ],
+        "supports_tool_choice": {
+          "none": true,
+          "auto": true,
+          "required": false,
+          "function": false
+        },
+        "status": -2,
+        "uptime_last_30m": 89.27335640138409,
+        "uptime_last_5m": 71.02803738317756,
+        "uptime_last_1d": 98.95982441072621,
+        "supports_implicit_caching": false,
+        "supports_voice_cloning": false,
+        "latency_last_30m": null,
+        "throughput_last_30m": null
+      }
+    ]
+  }
+}

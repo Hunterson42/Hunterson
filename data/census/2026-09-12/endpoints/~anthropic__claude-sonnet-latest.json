@@ -1,0 +1,21 @@
+{
+  "data": {
+    "id": "~anthropic/claude-sonnet-latest",
+    "name": "Anthropic Claude Sonnet Latest",
+    "created": 1777318368,
+    "description": "This model always redirects to the latest model in the Anthropic Claude Sonnet family.",
+    "architecture": {
+      "tokenizer": "Router",
+      "instruct_type": null,
+      "modality": "text+image->text",
+      "input_modalities": [
+        "text",
+        "image"
+      ],
+      "output_modalities": [
+        "text"
+      ]
+    },
+    "endpoints": []
+  }
+}

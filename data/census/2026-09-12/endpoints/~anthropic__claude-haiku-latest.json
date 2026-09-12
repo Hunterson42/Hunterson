@@ -1,0 +1,21 @@
+{
+  "data": {
+    "id": "~anthropic/claude-haiku-latest",
+    "name": "Anthropic Claude Haiku Latest",
+    "created": 1777318492,
+    "description": "This model always redirects to the latest model in the Anthropic Claude Haiku family.",
+    "architecture": {
+      "tokenizer": "Router",
+      "instruct_type": null,
+      "modality": "text+image->text",
+      "input_modalities": [
+        "image",
+        "text"
+      ],
+      "output_modalities": [
+        "text"
+      ]
+    },
+    "endpoints": []
+  }
+}

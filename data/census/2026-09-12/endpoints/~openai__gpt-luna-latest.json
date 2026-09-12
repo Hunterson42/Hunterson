@@ -1,0 +1,22 @@
+{
+  "data": {
+    "id": "~openai/gpt-luna-latest",
+    "name": "OpenAI GPT Luna Latest",
+    "created": 1789130922,
+    "description": "This model always redirects to the latest model in the OpenAI GPT Luna family.",
+    "architecture": {
+      "tokenizer": "Router",
+      "instruct_type": null,
+      "modality": "text+image+file->text",
+      "input_modalities": [
+        "file",
+        "image",
+        "text"
+      ],
+      "output_modalities": [
+        "text"
+      ]
+    },
+    "endpoints": []
+  }
+}

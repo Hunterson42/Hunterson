@@ -1,0 +1,22 @@
+{
+  "data": {
+    "id": "~anthropic/claude-fable-latest",
+    "name": "Anthropic: Claude Fable Latest",
+    "created": 1781029944,
+    "description": "This model always redirects to the latest model in the Claude Fable family.",
+    "architecture": {
+      "tokenizer": "Router",
+      "instruct_type": null,
+      "modality": "text+image+file->text",
+      "input_modalities": [
+        "text",
+        "image",
+        "file"
+      ],
+      "output_modalities": [
+        "text"
+      ]
+    },
+    "endpoints": []
+  }
+}
