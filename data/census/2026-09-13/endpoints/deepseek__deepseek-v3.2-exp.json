@@ -1,0 +1,163 @@
+{
+  "data": {
+    "id": "deepseek/deepseek-v3.2-exp",
+    "name": "DeepSeek: DeepSeek V3.2 Exp",
+    "created": 1759150481,
+    "description": "DeepSeek-V3.2-Exp is an experimental large language model released by DeepSeek as an intermediate step between V3.1 and future architectures. It introduces DeepSeek Sparse Attention (DSA), a fine-grained sparse attention mechanism...",
+    "architecture": {
+      "tokenizer": "DeepSeek",
+      "instruct_type": "deepseek-v3.1",
+      "modality": "text->text",
+      "input_modalities": [
+        "text"
+      ],
+      "output_modalities": [
+        "text"
+      ]
+    },
+    "endpoints": [
+      {
+        "name": "SiliconFlow | deepseek/deepseek-v3.2-exp",
+        "model_id": "deepseek/deepseek-v3.2-exp",
+        "model_name": "DeepSeek: DeepSeek V3.2 Exp",
+        "context_length": 163840,
+        "pricing": {
+          "prompt": "0.00000027",
+          "completion": "0.00000041",
+          "discount": 0
+        },
+        "provider_name": "SiliconFlow",
+        "tag": "siliconflow/fp8",
+        "quantization": "fp8",
+        "max_completion_tokens": 147456,
+        "max_prompt_tokens": null,
+        "supported_parameters": [
+          "reasoning",
+          "include_reasoning",
+          "structured_outputs",
+          "response_format",
+          "temperature",
+          "top_p",
+          "top_k",
+          "frequency_penalty",
+          "tools",
+          "tool_choice",
+          "max_tokens"
+        ],
+        "supports_tool_choice": {
+          "none": true,
+          "auto": true,
+          "required": true,
+          "function": true
+        },
+        "status": 0,
+        "uptime_last_30m": 98.81539980256665,
+        "uptime_last_5m": 100,
+        "uptime_last_1d": 98.62372548759629,
+        "supports_implicit_caching": false,
+        "supports_voice_cloning": false,
+        "latency_last_30m": null,
+        "throughput_last_30m": null
+      },
+      {
+        "name": "AtlasCloud | deepseek/deepseek-v3.2-exp",
+        "model_id": "deepseek/deepseek-v3.2-exp",
+        "model_name": "DeepSeek: DeepSeek V3.2 Exp",
+        "context_length": 163840,
+        "pricing": {
+          "prompt": "0.00000027",
+          "completion": "0.00000041",
+          "input_cache_read": "0.00000027",
+          "discount": 0
+        },
+        "provider_name": "AtlasCloud",
+        "tag": "atlas-cloud/fp8",
+        "quantization": "fp8",
+        "max_completion_tokens": 147456,
+        "max_prompt_tokens": null,
+        "supported_parameters": [
+          "reasoning",
+          "include_reasoning",
+          "max_tokens",
+          "temperature",
+          "top_p",
+          "top_k",
+          "min_p",
+          "frequency_penalty",
+          "presence_penalty",
+          "repetition_penalty",
+          "stop",
+          "seed",
+          "logit_bias",
+          "response_format",
+          "structured_outputs",
+          "tools",
+          "tool_choice",
+          "logprobs",
+          "top_logprobs"
+        ],
+        "supports_tool_choice": {
+          "none": true,
+          "auto": true,
+          "required": true,
+          "function": true
+        },
+        "status": 0,
+        "uptime_last_30m": 98.58657243816255,
+        "uptime_last_5m": 96.3855421686747,
+        "uptime_last_1d": 99.40831599708211,
+        "supports_implicit_caching": false,
+        "supports_voice_cloning": false,
+        "latency_last_30m": null,
+        "throughput_last_30m": null
+      },
+      {
+        "name": "Novita | deepseek/deepseek-v3.2-exp",
+        "model_id": "deepseek/deepseek-v3.2-exp",
+        "model_name": "DeepSeek: DeepSeek V3.2 Exp",
+        "context_length": 163840,
+        "pricing": {
+          "prompt": "0.00000027",
+          "completion": "0.00000041",
+          "discount": 0
+        },
+        "provider_name": "Novita",
+        "tag": "novita/fp8",
+        "quantization": "fp8",
+        "max_completion_tokens": 65536,
+        "max_prompt_tokens": null,
+        "supported_parameters": [
+          "reasoning",
+          "include_reasoning",
+          "max_tokens",
+          "temperature",
+          "top_p",
+          "stop",
+          "frequency_penalty",
+          "presence_penalty",
+          "seed",
+          "top_k",
+          "repetition_penalty",
+          "tools",
+          "tool_choice",
+          "response_format",
+          "structured_outputs"
+        ],
+        "supports_tool_choice": {
+          "none": true,
+          "auto": true,
+          "required": true,
+          "function": true
+        },
+        "status": 0,
+        "uptime_last_30m": 99.92334227673439,
+        "uptime_last_5m": 100,
+        "uptime_last_1d": 99.79199080024352,
+        "supports_implicit_caching": false,
+        "supports_voice_cloning": false,
+        "latency_last_30m": null,
+        "throughput_last_30m": null
+      }
+    ]
+  }
+}
