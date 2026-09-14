@@ -1,0 +1,239 @@
+{
+  "data": {
+    "id": "qwen/qwen3-30b-a3b-instruct-2507",
+    "name": "Qwen: Qwen3 30B A3B Instruct 2507",
+    "created": 1753806965,
+    "description": "Qwen3-30B-A3B-Instruct-2507 is a 30.5B-parameter mixture-of-experts language model from Qwen, with 3.3B active parameters per inference. It operates in non-thinking mode and is designed for high-quality instruction following, multilingual understanding, and...",
+    "architecture": {
+      "tokenizer": "Qwen3",
+      "instruct_type": null,
+      "modality": "text->text",
+      "input_modalities": [
+        "text"
+      ],
+      "output_modalities": [
+        "text"
+      ]
+    },
+    "endpoints": [
+      {
+        "name": "StreamLake | qwen/qwen3-30b-a3b-instruct-2507",
+        "model_id": "qwen/qwen3-30b-a3b-instruct-2507",
+        "model_name": "Qwen: Qwen3 30B A3B Instruct 2507",
+        "context_length": 128000,
+        "pricing": {
+          "prompt": "0.00000004815",
+          "completion": "0.00000019305",
+          "discount": 0.55
+        },
+        "provider_name": "StreamLake",
+        "tag": "streamlake",
+        "quantization": "unknown",
+        "max_completion_tokens": 32000,
+        "max_prompt_tokens": null,
+        "supported_parameters": [
+          "tools",
+          "tool_choice",
+          "response_format",
+          "structured_outputs",
+          "logprobs",
+          "top_logprobs",
+          "max_tokens",
+          "temperature",
+          "top_p",
+          "stop",
+          "presence_penalty"
+        ],
+        "supports_tool_choice": {
+          "none": true,
+          "auto": true,
+          "required": true,
+          "function": true
+        },
+        "status": 0,
+        "uptime_last_30m": 98.13077895297013,
+        "uptime_last_5m": 97.59071117561685,
+        "uptime_last_1d": 98.61787399805229,
+        "supports_implicit_caching": false,
+        "supports_voice_cloning": false,
+        "latency_last_30m": null,
+        "throughput_last_30m": null
+      },
+      {
+        "name": "DekaLLM | qwen/qwen3-30b-a3b-instruct-2507",
+        "model_id": "qwen/qwen3-30b-a3b-instruct-2507",
+        "model_name": "Qwen: Qwen3 30B A3B Instruct 2507",
+        "context_length": 262144,
+        "pricing": {
+          "prompt": "0.00000009",
+          "completion": "0.0000003",
+          "discount": 0
+        },
+        "provider_name": "DekaLLM",
+        "tag": "dekallm",
+        "quantization": "unknown",
+        "max_completion_tokens": 235929,
+        "max_prompt_tokens": null,
+        "supported_parameters": [
+          "frequency_penalty",
+          "logit_bias",
+          "max_tokens",
+          "presence_penalty",
+          "seed",
+          "stop",
+          "temperature",
+          "top_p",
+          "response_format",
+          "structured_outputs",
+          "tools"
+        ],
+        "supports_tool_choice": {
+          "none": true,
+          "auto": true,
+          "required": true,
+          "function": true
+        },
+        "status": 0,
+        "uptime_last_30m": 100,
+        "uptime_last_5m": 100,
+        "uptime_last_1d": 98.46376673948143,
+        "supports_implicit_caching": false,
+        "supports_voice_cloning": false,
+        "latency_last_30m": null,
+        "throughput_last_30m": null
+      },
+      {
+        "name": "SiliconFlow | qwen/qwen3-30b-a3b-instruct-2507",
+        "model_id": "qwen/qwen3-30b-a3b-instruct-2507",
+        "model_name": "Qwen: Qwen3 30B A3B Instruct 2507",
+        "context_length": 262144,
+        "pricing": {
+          "prompt": "0.00000009",
+          "completion": "0.0000003",
+          "discount": 0
+        },
+        "provider_name": "SiliconFlow",
+        "tag": "siliconflow/fp8",
+        "quantization": "fp8",
+        "max_completion_tokens": 235929,
+        "max_prompt_tokens": null,
+        "supported_parameters": [
+          "structured_outputs",
+          "response_format",
+          "temperature",
+          "top_p",
+          "top_k",
+          "frequency_penalty",
+          "tools",
+          "tool_choice",
+          "max_tokens"
+        ],
+        "supports_tool_choice": {
+          "none": true,
+          "auto": true,
+          "required": true,
+          "function": true
+        },
+        "status": 0,
+        "uptime_last_30m": 97.26651480637814,
+        "uptime_last_5m": 91.83128670581954,
+        "uptime_last_1d": 98.92040870831762,
+        "supports_implicit_caching": false,
+        "supports_voice_cloning": false,
+        "latency_last_30m": null,
+        "throughput_last_30m": null
+      },
+      {
+        "name": "Nebius | qwen/qwen3-30b-a3b-instruct-2507",
+        "model_id": "qwen/qwen3-30b-a3b-instruct-2507",
+        "model_name": "Qwen: Qwen3 30B A3B Instruct 2507",
+        "context_length": 262144,
+        "pricing": {
+          "prompt": "0.0000001",
+          "completion": "0.0000003",
+          "discount": 0
+        },
+        "provider_name": "Nebius",
+        "tag": "nebius/fp8",
+        "quantization": "fp8",
+        "max_completion_tokens": 235929,
+        "max_prompt_tokens": null,
+        "supported_parameters": [
+          "max_tokens",
+          "temperature",
+          "top_p",
+          "stop",
+          "frequency_penalty",
+          "presence_penalty",
+          "seed",
+          "top_k",
+          "logit_bias",
+          "tools",
+          "tool_choice",
+          "response_format",
+          "structured_outputs",
+          "repetition_penalty"
+        ],
+        "supports_tool_choice": {
+          "none": true,
+          "auto": true,
+          "required": true,
+          "function": true
+        },
+        "status": -2,
+        "uptime_last_30m": 94.42763489662129,
+        "uptime_last_5m": 78.91832229580574,
+        "uptime_last_1d": 95.02500840203231,
+        "supports_implicit_caching": false,
+        "supports_voice_cloning": false,
+        "latency_last_30m": null,
+        "throughput_last_30m": null
+      },
+      {
+        "name": "Alibaba | qwen/qwen3-30b-a3b-instruct-2507",
+        "model_id": "qwen/qwen3-30b-a3b-instruct-2507",
+        "model_name": "Qwen: Qwen3 30B A3B Instruct 2507",
+        "context_length": 131072,
+        "pricing": {
+          "prompt": "0.00000013",
+          "completion": "0.00000052",
+          "discount": 0
+        },
+        "provider_name": "Alibaba",
+        "tag": "alibaba",
+        "quantization": "unknown",
+        "max_completion_tokens": 32768,
+        "max_prompt_tokens": 129024,
+        "supported_parameters": [
+          "max_tokens",
+          "temperature",
+          "top_p",
+          "seed",
+          "presence_penalty",
+          "response_format",
+          "tools",
+          "tool_choice",
+          "logprobs",
+          "top_logprobs",
+          "top_k",
+          "frequency_penalty",
+          "stop"
+        ],
+        "supports_tool_choice": {
+          "none": true,
+          "auto": true,
+          "required": true,
+          "function": true
+        },
+        "status": 0,
+        "uptime_last_30m": 99.91306867574616,
+        "uptime_last_5m": 100,
+        "uptime_last_1d": 99.96320701073687,
+        "supports_implicit_caching": false,
+        "supports_voice_cloning": false,
+        "latency_last_30m": null,
+        "throughput_last_30m": null
+      }
+    ]
+  }
+}

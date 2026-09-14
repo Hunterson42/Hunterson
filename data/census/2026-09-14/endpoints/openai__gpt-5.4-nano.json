@@ -1,0 +1,195 @@
+{
+  "data": {
+    "id": "openai/gpt-5.4-nano",
+    "name": "OpenAI: GPT-5.4 Nano",
+    "created": 1773748187,
+    "description": "GPT-5.4 nano is the most lightweight and cost-efficient variant of the GPT-5.4 family, optimized for speed-critical and high-volume tasks. It supports text and image inputs and is designed for low-latency...",
+    "architecture": {
+      "tokenizer": "GPT",
+      "instruct_type": null,
+      "modality": "text+image+file->text",
+      "input_modalities": [
+        "file",
+        "image",
+        "text"
+      ],
+      "output_modalities": [
+        "text"
+      ]
+    },
+    "endpoints": [
+      {
+        "name": "OpenAI | openai/gpt-5.4-nano-20260317",
+        "model_id": "openai/gpt-5.4-nano",
+        "model_name": "OpenAI: GPT-5.4 Nano",
+        "context_length": 400000,
+        "pricing": {
+          "prompt": "0.0000001",
+          "completion": "0.000000625",
+          "web_search": "0.01",
+          "input_cache_read": "0.00000001",
+          "discount": 0
+        },
+        "provider_name": "OpenAI",
+        "tag": "openai/flex",
+        "quantization": "unknown",
+        "max_completion_tokens": 128000,
+        "max_prompt_tokens": null,
+        "supported_parameters": [
+          "reasoning",
+          "include_reasoning",
+          "seed",
+          "max_tokens",
+          "response_format",
+          "structured_outputs",
+          "tools",
+          "tool_choice",
+          "reasoning_effort"
+        ],
+        "supports_tool_choice": {
+          "none": true,
+          "auto": true,
+          "required": true,
+          "function": true
+        },
+        "status": 0,
+        "uptime_last_30m": null,
+        "uptime_last_5m": null,
+        "uptime_last_1d": 100,
+        "supports_implicit_caching": false,
+        "supports_voice_cloning": false,
+        "latency_last_30m": null,
+        "throughput_last_30m": null
+      },
+      {
+        "name": "Azure | openai/gpt-5.4-nano-20260317",
+        "model_id": "openai/gpt-5.4-nano",
+        "model_name": "OpenAI: GPT-5.4 Nano",
+        "context_length": 400000,
+        "pricing": {
+          "prompt": "0.0000002",
+          "completion": "0.00000125",
+          "web_search": "0.01",
+          "input_cache_read": "0.00000002",
+          "discount": 0
+        },
+        "provider_name": "Azure",
+        "tag": "azure",
+        "quantization": "unknown",
+        "max_completion_tokens": 128000,
+        "max_prompt_tokens": null,
+        "supported_parameters": [
+          "max_completion_tokens",
+          "reasoning",
+          "include_reasoning",
+          "seed",
+          "response_format",
+          "structured_outputs",
+          "tools",
+          "tool_choice",
+          "reasoning_effort"
+        ],
+        "supports_tool_choice": {
+          "none": true,
+          "auto": true,
+          "required": true,
+          "function": true
+        },
+        "status": 0,
+        "uptime_last_30m": 100,
+        "uptime_last_5m": 100,
+        "uptime_last_1d": 99.98559127242788,
+        "supports_implicit_caching": false,
+        "supports_voice_cloning": false,
+        "latency_last_30m": null,
+        "throughput_last_30m": null
+      },
+      {
+        "name": "OpenAI | openai/gpt-5.4-nano-20260317",
+        "model_id": "openai/gpt-5.4-nano",
+        "model_name": "OpenAI: GPT-5.4 Nano",
+        "context_length": 400000,
+        "pricing": {
+          "prompt": "0.0000002",
+          "completion": "0.00000125",
+          "web_search": "0.01",
+          "input_cache_read": "0.00000002",
+          "discount": 0
+        },
+        "provider_name": "OpenAI",
+        "tag": "openai",
+        "quantization": "unknown",
+        "max_completion_tokens": 128000,
+        "max_prompt_tokens": null,
+        "supported_parameters": [
+          "reasoning",
+          "include_reasoning",
+          "seed",
+          "max_tokens",
+          "response_format",
+          "structured_outputs",
+          "tools",
+          "tool_choice",
+          "reasoning_effort"
+        ],
+        "supports_tool_choice": {
+          "none": true,
+          "auto": true,
+          "required": true,
+          "function": true
+        },
+        "status": 0,
+        "uptime_last_30m": 98.86200973375323,
+        "uptime_last_5m": 99.19549477071601,
+        "uptime_last_1d": 99.20250532569378,
+        "supports_implicit_caching": false,
+        "supports_voice_cloning": false,
+        "latency_last_30m": null,
+        "throughput_last_30m": null
+      },
+      {
+        "name": "Azure | openai/gpt-5.4-nano-20260317",
+        "model_id": "openai/gpt-5.4-nano",
+        "model_name": "OpenAI: GPT-5.4 Nano",
+        "context_length": 400000,
+        "pricing": {
+          "prompt": "0.00000022",
+          "completion": "0.000001375",
+          "web_search": "0.01",
+          "input_cache_read": "0.000000022",
+          "discount": 0
+        },
+        "provider_name": "Azure",
+        "tag": "azure/us",
+        "quantization": "unknown",
+        "max_completion_tokens": 128000,
+        "max_prompt_tokens": null,
+        "supported_parameters": [
+          "max_completion_tokens",
+          "reasoning",
+          "include_reasoning",
+          "seed",
+          "response_format",
+          "structured_outputs",
+          "tools",
+          "tool_choice",
+          "reasoning_effort"
+        ],
+        "supports_tool_choice": {
+          "none": true,
+          "auto": true,
+          "required": true,
+          "function": true
+        },
+        "status": 0,
+        "uptime_last_30m": null,
+        "uptime_last_5m": null,
+        "uptime_last_1d": 99.99519356812024,
+        "supports_implicit_caching": false,
+        "supports_voice_cloning": false,
+        "latency_last_30m": null,
+        "throughput_last_30m": null
+      }
+    ]
+  }
+}
