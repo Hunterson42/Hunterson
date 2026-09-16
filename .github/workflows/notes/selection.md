@@ -22,3 +22,19 @@ Qualifying at native precision: 13
 HF Inference Providers listed: Together, Novita, Fireworks, DeepInfra, Baseten, Scaleway
 Release: 0731 supersedes the preview; undated "deepseek-v4-flash" on OpenRouter is a separate alias with 17 providers
 Heavy-band reference point: DeepSeek-V4-Pro 1.6T total, 49B active (same report)
+
+Candidate: Standard reference
+Repository: openai/gpt-oss-120b
+Commit hash: b5c939de8f754692c1647ca79fbf85e8c1e70f8a
+Total parameters: 117B (model card and Safetensors box agree)
+Active parameters: 5.1B (model card)
+Published tensor types: BF16, U8
+Published precision: mxfp4, per model card tag. NOT fp8.
+  MoE expert weights are 4-bit (mxfp4, stored as U8); remaining layers BF16.
+  Designed to fit a single 80GB GPU (H100 or MI300X) in this form.
+Licence: Apache 2.0
+Census 2026-09-14: 19 providers, 23 endpoints; 9 undeclared, 6 fp4, 4 bf16, 3 fp8, 1 fp16
+Qualifying at native precision (fp4/mxfp4): 6
+HF Inference Providers listed: Together AI, Scaleway, OVHcloud AI Endpoints,
+  Nscale, Novita, Groq, Fireworks, Featherless AI, DeepInfra, Cerebras, Baseten
+Sibling: gpt-oss-20b, 21B total, 3.6B active
