@@ -1,0 +1,67 @@
+{
+  "data": {
+    "id": "anthropic/claude-opus-4",
+    "name": "Anthropic: Claude Opus 4",
+    "created": 1747931245,
+    "description": "Claude Opus 4 is benchmarked as the world\u2019s best coding model, at time of release, bringing sustained performance on complex, long-running tasks and agent workflows. It sets new benchmarks in...",
+    "architecture": {
+      "tokenizer": "Claude",
+      "instruct_type": null,
+      "modality": "text+image+file->text",
+      "input_modalities": [
+        "image",
+        "text",
+        "file"
+      ],
+      "output_modalities": [
+        "text"
+      ]
+    },
+    "endpoints": [
+      {
+        "name": "Google | anthropic/claude-4-opus-20250522",
+        "model_id": "anthropic/claude-opus-4",
+        "model_name": "Anthropic: Claude Opus 4",
+        "context_length": 200000,
+        "pricing": {
+          "prompt": "0.000015",
+          "completion": "0.000075",
+          "web_search": "0.01",
+          "input_cache_read": "0.0000015",
+          "input_cache_write": "0.00001875",
+          "input_cache_write_1h": "0.00003",
+          "discount": 0
+        },
+        "provider_name": "Google",
+        "tag": "google-vertex",
+        "quantization": "unknown",
+        "max_completion_tokens": 32000,
+        "max_prompt_tokens": null,
+        "supported_parameters": [
+          "max_tokens",
+          "top_p",
+          "temperature",
+          "stop",
+          "reasoning",
+          "include_reasoning",
+          "tools",
+          "tool_choice"
+        ],
+        "supports_tool_choice": {
+          "none": true,
+          "auto": true,
+          "required": true,
+          "function": true
+        },
+        "status": 0,
+        "uptime_last_30m": null,
+        "uptime_last_5m": null,
+        "uptime_last_1d": 99.98988263860785,
+        "supports_implicit_caching": false,
+        "supports_voice_cloning": false,
+        "latency_last_30m": null,
+        "throughput_last_30m": null
+      }
+    ]
+  }
+}
