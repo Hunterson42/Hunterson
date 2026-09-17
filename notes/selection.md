@@ -54,6 +54,7 @@ appears to be becoming the default release format at the top end.
 **Warning on page tags.** The "8-bit precision" tag on Hugging Face is inferred
 and is wrong for compressed-tensors models. It appears incorrectly on both
 gpt-oss-120b and Kimi K3. config.json governs.
+
 ---
 
 ## 2. Daily tracking
