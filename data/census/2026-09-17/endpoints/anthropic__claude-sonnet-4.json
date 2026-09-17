@@ -281,7 +281,7 @@
           "required": true,
           "function": true
         },
-        "status": -5,
+        "status": 0,
         "uptime_last_30m": null,
         "uptime_last_5m": null,
         "uptime_last_1d": 0,
