@@ -1,4 +1,4 @@
-# Candidate tracking, rebuilt 2026-09-17 12:03 UTC
+# Candidate tracking, rebuilt 2026-09-17 15:29 UTC
 
 Qualifying providers = distinct providers serving the checkpoint at its native precision.
 Bracketed figure is the total provider count at any precision, for context.
@@ -9,7 +9,7 @@ Bracketed figure is the total provider count at any precision, for context.
 |---|---|---|---|---|---|---|---|---|
 | z-ai/glm-5.3-flash *(reference)* | fp8 | **14** (25) | **15** (26) | **15** (26) | **16** (28) | **16** (27) | **15** (26) | **15** (27) |
 | deepseek/deepseek-v4-flash-0731 | fp8 | **11** (27) | **11** (27) | **11** (27) | **12** (27) | **11** (26) | **12** (27) | **12** (27) |
-| deepseek/deepseek-v4.1-flash | fp8 | **6** (9) | **8** (12) | **8** (13) | **9** (16) | **8** (17) | **9** (18) | **8** (18) |
+| deepseek/deepseek-v4.1-flash | fp8 | **6** (9) | **8** (12) | **8** (13) | **9** (16) | **8** (17) | **9** (18) | **9** (19) |
 | openai/gpt-oss-120b | mxfp4 or fp4 | **5** (19) | **5** (19) | **5** (19) | **5** (19) | **5** (20) | **5** (20) | **5** (20) |
 | qwen/qwen3.6-35b-a3b | fp8 | **8** (11) | **8** (11) | **8** (11) | **8** (11) | **8** (11) | **8** (11) | **8** (10) |
 | google/gemma-4-26b-a4b-it | bf16 | **5** (11) | **5** (11) | **5** (11) | **5** (11) | **5** (11) | **5** (11) | **5** (11) |
@@ -41,8 +41,12 @@ Bracketed figure is the total provider count at any precision, for context.
 
 | Model | Native | 09-11 | 09-12 | 09-13 | 09-14 | 09-15 | 09-16 | 09-17 |
 |---|---|---|---|---|---|---|---|---|
-| moonshotai/kimi-k3 | UNRESOLVED | **0** (16) | **0** (16) | **0** (17) | **0** (17) | **0** (17) | **0** (17) | **0** (17) |
+| moonshotai/kimi-k3 *(reference)* | mxfp4 or fp4 | **6** (16) | **6** (16) | **6** (17) | **6** (17) | **6** (17) | **6** (17) | **7** (17) |
 | qwen/qwen3.8-2.4t-a95b | fp8 | **1** (7) | **1** (7) | **1** (7) | **1** (7) | **1** (7) | **1** (7) | **1** (7) |
+
+### Stickiness against moonshotai/kimi-k3
+
+- qwen/qwen3.8-2.4t-a95b: not leading
 
 ## Soft edge, monitoring only
 
