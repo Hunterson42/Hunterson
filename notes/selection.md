@@ -42,7 +42,7 @@ Manual snapshot for the record:
 | Date | GLM-5.3-Flash fp8 | DS V4-Flash-0731 fp8 | DS V4.1-Flash fp8 | gpt-oss-120b mxfp4 |
 |---|---|---|---|---|
 | 14 Sep | 16 | 13 | not listed | 6 |
-| 17 Sep | 18 | 13 | 9 | 6 |
+| 17 Sep | 15 | 12 | 9 | 6 |
 
 Reading: GLM-5.3-Flash is strengthening while DeepSeek V4 Flash 0731 is flat. DeepSeek V4.1-Flash appeared between the two dates and reached 9 within days, which is the pattern the stickiness rule exists to absorb.
 
