@@ -35,16 +35,95 @@ Frontier is therefore defined in the methodology and marked under observation, p
 
 ## 2. Daily tracking
 
-Generated automatically into `data/track.md` by `scripts/track.py`. That file rebuilds the full history from the saved census on every run and computes the 20-day stickiness streak for each challenger. Read it rather than transcribing counts by hand.
+Generated automatically into `data/track.md` by `scripts/track.py`. That file
+rebuilds the full history from the saved census on every run and computes the
+20-day stickiness streak for each challenger. Read it rather than transcribing
+counts by hand.
 
-Manual snapshot for the record:
+**Counting rule.** Qualifying count means DISTINCT PROVIDERS serving the
+checkpoint at an accepted precision. The ranking page in `data/rank/` counts
+ENDPOINTS, which is a larger number because several providers list the same
+model twice. The selection rule uses providers. Any figure taken from the
+ranking page is wrong for this purpose.
 
-| Date | GLM-5.3-Flash fp8 | DS V4-Flash-0731 fp8 | DS V4.1-Flash fp8 | gpt-oss-120b mxfp4 |
+### Standard grade, qualifying providers
+
+| Date | GLM-5.3-Flash | DS V4-Flash-0731 | DS V4.1-Flash | gpt-oss-120b |
 |---|---|---|---|---|
-| 14 Sep | 16 | 13 | not listed | 6 |
-| 17 Sep | 15 | 12 | 9 | 6 |
+| 11 Sep | 14 | 11 | 6 | 6 |
+| 12 Sep | 15 | 11 | 8 | 6 |
+| 13 Sep | 15 | 11 | 8 | 6 |
+| 14 Sep | 16 | 12 | 9 | 6 |
+| 15 Sep | 16 | 11 | 8 | 6 |
+| 16 Sep | 15 | 12 | 9 | 7 |
+| 17 Sep | 15 | 12 | 8 | 7 |
 
-Reading: GLM-5.3-Flash is strengthening while DeepSeek V4 Flash 0731 is flat. DeepSeek V4.1-Flash appeared between the two dates and reached 9 within days, which is the pattern the stickiness rule exists to absorb.
+Accepted precisions: fp8 for the GLM and DeepSeek models; mxfp4 or fp4 for
+gpt-oss-120b.
+
+### Heavy grade, qualifying providers
+
+| Date | GLM-5.3 | GLM-5.2 | DS V4-Pro-0813 | Kimi K2.6 |
+|---|---|---|---|---|
+| 11 Sep | 13 | not tracked | 8 | precision unresolved |
+| 12 Sep | 11 | not tracked | 8 | precision unresolved |
+| 13 Sep | 11 | not tracked | 8 | precision unresolved |
+| 14 Sep | 12 | not tracked | 8 | precision unresolved |
+| 15 Sep | 13 | not tracked | 8 | precision unresolved |
+| 16 Sep | 13 | not tracked | 8 | precision unresolved |
+| 17 Sep | 13 | 12 | 8 | precision unresolved |
+
+GLM-5.2 added to the candidate set on 17 September after appearing on the
+watchlist. Earlier days will populate on the next run, since the tracker
+rebuilds from the saved census.
+
+### Reading, 17 September
+
+**No challenger has led either reference on any day.** The stickiness rule has
+not come close to triggering in seven days, including a week in which a new
+model was released into the Standard band.
+
+**Daily variation is plus or minus one provider.** This is endpoints appearing
+and disappearing rather than providers entering or leaving. A 20 consecutive
+day requirement absorbs that comfortably, which is the first evidence the rule
+produces a stable reference rather than a jittery one. Worth a sentence in the
+methodology, because it is the first thing a reader will doubt.
+
+**Standard: the lead is flat, not widening.** GLM-5.3-Flash gained two
+providers and gave one back, ending at 15. DeepSeek V4 Flash 0731 gained one
+and held it, ending at 12. The gap touched four on 14 and 15 September and is
+back to three.
+
+**The slow climb is the thing to watch.** DeepSeek V4 Flash 0731 has added
+roughly one provider a week while the reference has added none. At that rate
+the gap closes in about three weeks, which would put the stickiness rule to
+work in late October, just as the shadow period ends.
+
+**DeepSeek V4.1-Flash is not behaving as a challenger.** It was already in the
+census on 11 September at 6 providers, not a new arrival as first thought. It
+has oscillated between 8 and 9 since 12 September with no upward trend in five
+days, and sits seven behind the reference. Whatever adoption it was going to
+get on release, it has had.
+
+**Heavy is stable to the point of stagnation.** GLM-5.3 dipped to 11 mid-week
+and recovered to 13, ending where it started. DeepSeek V4 Pro 0813 has not
+moved at all in seven days, which suggests a settled panel rather than a
+growing one.
+
+**GLM-5.2 at 12 is the Heavy concern.** A superseded model retaining almost the
+same panel as its replacement means providers are not migrating. If the Heavy
+reference is GLM-5.3 at 13 and its own predecessor sits at 12, the reference is
+less secure than the headline gap to DeepSeek suggests.
+
+### Corrections to earlier entries
+
+Figures recorded before 17 September were endpoint counts taken from the
+ranking page and were overstated. GLM-5.3-Flash was recorded as 16 on 14
+September and 18 on 17 September; the correct qualifying provider counts are
+16 and 15. DeepSeek V4 Flash 0731 was recorded as 13 on both dates; the
+correct counts are 12 and 12. GLM-5.3 was recorded as 12 then 15; the correct
+counts are 12 and 13. Every candidate block in sections 3 to 5 needs the same
+correction applied.
 
 ---
 
