@@ -38,3 +38,43 @@ Qualifying at native precision (fp4/mxfp4): 6
 HF Inference Providers listed: Together AI, Scaleway, OVHcloud AI Endpoints,
   Nscale, Novita, Groq, Fireworks, Featherless AI, DeepInfra, Cerebras, Baseten
 Sibling: gpt-oss-20b, 21B total, 3.6B active
+
+HEAVY GRADE CANDIDATES
+
+deepseek-ai/DeepSeek-V4-Pro-0813
+  Commit hash: 72e1d3230f6c080a530b0a1d46f8eb4602340597
+  Total: 1.7T (Safetensors, incl. DSpark module); 1.6T main model (tech report)
+  Active: 49B (tech report, arXiv:2606.19348 abstract)
+  Tensor types: BF16, I64, F32, F8_E4M3, I8
+  Precision: fp8, per card tags (fp8 and 8-bit precision)
+  Licence: MIT
+  Census 14 Sep: 20 providers; 10 undeclared, 8 fp8, 3 fp4. Qualifying fp8: 8
+  HF partners: Together, Novita, Fireworks, DeepInfra, Baseten
+  Note: 0813 supersedes the preview; same structure plus DSpark module
+
+zai-org/GLM-5.3
+  Commit hash: aca966e4e02791568aa6a4ced368624b3d897f42
+  Total: 753B (Safetensors)
+  Active: 40B
+  Tensor types: BF16, F8_E4M3, F32
+  Precision: fp8, per card tag
+  Licence: glm-5.3 (custom, NOT MIT). Read it before including; a restrictive
+    licence could stop providers serving it and shrink the panel
+  Census 14 Sep: 26 providers, 27 endpoints; 12 fp8, 9 undeclared, 6 fp4.
+    Qualifying fp8: 12
+  HF partners: Zai, Together, Novita, Fireworks, DeepInfra, Baseten
+  Note: same base model as GLM-5.2, gains from post-training only
+
+moonshotai/Kimi-K2.6
+  Commit hash: 7eb5002f6aadc958aed6a9177b7ed26bb94011bb
+  Total: 1T. Active: 32B (Model Summary table)
+  Architecture: MoE, 384 experts, 8 selected per token, 1 shared, 61 layers
+  Multimodal: MoonViT vision encoder, 400M params. Context 256K
+  Tensor types: F32, I32, BF16. Tag "compressed-tensors" is a framework,
+    not a precision. Native precision UNRESOLVED; check config.json
+  Licence: modified-mit. Read it
+  Census 14 Sep: 20 providers, 21 endpoints; 6 fp4, 6 int4, 5 undeclared,
+    3 fp8, 1 bf16. Most fragmented panel of any candidate
+  HF partners: Novita, Fireworks, Featherless, DeepInfra, Baseten
+  Grade: Heavy at 32B active, 7% above the 30B boundary. Inside the 20%
+    review trigger; review recorded at launch
