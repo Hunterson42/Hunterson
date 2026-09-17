@@ -217,8 +217,22 @@ correction applied.
 
 ### 5.1 moonshotai/kimi-k3
 
-- Census 17 Sep: 17 providers, 20 endpoints. unknown 9, fp4 4, fp8 3, mxfp4 3, bf16 1. **Largest single-precision group: 4**
-- Median posted output: $15.00, range $10.95 to $22.50
+- Commit: c5d1dd4c428bd1ce8b88c5044f3b6ccde9e3b721 (initial commit, config.json)
+- Total 2.8T, active 104B (technical report abstract)
+- Architecture: 896 routed experts, 16 per token, 2 shared, 93 layers,
+    hidden 7168, context 1,048,576. Kimi Delta Attention on most layers with
+    full attention every 4th. Native vision encoder, 27 layers
+- Native precision: mxfp4 (format "mxfp4-pack-quantized", 4-bit, group 32,
+    symmetric float), routed experts only. Base dtype bfloat16. Excluded from
+    quantisation: self-attention, shared experts, dense MLP projections,
+    lm_head, vision tower, mm projector. Source: config.json
+ - The "8-bit precision" page tag is wrong; it is inferred and unreliable for
+    compressed-tensors models. Same error appears on gpt-oss-120b
+ - Licence: kimi-k3 (custom). Read it
+ - Accepted tags for assessment: mxfp4, fp4
+ - Note: the K3 report concedes K3 trails Claude Fable 5 and GPT-5.6 Sol while
+    beating other open and proprietary models. Market prices that gap at
+    roughly 3.3x, $15 against $50
 
 ### 5.2 qwen/qwen3.8-2.4t-a95b
 
