@@ -31,6 +31,29 @@ The cause is fragmentation, not scarcity: the largest models are the ones provid
 
 Frontier is therefore defined in the methodology and marked under observation, publishable when five providers serve one checkpoint at a common declared precision.
 
+### 1.3 Precision tag equivalence
+
+Where a lab publishes a checkpoint in exactly one quantised format, provider
+tags naming the bit width without the variant are treated as that format.
+Where a lab publishes in more than one format, only the exact tag qualifies.
+The accepted tags for each reference are listed in the methodology and cannot
+be changed without a published change note.
+
+**Why this rule exists.** gpt-oss-120b and Kimi K3 are both published solely in
+mxfp4 form, confirmed from config.json, yet most providers tag them bare fp4.
+Insisting on the exact tag gave gpt-oss a panel of zero, which is absurd for a
+model published in only one form. The rule is general rather than decided case
+by case, and the accepted tags are published so that widening them to reach
+five providers is visible.
+
+**Observed convention.** Both OpenAI and Moonshot publish very large MoE models
+as 4-bit routed experts on a bfloat16 skeleton, with attention, shared experts,
+dense projections, the output head and any vision tower left unquantised. This
+appears to be becoming the default release format at the top end.
+
+**Warning on page tags.** The "8-bit precision" tag on Hugging Face is inferred
+and is wrong for compressed-tensors models. It appears incorrectly on both
+gpt-oss-120b and Kimi K3. config.json governs.
 ---
 
 ## 2. Daily tracking
