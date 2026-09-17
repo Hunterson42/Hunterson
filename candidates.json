@@ -18,7 +18,7 @@
       {"openrouter_id": "z-ai/glm-5.3", "native_precision": "fp8", "reference": true},
       {"openrouter_id": "z-ai/glm-5.2", "native_precision": "fp8"},
       {"openrouter_id": "deepseek/deepseek-v4-pro-0813", "native_precision": "fp8"},
-      {"openrouter_id": "moonshotai/kimi-k2.6", "native_precision": "int4"},
+      {"openrouter_id": "moonshotai/kimi-k2.6", "native_precision": "int4"}
     ],
     "Frontier (not published)": [
       {"openrouter_id": "moonshotai/kimi-k3", "native_precision": ["mxfp4", "fp4"], "reference": true},
