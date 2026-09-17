@@ -1,4 +1,4 @@
-# Candidate tracking, rebuilt 2026-09-17 15:29 UTC
+# Candidate tracking, rebuilt 2026-09-17 15:47 UTC
 
 Qualifying providers = distinct providers serving the checkpoint at its native precision.
 Bracketed figure is the total provider count at any precision, for context.
@@ -29,7 +29,7 @@ Bracketed figure is the total provider count at any precision, for context.
 | z-ai/glm-5.3 *(reference)* | fp8 | **13** (27) | **11** (25) | **11** (25) | **12** (26) | **13** (27) | **13** (28) | **13** (29) |
 | z-ai/glm-5.2 | fp8 | **13** (24) | **13** (24) | **13** (24) | **12** (23) | **12** (23) | **12** (23) | **12** (23) |
 | deepseek/deepseek-v4-pro-0813 | fp8 | **8** (19) | **8** (20) | **8** (20) | **8** (20) | **8** (20) | **8** (20) | **8** (20) |
-| moonshotai/kimi-k2.6 | UNRESOLVED | **0** (20) | **0** (20) | **0** (20) | **0** (20) | **0** (20) | **0** (20) | **0** (20) |
+| moonshotai/kimi-k2.6 | int4 | **6** (20) | **6** (20) | **6** (20) | **6** (20) | **6** (20) | **6** (20) | **6** (20) |
 
 ### Stickiness against z-ai/glm-5.3
 
