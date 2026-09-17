@@ -1,20 +1,32 @@
 {
-  "ignore": ["anthropic/claude-opus-5", "anthropic/claude-sonnet-5"],
+  "ignore": [
+    "anthropic/claude-opus-4.5", "anthropic/claude-opus-4.6", "anthropic/claude-opus-4.7",
+    "anthropic/claude-opus-4.8", "anthropic/claude-opus-5", "anthropic/claude-sonnet-4.5",
+    "anthropic/claude-sonnet-4.6", "anthropic/claude-sonnet-5", "anthropic/claude-fable-5",
+    "openai/gpt-5", "google/gemini-3-pro", "x-ai/grok-5"
+  ],
   "grades": {
     "Standard (30B active or fewer)": [
       {"openrouter_id": "z-ai/glm-5.3-flash", "native_precision": "fp8", "reference": true},
       {"openrouter_id": "deepseek/deepseek-v4-flash-0731", "native_precision": "fp8"},
       {"openrouter_id": "deepseek/deepseek-v4.1-flash", "native_precision": "fp8"},
-      {"openrouter_id": "openai/gpt-oss-120b", "native_precision": "mxfp4"}
+      {"openrouter_id": "openai/gpt-oss-120b", "native_precision": ["mxfp4", "fp4"]},
+      {"openrouter_id": "qwen/qwen3.6-35b-a3b", "native_precision": "fp8"},
+      {"openrouter_id": "google/gemma-4-26b-a4b-it", "native_precision": "bf16"}
     ],
     "Heavy (above 30B active)": [
       {"openrouter_id": "z-ai/glm-5.3", "native_precision": "fp8", "reference": true},
+      {"openrouter_id": "z-ai/glm-5.2", "native_precision": "fp8"},
       {"openrouter_id": "deepseek/deepseek-v4-pro-0813", "native_precision": "fp8"},
       {"openrouter_id": "moonshotai/kimi-k2.6", "native_precision": "UNRESOLVED"}
     ],
     "Frontier (not published)": [
       {"openrouter_id": "moonshotai/kimi-k3", "native_precision": "UNRESOLVED"},
       {"openrouter_id": "qwen/qwen3.8-2.4t-a95b", "native_precision": "fp8"}
+    ],
+    "Soft edge, monitoring only": [
+      {"openrouter_id": "qwen/qwen3.8-27b", "native_precision": "fp8", "reference": true},
+      {"openrouter_id": "qwen/qwen3.6-27b", "native_precision": "fp8"}
     ]
   }
 }
