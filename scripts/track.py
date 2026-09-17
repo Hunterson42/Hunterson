@@ -26,7 +26,9 @@ def load_config():
 
 
 def qualifying_count(census_dir, openrouter_id, native_precision):
-    """Distinct providers serving this model at the given precision, on one day."""
+    """Distinct providers serving this model at an accepted precision, on one day.
+    native_precision may be a single string or a list of acceptable tags."""
+    accepted = native_precision if isinstance(native_precision, list) else [native_precision]
     path = os.path.join(census_dir, "endpoints", openrouter_id.replace("/", "__") + ".json")
     if not os.path.exists(path):
         return None, None
@@ -42,7 +44,7 @@ def qualifying_count(census_dir, openrouter_id, native_precision):
     for ep in endpoints:
         name = ep.get("provider_name", "unknown")
         all_providers.add(name)
-        if (ep.get("quantization") or "unspecified") == native_precision:
+        if (ep.get("quantization") or "unspecified") in accepted:
             native_providers.add(name)
     return len(native_providers), len(all_providers)
 
@@ -73,7 +75,9 @@ for grade, entries in cfg["grades"].items():
             row.append("-" if q is None else f"**{q}** ({total})")
         series[(grade, e["openrouter_id"])] = per_day
         marker = " *(reference)*" if e.get("reference") else ""
-        lines.append(f"| {e['openrouter_id']}{marker} | {e['native_precision']} | " + " | ".join(row) + " |")
+        prec = e["native_precision"]
+        prec_str = " or ".join(prec) if isinstance(prec, list) else prec
+        lines.append(f"| {e['openrouter_id']}{marker} | {prec_str} | " + " | ".join(row) + " |")
     lines.append("")
 
     # Stickiness: consecutive days each non-reference entry beat the reference.
