@@ -15,6 +15,9 @@ today = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d")
 out_dir = os.path.join("data", "census", today)
 os.makedirs(out_dir, exist_ok=True)
 
+if os.path.exists(os.path.join(out_dir, "models.json")) and not os.environ.get("FORCE_CENSUS"):
+    print(f"Census for {today} already exists; not overwriting. Set FORCE_CENSUS=1 to override.")
+    raise SystemExit(0)
 
 def get_json(url):
     req = urllib.request.Request(url, headers={"User-Agent": "inference-assessment-census/0.1"})
