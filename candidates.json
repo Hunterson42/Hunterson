@@ -21,7 +21,7 @@
       {"openrouter_id": "moonshotai/kimi-k2.6", "native_precision": "UNRESOLVED"}
     ],
     "Frontier (not published)": [
-      {"openrouter_id": "moonshotai/kimi-k3", "native_precision": "UNRESOLVED"},
+      {"openrouter_id": "moonshotai/kimi-k3", "native_precision": ["mxfp4", "fp4"], "reference": true},
       {"openrouter_id": "qwen/qwen3.8-2.4t-a95b", "native_precision": "fp8"}
     ],
     "Soft edge, monitoring only": [
