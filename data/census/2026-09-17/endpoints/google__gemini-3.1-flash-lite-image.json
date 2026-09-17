@@ -52,9 +52,9 @@
           "function": true
         },
         "status": 0,
-        "uptime_last_30m": 99.96487530734106,
+        "uptime_last_30m": 100,
         "uptime_last_5m": 100,
-        "uptime_last_1d": 99.9664102880489,
+        "uptime_last_1d": 99.95494169455274,
         "supports_implicit_caching": false,
         "supports_voice_cloning": false,
         "latency_last_30m": null,
