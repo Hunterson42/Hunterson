@@ -57,7 +57,7 @@ Reading: GLM-5.3-Flash is strengthening while DeepSeek V4 Flash 0731 is flat. De
 - Parameters: 321B total (Safetensors), 18B active (model card)
 - Native precision: **fp8**. Tensor types F8_E4M3 bulk, with BF16 and F32 components. Card tag: fp8
 - Licence: MIT
-- Census 17 Sep: 29 providers, 30 endpoints. fp8 18, unknown 8, fp4 3, nvfp4 1. **Qualifying: 18**
+- Census 17 Sep: 29 providers, 30 endpoints. fp8 18, unknown 8, fp4 3, nvfp4 1. **Qualifying: 15**
 - Hugging Face serving partners: Zai, Together, Novita, Fireworks, DeepInfra, Baseten
 - Watch: chat template changed at commit `690b705` after release. Template changes are material under the methodology; weight changes have not occurred
 
@@ -69,7 +69,7 @@ Reading: GLM-5.3-Flash is strengthening while DeepSeek V4 Flash 0731 is flat. De
 - Report caveat: the report describes the April preview; the 0731 card states the same structure plus the DSpark module
 - Native precision: **fp8**, per card tags. Tensor types BF16, I64, F32, F8_E4M3, I8
 - Licence: MIT
-- Census 17 Sep: 27 providers, 29 endpoints. fp8 13, unknown 9, fp4 6, bf16 1. **Qualifying: 13**
+- Census 17 Sep: 27 providers, 29 endpoints. fp8 13, unknown 9, fp4 6, bf16 1. **Qualifying: 12**
 - Hugging Face serving partners: Together, Novita, Fireworks, DeepInfra, Baseten, Scaleway
 - Alias warning: the undated `deepseek/deepseek-v4-flash` is a separate listing with 16 providers. Not the same product. The hash is the identifier
 - Open question: repository is 167 GB against 304B parameters, which does not reconcile at one byte per parameter. Check `config.json` for a `quantization_config` block
@@ -107,7 +107,7 @@ Reading: GLM-5.3-Flash is strengthening while DeepSeek V4 Flash 0731 is flat. De
 - Discrepancy: card shows 753B total against 744B announced. Presumably a later revision within the series. Record both
 - Native precision: **fp8**, per card tag. Tensor types BF16, F8_E4M3, F32
 - Licence: `glm-5.3` custom, not MIT. Read before relying on it; restrictive terms could limit panel growth
-- Census 17 Sep: 29 providers, 33 endpoints. fp8 15, unknown 10, fp4 7, nvfp4 1. **Qualifying: 15**
+- Census 17 Sep: 29 providers, 33 endpoints. fp8 15, unknown 10, fp4 7, nvfp4 1. **Qualifying: 13**
 - Note: same base model as GLM-5.2; gains from post-training only
 
 ### 4.2 deepseek-ai/DeepSeek-V4-Pro-0813
