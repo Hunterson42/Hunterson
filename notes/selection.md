@@ -71,6 +71,48 @@ appears to be becoming the default release format at the top end.
 and is wrong for compressed-tensors models. It appears incorrectly on both
 gpt-oss-120b and Kimi K3. config.json governs.
 
+### 1.4 Launch threshold and maintenance floor
+
+**Launch threshold.** A grade is published only after its reference has held at
+least 10 qualifying providers for 20 consecutive assessment days.
+
+**Maintenance floor.** Once published, the grade continues while the reference
+holds at least 5. Below 5, no price is published that day and the count is
+published instead, with the reason. A grade below 5 for 20 consecutive days is
+withdrawn and must re-qualify at the launch threshold.
+
+**Why two numbers.** This is the exchange convention: listing requirements are
+stricter than continued listing requirements. A grade admitted at exactly the
+floor is one departure from non-publication, and a grade that prints "not
+published" every third week looks like a failure rather than a rule working.
+
+**Position at 17 September.** Standard qualifies, reference at 15. Heavy
+qualifies, reference at 13. Frontier does not, reference at 6 or 7.
+
+**Consequence.** Standard and Heavy launch on 3 November. Frontier publishes a
+daily qualifying count with no price until it reaches 10. The count is
+published rather than withheld, because the number of providers able to agree
+on how to serve a frontier open-weight model is itself a measure of how
+commoditised the top of the market is.
+
+### 1.5 The census is written once per day
+
+`census.py` refuses to overwrite a day's census once written. A manual re-run
+skips collection and re-runs only the analysis.
+
+**Why.** Before this change, the folder was named for the date but its contents
+were whatever the last run of the day had fetched. Between a 12:03 and a 15:47
+run on 17 September, the 17 September census changed: DeepSeek V4.1-Flash went
+from 8 qualifying providers to 9, Kimi K3 from 6 to 7.
+
+Harmless in selection work and fatal once live. The assessor takes posted
+prices from that day's census, and the methodology says prices are taken in a
+fixed window. A later run overwriting the morning's file would mean the
+published price was marked against data that did not exist at the assessment
+time, and the raw data would no longer support the number.
+
+Re-analysing is free. Re-collecting is not.
+
 ---
 
 ## 2. Daily tracking
