@@ -20,16 +20,32 @@ Standard is 30 billion active parameters or fewer. Heavy is above 30 billion.
 
 **Known soft edge.** The Qwen dense 27B models would fall in Standard on active parameters while pricing at roughly $2.50 per million, five times the Standard band. Active parameters predict the price band well but not perfectly. Not retrofitted: the rollover mechanism and its published conversion ratio exist to carry users across exactly such a step. Recorded here as a known limitation. Confirm whether these models are dense before writing it up.
 
-### 1.2 Frontier grade defined but not published
+### 1.2 Frontier grade: definition
 
-No open-weight model in the frontier band reaches five distinct providers at a single declared precision.
+Frontier comprises open-weight models at the capability edge, provisionally
+those above 70 billion active parameters.
 
-- Kimi K3, 17 September: 17 providers, split unknown 9, fp4 4, fp8 3, mxfp4 3, bf16 1. Largest single-precision group: 4.
-- Qwen 3.8 2.4T-A95B, 17 September: 7 providers, of which fp8 1 and fp4 1.
+**The 70 billion floor is provisional.** It sits in the gap between DeepSeek
+V4 Pro at 49B active and Qwen 3.8 at 95B, but it rests on two observations
+where the 30B line rested on seven. It will be reviewed once five models sit
+above it.
 
-The cause is fragmentation, not scarcity: the largest models are the ones providers most need to shrink, and they shrink them differently. Waiting for more providers does not fix it.
+**What actually defines the grade is serving fragmentation, not size.** At
+1.7T total, DeepSeek V4 Pro has eight providers all at fp8, because the lab
+published at fp8 and everyone serves it that way. Kimi K3 at 2.8T has
+seventeen providers across five tags. Size does not fragment a panel; being at
+the capability edge does, because that is where providers are forced into
+their own compromises to serve economically.
 
-Frontier is therefore defined in the methodology and marked under observation, publishable when five providers serve one checkpoint at a common declared precision.
+**Correction, 17 September.** This section previously concluded Frontier was
+unpublishable because no model reached five providers at one precision. That
+rested on reading the ranking page's tag split as though each tag were a
+different product. Once Kimi K3's native precision was resolved to mxfp4 from
+config.json, fp4 and mxfp4 became one population under rule 1.3, and K3 shows
+6 qualifying providers on every day from 11 to 16 September and 7 on the 17th.
+The finding was wrong and the grade has a panel.
+
+**Frontier is nonetheless not published at launch.** See rule 1.4.
 
 ### 1.3 Precision tag equivalence
 
