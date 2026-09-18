@@ -244,12 +244,26 @@ correction applied.
 - OpenRouter id: `moonshotai/kimi-k2.6`
 - Commit hash: `7eb5002f6aadc958aed6a9177b7ed26bb94011bb`
 - Parameters: 1T total, 32B active (Model Summary table)
-- Architecture: MoE, 384 experts, 8 selected per token, 1 shared, 61 layers. MoonViT vision encoder at 400M. Context 256K
-- Native precision: **UNRESOLVED**. Tensor types F32, I32, BF16. The `compressed-tensors` tag names a quantisation framework, not a precision. Check `config.json` for the quantisation block
+- Architecture: MoE, 384 routed experts, 8 per token, 1 shared, 61 layers.
+  Context 262,144. Vision encoder 27 layers
+- **Native precision: int4.** config.json quantization_config gives type
+  "int", num_bits 4, format "pack-quantized", group_size 32, symmetric. Base
+  dtype bfloat16
+- Unquantised per the ignore list: self-attention, shared experts, dense MLP
+  projections, lm_head, vision tower, mm projector
+- **Accepted tag: int4 only.** Endpoints tagged fp4 are serving a form the lab
+  did not publish, and are excluded under rule 1.3
 - Licence: modified-mit. Read it
-- Census 17 Sep: 20 providers, 21 endpoints. int4 6, fp4 6, unknown 5, fp8 3, bf16 1. Most fragmented panel of any candidate. **Qualifying: at most 6, precision undetermined**
-- Grade: Heavy at 32B active, 7 per cent above the boundary, inside the 20 per cent review trigger
-- Not selectable as a reference until precision is resolved
+- Architecture note: the text config declares `DeepseekV3ForCausalLM` and ships
+  DeepSeek's modelling files. K3, three weeks later, uses Moonshot's own
+  `KimiLinearForCausalLM` with Kimi Delta Attention. A genuine generational
+  break, and the likely reason the two panels differ so much: providers had
+  DeepSeek V3 tooling ready for K2.6 and needed new work for K3
+- Outstanding: config.json commit `2755962`, "support-transformers-inference",
+  was made after release. Check whether it touched weights or only loading
+  code. Weights change triggers rollover; loading code does not
+- Grade: Heavy at 32B active, 7 per cent above the boundary, inside the 20 per
+  cent review trigger
 
 ---
 
