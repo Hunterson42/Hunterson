@@ -1,0 +1,25 @@
+{
+  "data": {
+    "id": "openrouter/auto-beta",
+    "name": "Auto Router (Beta)",
+    "created": 1784311165,
+    "description": "Auto Router (Beta) is a task-aware router from OpenRouter. It classifies each request, then routes it the [most popular model](/rankings#task-spend) for that task based on aggregate spend, filtered by your...",
+    "architecture": {
+      "tokenizer": "Router",
+      "instruct_type": null,
+      "modality": "text+image+file+audio+video->text+image",
+      "input_modalities": [
+        "text",
+        "image",
+        "audio",
+        "file",
+        "video"
+      ],
+      "output_modalities": [
+        "text",
+        "image"
+      ]
+    },
+    "endpoints": []
+  }
+}
