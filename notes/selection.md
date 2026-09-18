@@ -367,11 +367,15 @@ The ambiguity of bare `fp4` is a live problem for gpt-oss, whose native format i
 
 ## 8. Open items before 25 September
 
-1. Collect the model card for DeepSeek V4.1-Flash: hash, total and active parameters, native precision
-2. Resolve Kimi K2.6 native precision from `config.json`
-3. Resolve whether the Qwen 27B models are dense; if so, record the soft-edge finding properly
-4. Read the GLM-5.3 and Kimi licences
-5. Decide whether bare `fp4` counts as native for gpt-oss
-6. Reconcile the DeepSeek V4 Flash 167 GB against 304B parameters
+1. Collect the model card for DeepSeek V4.1-Flash: hash, total and active
+   parameters, native precision
+2. Resolve whether the Qwen 27B models are dense; if so, record the soft-edge
+   finding properly
+3. Read the GLM-5.3, Kimi K2.6 and Kimi K3 licences
+4. Check whether Kimi K2.6 config commit `2755962` touched weights
+5. Reconcile the DeepSeek V4 Flash 167 GB against 304B parameters
+6. Check the Minimax M3 card; 8 fp8 providers and never examined
 7. Choose the Standard reference and record the ten daily qualifying counts
-8. Confirm the Heavy reference, on current data GLM-5.3 at 15 qualifying
+8. Confirm the Heavy reference, noting the GLM-5.2 instability in section 2
+9. Add the once-per-day census rule to the methodology data sources section
+10. Add the launch threshold and maintenance floor to the methodology
