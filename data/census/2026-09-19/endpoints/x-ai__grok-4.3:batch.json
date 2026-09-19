@@ -1,0 +1,78 @@
+{
+  "data": {
+    "id": "x-ai/grok-4.3:batch",
+    "name": "SpaceXAI: Grok 4.3 (batch)",
+    "created": 1777591821,
+    "description": "Grok 4.3 is a reasoning model from SpaceXAI. It accepts text and image inputs with text output, and is suited for agentic workflows, instruction-following tasks, and applications requiring high factual...",
+    "architecture": {
+      "tokenizer": "Grok",
+      "instruct_type": null,
+      "modality": "text+image+file->text",
+      "input_modalities": [
+        "text",
+        "image",
+        "file"
+      ],
+      "output_modalities": [
+        "text"
+      ]
+    },
+    "endpoints": [
+      {
+        "name": "xAI | x-ai/grok-4.3-20260430:batch",
+        "model_id": "x-ai/grok-4.3:batch",
+        "model_name": "SpaceXAI: Grok 4.3",
+        "context_length": 1000000,
+        "pricing": {
+          "prompt": "0.000001",
+          "completion": "0.000002",
+          "web_search": "0.005",
+          "input_cache_read": "0.00000016",
+          "discount": 0,
+          "overrides": [
+            {
+              "min_prompt_tokens": 200000,
+              "prompt": "0.000002",
+              "completion": "0.000004",
+              "input_cache_read": "0.00000032"
+            }
+          ]
+        },
+        "provider_name": "xAI",
+        "tag": "xai",
+        "quantization": "unknown",
+        "max_completion_tokens": 900000,
+        "max_prompt_tokens": null,
+        "supported_parameters": [
+          "reasoning",
+          "include_reasoning",
+          "structured_outputs",
+          "response_format",
+          "max_tokens",
+          "temperature",
+          "top_p",
+          "seed",
+          "logprobs",
+          "top_logprobs",
+          "tools",
+          "tool_choice",
+          "reasoning_effort"
+        ],
+        "supports_tool_choice": {
+          "none": true,
+          "auto": true,
+          "required": true,
+          "function": true
+        },
+        "status": 0,
+        "uptime_last_30m": null,
+        "uptime_last_5m": null,
+        "uptime_last_1d": null,
+        "supports_implicit_caching": false,
+        "supports_voice_cloning": false,
+        "latency_last_30m": null,
+        "throughput_last_30m": null
+      }
+    ]
+  }
+}

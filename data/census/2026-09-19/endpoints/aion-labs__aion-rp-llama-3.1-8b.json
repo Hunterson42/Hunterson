@@ -1,0 +1,56 @@
+{
+  "data": {
+    "id": "aion-labs/aion-rp-llama-3.1-8b",
+    "name": "AionLabs: Aion-RP 1.0 (8B)",
+    "created": 1738696718,
+    "description": "Aion-RP-Llama-3.1-8B ranks the highest in the character evaluation portion of the RPBench-Auto benchmark, a roleplaying-specific variant of Arena-Hard-Auto, where LLMs evaluate each other\u2019s responses. It is a fine-tuned base model...",
+    "architecture": {
+      "tokenizer": "Other",
+      "instruct_type": null,
+      "modality": "text->text",
+      "input_modalities": [
+        "text"
+      ],
+      "output_modalities": [
+        "text"
+      ]
+    },
+    "endpoints": [
+      {
+        "name": "AionLabs | aion-labs/aion-rp-llama-3.1-8b",
+        "model_id": "aion-labs/aion-rp-llama-3.1-8b",
+        "model_name": "AionLabs: Aion-RP 1.0 (8B)",
+        "context_length": 32768,
+        "pricing": {
+          "prompt": "0.0000008",
+          "completion": "0.0000016",
+          "discount": 0
+        },
+        "provider_name": "AionLabs",
+        "tag": "aion-labs",
+        "quantization": "unknown",
+        "max_completion_tokens": 29491,
+        "max_prompt_tokens": null,
+        "supported_parameters": [
+          "max_tokens",
+          "temperature",
+          "top_p"
+        ],
+        "supports_tool_choice": {
+          "none": true,
+          "auto": true,
+          "required": true,
+          "function": true
+        },
+        "status": 0,
+        "uptime_last_30m": null,
+        "uptime_last_5m": null,
+        "uptime_last_1d": 100,
+        "supports_implicit_caching": false,
+        "supports_voice_cloning": false,
+        "latency_last_30m": null,
+        "throughput_last_30m": null
+      }
+    ]
+  }
+}

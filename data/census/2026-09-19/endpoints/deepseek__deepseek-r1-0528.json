@@ -1,0 +1,202 @@
+{
+  "data": {
+    "id": "deepseek/deepseek-r1-0528",
+    "name": "DeepSeek: R1 0528",
+    "created": 1748455170,
+    "description": "May 28th update to the [original DeepSeek R1](/deepseek/deepseek-r1) Performance on par with [OpenAI o1](/openai/o1), but open-sourced and with fully open reasoning tokens. It's 671B parameters in size, with 37B active...",
+    "architecture": {
+      "tokenizer": "DeepSeek",
+      "instruct_type": "deepseek-r1",
+      "modality": "text->text",
+      "input_modalities": [
+        "text"
+      ],
+      "output_modalities": [
+        "text"
+      ]
+    },
+    "endpoints": [
+      {
+        "name": "DeepInfra | deepseek/deepseek-r1-0528",
+        "model_id": "deepseek/deepseek-r1-0528",
+        "model_name": "DeepSeek: R1 0528",
+        "context_length": 163840,
+        "pricing": {
+          "prompt": "0.0000005",
+          "completion": "0.00000215",
+          "input_cache_read": "0.00000035",
+          "discount": 0
+        },
+        "provider_name": "DeepInfra",
+        "tag": "deepinfra/fp4",
+        "quantization": "fp4",
+        "max_completion_tokens": 32768,
+        "max_prompt_tokens": null,
+        "supported_parameters": [
+          "reasoning",
+          "include_reasoning",
+          "max_tokens",
+          "temperature",
+          "top_p",
+          "stop",
+          "frequency_penalty",
+          "presence_penalty",
+          "repetition_penalty",
+          "top_k",
+          "seed",
+          "min_p",
+          "structured_outputs",
+          "logit_bias",
+          "response_format"
+        ],
+        "supports_tool_choice": {
+          "none": true,
+          "auto": true,
+          "required": true,
+          "function": true
+        },
+        "status": 0,
+        "uptime_last_30m": 99.93650793650794,
+        "uptime_last_5m": 100,
+        "uptime_last_1d": 99.92862969004894,
+        "supports_implicit_caching": false,
+        "supports_voice_cloning": false,
+        "latency_last_30m": null,
+        "throughput_last_30m": null
+      },
+      {
+        "name": "SiliconFlow | deepseek/deepseek-r1-0528",
+        "model_id": "deepseek/deepseek-r1-0528",
+        "model_name": "DeepSeek: R1 0528",
+        "context_length": 163840,
+        "pricing": {
+          "prompt": "0.0000005",
+          "completion": "0.00000218",
+          "discount": 0
+        },
+        "provider_name": "SiliconFlow",
+        "tag": "siliconflow/fp8",
+        "quantization": "fp8",
+        "max_completion_tokens": 147456,
+        "max_prompt_tokens": null,
+        "supported_parameters": [
+          "reasoning",
+          "include_reasoning",
+          "structured_outputs",
+          "response_format",
+          "temperature",
+          "top_p",
+          "top_k",
+          "frequency_penalty",
+          "tools",
+          "tool_choice",
+          "max_tokens"
+        ],
+        "supports_tool_choice": {
+          "none": true,
+          "auto": true,
+          "required": false,
+          "function": true
+        },
+        "status": 0,
+        "uptime_last_30m": 99.80916030534351,
+        "uptime_last_5m": 100,
+        "uptime_last_1d": 99.66496101364523,
+        "supports_implicit_caching": false,
+        "supports_voice_cloning": false,
+        "latency_last_30m": null,
+        "throughput_last_30m": null
+      },
+      {
+        "name": "StreamLake | deepseek/deepseek-r1-0528",
+        "model_id": "deepseek/deepseek-r1-0528",
+        "model_name": "DeepSeek: R1 0528",
+        "context_length": 128000,
+        "pricing": {
+          "prompt": "0.000000571",
+          "completion": "0.000002286",
+          "discount": 0
+        },
+        "provider_name": "StreamLake",
+        "tag": "streamlake",
+        "quantization": "unknown",
+        "max_completion_tokens": 32000,
+        "max_prompt_tokens": null,
+        "supported_parameters": [
+          "reasoning",
+          "include_reasoning",
+          "response_format",
+          "structured_outputs",
+          "logprobs",
+          "top_logprobs",
+          "max_tokens",
+          "temperature",
+          "top_p",
+          "stop",
+          "presence_penalty"
+        ],
+        "supports_tool_choice": {
+          "none": true,
+          "auto": true,
+          "required": true,
+          "function": true
+        },
+        "status": 0,
+        "uptime_last_30m": 99.20212765957447,
+        "uptime_last_5m": 100,
+        "uptime_last_1d": 99.37402190923318,
+        "supports_implicit_caching": false,
+        "supports_voice_cloning": false,
+        "latency_last_30m": null,
+        "throughput_last_30m": null
+      },
+      {
+        "name": "Novita | deepseek/deepseek-r1-0528",
+        "model_id": "deepseek/deepseek-r1-0528",
+        "model_name": "DeepSeek: R1 0528",
+        "context_length": 163840,
+        "pricing": {
+          "prompt": "0.0000007",
+          "completion": "0.0000025",
+          "input_cache_read": "0.00000035",
+          "discount": 0
+        },
+        "provider_name": "Novita",
+        "tag": "novita/fp8",
+        "quantization": "fp8",
+        "max_completion_tokens": 32768,
+        "max_prompt_tokens": null,
+        "supported_parameters": [
+          "reasoning",
+          "include_reasoning",
+          "max_tokens",
+          "temperature",
+          "top_p",
+          "stop",
+          "frequency_penalty",
+          "presence_penalty",
+          "seed",
+          "top_k",
+          "repetition_penalty",
+          "tools",
+          "tool_choice",
+          "response_format"
+        ],
+        "supports_tool_choice": {
+          "none": true,
+          "auto": true,
+          "required": true,
+          "function": true
+        },
+        "status": 0,
+        "uptime_last_30m": null,
+        "uptime_last_5m": null,
+        "uptime_last_1d": 99.38650306748467,
+        "supports_implicit_caching": false,
+        "supports_voice_cloning": false,
+        "latency_last_30m": null,
+        "throughput_last_30m": null
+      }
+    ]
+  }
+}
