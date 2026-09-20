@@ -1,0 +1,151 @@
+{
+  "data": {
+    "id": "deepseek/deepseek-chat-v3-0324",
+    "name": "DeepSeek: DeepSeek V3 0324",
+    "created": 1742824755,
+    "description": "DeepSeek V3, a 685B-parameter, mixture-of-experts model, is the latest iteration of the flagship chat model family from the DeepSeek team. It succeeds the [DeepSeek V3](/deepseek/deepseek-chat-v3) model and performs really well...",
+    "architecture": {
+      "tokenizer": "DeepSeek",
+      "instruct_type": null,
+      "modality": "text->text",
+      "input_modalities": [
+        "text"
+      ],
+      "output_modalities": [
+        "text"
+      ]
+    },
+    "endpoints": [
+      {
+        "name": "DeepInfra | deepseek/deepseek-chat-v3-0324",
+        "model_id": "deepseek/deepseek-chat-v3-0324",
+        "model_name": "DeepSeek: DeepSeek V3 0324",
+        "context_length": 163840,
+        "pricing": {
+          "prompt": "0.00000024",
+          "completion": "0.0000009",
+          "input_cache_read": "0.000000135",
+          "discount": 0
+        },
+        "provider_name": "DeepInfra",
+        "tag": "deepinfra/fp4",
+        "quantization": "fp4",
+        "max_completion_tokens": 16384,
+        "max_prompt_tokens": null,
+        "supported_parameters": [
+          "max_tokens",
+          "temperature",
+          "top_p",
+          "stop",
+          "frequency_penalty",
+          "presence_penalty",
+          "repetition_penalty",
+          "top_k",
+          "seed",
+          "min_p",
+          "logit_bias",
+          "tools",
+          "tool_choice",
+          "structured_outputs",
+          "response_format"
+        ],
+        "supports_tool_choice": {
+          "none": true,
+          "auto": true,
+          "required": false,
+          "function": false
+        },
+        "status": 0,
+        "uptime_last_30m": 96.89265536723164,
+        "uptime_last_5m": 100,
+        "uptime_last_1d": 92.6241751748137,
+        "supports_implicit_caching": false,
+        "supports_voice_cloning": false,
+        "latency_last_30m": null,
+        "throughput_last_30m": null
+      },
+      {
+        "name": "SiliconFlow | deepseek/deepseek-chat-v3-0324",
+        "model_id": "deepseek/deepseek-chat-v3-0324",
+        "model_name": "DeepSeek: DeepSeek V3 0324",
+        "context_length": 163840,
+        "pricing": {
+          "prompt": "0.00000025",
+          "completion": "0.000001",
+          "discount": 0
+        },
+        "provider_name": "SiliconFlow",
+        "tag": "siliconflow/fp8",
+        "quantization": "fp8",
+        "max_completion_tokens": 147456,
+        "max_prompt_tokens": null,
+        "supported_parameters": [
+          "structured_outputs",
+          "response_format",
+          "temperature",
+          "top_p",
+          "top_k",
+          "frequency_penalty",
+          "tools",
+          "tool_choice",
+          "max_tokens"
+        ],
+        "supports_tool_choice": {
+          "none": true,
+          "auto": true,
+          "required": false,
+          "function": true
+        },
+        "status": 0,
+        "uptime_last_30m": 98.53777416734363,
+        "uptime_last_5m": 99.22958397534669,
+        "uptime_last_1d": 99.21105292405905,
+        "supports_implicit_caching": false,
+        "supports_voice_cloning": false,
+        "latency_last_30m": null,
+        "throughput_last_30m": null
+      },
+      {
+        "name": "GMICloud | deepseek/deepseek-chat-v3-0324",
+        "model_id": "deepseek/deepseek-chat-v3-0324",
+        "model_name": "DeepSeek: DeepSeek V3 0324",
+        "context_length": 163840,
+        "pricing": {
+          "prompt": "0.00000029",
+          "completion": "0.00000114",
+          "input_cache_read": "0.00000011",
+          "discount": 0
+        },
+        "provider_name": "GMICloud",
+        "tag": "gmicloud/fp8",
+        "quantization": "fp8",
+        "max_completion_tokens": 147456,
+        "max_prompt_tokens": null,
+        "supported_parameters": [
+          "max_tokens",
+          "temperature",
+          "top_p",
+          "seed",
+          "response_format",
+          "structured_outputs",
+          "logprobs",
+          "top_logprobs"
+        ],
+        "supports_tool_choice": {
+          "none": true,
+          "auto": true,
+          "required": true,
+          "function": true
+        },
+        "status": 0,
+        "uptime_last_30m": 95.36509580528224,
+        "uptime_last_5m": 96.47302904564316,
+        "uptime_last_1d": 97.00464217447015,
+        "supports_implicit_caching": false,
+        "supports_voice_cloning": false,
+        "latency_last_30m": null,
+        "throughput_last_30m": null
+      }
+    ]
+  }
+}

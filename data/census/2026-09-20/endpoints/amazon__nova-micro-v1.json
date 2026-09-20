@@ -1,0 +1,97 @@
+{
+  "data": {
+    "id": "amazon/nova-micro-v1",
+    "name": "Amazon: Nova Micro 1.0",
+    "created": 1733437237,
+    "description": "Amazon Nova Micro 1.0 is a text-only model that delivers the lowest latency responses in the Amazon Nova family of models at a very low cost. With a context length...",
+    "architecture": {
+      "tokenizer": "Nova",
+      "instruct_type": null,
+      "modality": "text->text",
+      "input_modalities": [
+        "text"
+      ],
+      "output_modalities": [
+        "text"
+      ]
+    },
+    "endpoints": [
+      {
+        "name": "Amazon Bedrock | amazon/nova-micro-v1",
+        "model_id": "amazon/nova-micro-v1",
+        "model_name": "Amazon: Nova Micro 1.0",
+        "context_length": 128000,
+        "pricing": {
+          "prompt": "0.000000035",
+          "completion": "0.00000014",
+          "discount": 0
+        },
+        "provider_name": "Amazon Bedrock",
+        "tag": "amazon-bedrock/eu-west-1",
+        "quantization": "unknown",
+        "max_completion_tokens": 5120,
+        "max_prompt_tokens": null,
+        "supported_parameters": [
+          "max_tokens",
+          "temperature",
+          "top_p",
+          "top_k",
+          "stop",
+          "tools"
+        ],
+        "supports_tool_choice": {
+          "none": true,
+          "auto": true,
+          "required": true,
+          "function": true
+        },
+        "status": -5,
+        "uptime_last_30m": 22.95866074478989,
+        "uptime_last_5m": null,
+        "uptime_last_1d": 79.18021608113489,
+        "supports_implicit_caching": false,
+        "supports_voice_cloning": false,
+        "latency_last_30m": null,
+        "throughput_last_30m": null
+      },
+      {
+        "name": "Amazon Bedrock | amazon/nova-micro-v1",
+        "model_id": "amazon/nova-micro-v1",
+        "model_name": "Amazon: Nova Micro 1.0",
+        "context_length": 128000,
+        "pricing": {
+          "prompt": "0.000000035",
+          "completion": "0.00000014",
+          "discount": 0
+        },
+        "provider_name": "Amazon Bedrock",
+        "tag": "amazon-bedrock",
+        "quantization": "unknown",
+        "max_completion_tokens": 5120,
+        "max_prompt_tokens": null,
+        "supported_parameters": [
+          "max_tokens",
+          "temperature",
+          "top_p",
+          "top_k",
+          "stop",
+          "tools"
+        ],
+        "supports_tool_choice": {
+          "none": true,
+          "auto": true,
+          "required": true,
+          "function": true
+        },
+        "status": 0,
+        "uptime_last_30m": 96.09185814992198,
+        "uptime_last_5m": 100,
+        "uptime_last_1d": 97.717019835399,
+        "supports_implicit_caching": false,
+        "supports_voice_cloning": false,
+        "latency_last_30m": null,
+        "throughput_last_30m": null
+      }
+    ]
+  }
+}
