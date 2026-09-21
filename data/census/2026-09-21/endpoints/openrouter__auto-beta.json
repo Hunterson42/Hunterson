@@ -1,0 +1,25 @@
+{
+  "data": {
+    "id": "openrouter/auto-beta",
+    "name": "Auto Router (Beta)",
+    "created": 1784311165,
+    "description": "The experimental version of our Auto Router where we test new improvements. Use it to get the latest and greatest version of our general purpose auto router, but expect beta...",
+    "architecture": {
+      "tokenizer": "Router",
+      "instruct_type": null,
+      "modality": "text+image+file+audio+video->text+image",
+      "input_modalities": [
+        "text",
+        "image",
+        "audio",
+        "file",
+        "video"
+      ],
+      "output_modalities": [
+        "text",
+        "image"
+      ]
+    },
+    "endpoints": []
+  }
+}
