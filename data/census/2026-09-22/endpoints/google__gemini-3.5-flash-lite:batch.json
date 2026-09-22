@@ -1,0 +1,73 @@
+{
+  "data": {
+    "id": "google/gemini-3.5-flash-lite:batch",
+    "name": "Google: Gemini 3.5 Flash Lite (batch)",
+    "created": 1784646726,
+    "description": "Gemini 3.5 Flash Lite is a high-efficiency model from Google with upgraded agentic capabilities. It is suited for subagents that execute focused tasks within complex, multi-agent workflows.",
+    "architecture": {
+      "tokenizer": "Gemini",
+      "instruct_type": null,
+      "modality": "text+image+file+audio+video->text",
+      "input_modalities": [
+        "text",
+        "image",
+        "video",
+        "file",
+        "audio"
+      ],
+      "output_modalities": [
+        "text"
+      ]
+    },
+    "endpoints": [
+      {
+        "name": "Google | google/gemini-3.5-flash-lite-20260721:batch",
+        "model_id": "google/gemini-3.5-flash-lite:batch",
+        "model_name": "Google: Gemini 3.5 Flash Lite",
+        "context_length": 1048576,
+        "pricing": {
+          "prompt": "0.00000015",
+          "completion": "0.00000125",
+          "image": "0.00000015",
+          "audio": "0.00000015",
+          "input_audio_cache": "0.000000015",
+          "web_search": "0.014",
+          "internal_reasoning": "0.00000125",
+          "input_cache_read": "0.000000015",
+          "discount": 0
+        },
+        "provider_name": "Google",
+        "tag": "google-vertex/global",
+        "quantization": "unknown",
+        "max_completion_tokens": 65536,
+        "max_prompt_tokens": null,
+        "supported_parameters": [
+          "reasoning",
+          "include_reasoning",
+          "max_tokens",
+          "seed",
+          "response_format",
+          "stop",
+          "structured_outputs",
+          "tools",
+          "tool_choice",
+          "reasoning_effort"
+        ],
+        "supports_tool_choice": {
+          "none": true,
+          "auto": true,
+          "required": true,
+          "function": true
+        },
+        "status": 0,
+        "uptime_last_30m": null,
+        "uptime_last_5m": null,
+        "uptime_last_1d": null,
+        "supports_implicit_caching": true,
+        "supports_voice_cloning": false,
+        "latency_last_30m": null,
+        "throughput_last_30m": null
+      }
+    ]
+  }
+}
