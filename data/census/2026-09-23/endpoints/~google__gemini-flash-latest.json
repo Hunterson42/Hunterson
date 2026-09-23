@@ -1,0 +1,24 @@
+{
+  "data": {
+    "id": "~google/gemini-flash-latest",
+    "name": "Google: Gemini Flash Latest",
+    "created": 1777318398,
+    "description": "This model always redirects to the latest model in the Gemini Flash family.",
+    "architecture": {
+      "tokenizer": "Router",
+      "instruct_type": null,
+      "modality": "text+image+file+audio+video->text",
+      "input_modalities": [
+        "text",
+        "image",
+        "file",
+        "audio",
+        "video"
+      ],
+      "output_modalities": [
+        "text"
+      ]
+    },
+    "endpoints": []
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "data": {
+    "id": "perplexity/sonar",
+    "name": "Perplexity: Sonar",
+    "created": 1738013808,
+    "description": "Sonar is lightweight, affordable, fast, and simple to use \u2014 now featuring citations and the ability to customize sources. It is designed for companies seeking to integrate lightweight question-and-answer features...",
+    "architecture": {
+      "tokenizer": "Other",
+      "instruct_type": null,
+      "modality": "text+image->text",
+      "input_modalities": [
+        "text",
+        "image"
+      ],
+      "output_modalities": [
+        "text"
+      ]
+    },
+    "endpoints": [
+      {
+        "name": "Perplexity | perplexity/sonar",
+        "model_id": "perplexity/sonar",
+        "model_name": "Perplexity: Sonar",
+        "context_length": 127072,
+        "pricing": {
+          "prompt": "0.000001",
+          "completion": "0.000001",
+          "web_search": "0.005",
+          "discount": 0
+        },
+        "provider_name": "Perplexity",
+        "tag": "perplexity",
+        "quantization": "unknown",
+        "max_completion_tokens": 114364,
+        "max_prompt_tokens": null,
+        "supported_parameters": [
+          "max_tokens",
+          "temperature",
+          "top_p",
+          "top_k",
+          "frequency_penalty",
+          "presence_penalty",
+          "web_search_options"
+        ],
+        "supports_tool_choice": {
+          "none": true,
+          "auto": true,
+          "required": true,
+          "function": true
+        },
+        "status": 0,
+        "uptime_last_30m": 100,
+        "uptime_last_5m": 100,
+        "uptime_last_1d": 99.99326134200373,
+        "supports_implicit_caching": false,
+        "supports_voice_cloning": false,
+        "latency_last_30m": null,
+        "throughput_last_30m": null
+      }
+    ]
+  }
+}

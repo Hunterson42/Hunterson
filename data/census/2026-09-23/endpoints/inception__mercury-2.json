@@ -1,0 +1,64 @@
+{
+  "data": {
+    "id": "inception/mercury-2",
+    "name": "Inception: Mercury 2",
+    "created": 1772636275,
+    "description": "Mercury 2 is an extremely fast reasoning LLM, and the first reasoning diffusion LLM (dLLM). Instead of generating tokens sequentially, Mercury 2 produces and refines multiple tokens in parallel, achieving...",
+    "architecture": {
+      "tokenizer": "Other",
+      "instruct_type": null,
+      "modality": "text->text",
+      "input_modalities": [
+        "text"
+      ],
+      "output_modalities": [
+        "text"
+      ]
+    },
+    "endpoints": [
+      {
+        "name": "Inception | inception/mercury-2-20260304",
+        "model_id": "inception/mercury-2",
+        "model_name": "Inception: Mercury 2",
+        "context_length": 128000,
+        "pricing": {
+          "prompt": "0.00000025",
+          "completion": "0.00000075",
+          "input_cache_read": "0.000000025",
+          "discount": 0
+        },
+        "provider_name": "Inception",
+        "tag": "inception",
+        "quantization": "unknown",
+        "max_completion_tokens": 50000,
+        "max_prompt_tokens": null,
+        "supported_parameters": [
+          "reasoning",
+          "include_reasoning",
+          "max_tokens",
+          "stop",
+          "temperature",
+          "tools",
+          "tool_choice",
+          "response_format",
+          "structured_outputs",
+          "reasoning_effort"
+        ],
+        "supports_tool_choice": {
+          "none": false,
+          "auto": true,
+          "required": false,
+          "function": false
+        },
+        "status": 0,
+        "uptime_last_30m": 100,
+        "uptime_last_5m": 100,
+        "uptime_last_1d": 99.9957457308409,
+        "supports_implicit_caching": false,
+        "supports_voice_cloning": false,
+        "latency_last_30m": null,
+        "throughput_last_30m": null
+      }
+    ]
+  }
+}
