@@ -1,0 +1,65 @@
+{
+  "data": {
+    "id": "sao10k/l3.3-euryale-70b",
+    "name": "Sao10K: Llama 3.3 Euryale 70B",
+    "created": 1734535928,
+    "description": "Euryale L3.3 70B is a model focused on creative roleplay from [Sao10k](https://ko-fi.com/sao10k). It is the successor of [Euryale L3 70B v2.2](/models/sao10k/l3-euryale-70b).",
+    "architecture": {
+      "tokenizer": "Llama3",
+      "instruct_type": "llama3",
+      "modality": "text->text",
+      "input_modalities": [
+        "text"
+      ],
+      "output_modalities": [
+        "text"
+      ]
+    },
+    "endpoints": [
+      {
+        "name": "NextBit | sao10k/l3.3-euryale-70b-v2.3",
+        "model_id": "sao10k/l3.3-euryale-70b",
+        "model_name": "Sao10K: Llama 3.3 Euryale 70B",
+        "context_length": 131072,
+        "pricing": {
+          "prompt": "0.00000065",
+          "completion": "0.00000075",
+          "discount": 0
+        },
+        "provider_name": "NextBit",
+        "tag": "nextbit/bf16",
+        "quantization": "bf16",
+        "max_completion_tokens": 16384,
+        "max_prompt_tokens": null,
+        "supported_parameters": [
+          "max_tokens",
+          "temperature",
+          "top_p",
+          "stop",
+          "frequency_penalty",
+          "presence_penalty",
+          "response_format",
+          "structured_outputs",
+          "logprobs",
+          "top_logprobs",
+          "repetition_penalty",
+          "seed"
+        ],
+        "supports_tool_choice": {
+          "none": true,
+          "auto": true,
+          "required": true,
+          "function": true
+        },
+        "status": 0,
+        "uptime_last_30m": 96.95652173913044,
+        "uptime_last_5m": 93.54838709677419,
+        "uptime_last_1d": 94.31924256567542,
+        "supports_implicit_caching": false,
+        "supports_voice_cloning": false,
+        "latency_last_30m": null,
+        "throughput_last_30m": null
+      }
+    ]
+  }
+}

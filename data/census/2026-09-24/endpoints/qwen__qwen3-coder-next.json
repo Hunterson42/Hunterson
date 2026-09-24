@@ -1,0 +1,207 @@
+{
+  "data": {
+    "id": "qwen/qwen3-coder-next",
+    "name": "Qwen: Qwen3 Coder Next",
+    "created": 1770164101,
+    "description": "Qwen3-Coder-Next is an open-weight causal language model optimized for coding agents and local development workflows. It uses a sparse MoE design with 80B total parameters and only 3B activated per...",
+    "architecture": {
+      "tokenizer": "Qwen",
+      "instruct_type": null,
+      "modality": "text->text",
+      "input_modalities": [
+        "text"
+      ],
+      "output_modalities": [
+        "text"
+      ]
+    },
+    "endpoints": [
+      {
+        "name": "Parasail | qwen/qwen3-coder-next-2025-02-03",
+        "model_id": "qwen/qwen3-coder-next",
+        "model_name": "Qwen: Qwen3 Coder Next",
+        "context_length": 262144,
+        "pricing": {
+          "prompt": "0.00000012",
+          "completion": "0.0000008",
+          "input_cache_read": "0.00000007",
+          "discount": 0
+        },
+        "provider_name": "Parasail",
+        "tag": "parasail/bf16",
+        "quantization": "bf16",
+        "max_completion_tokens": 235929,
+        "max_prompt_tokens": null,
+        "supported_parameters": [
+          "max_tokens",
+          "temperature",
+          "top_p",
+          "frequency_penalty",
+          "presence_penalty",
+          "repetition_penalty",
+          "seed",
+          "stop",
+          "top_k",
+          "logit_bias",
+          "response_format",
+          "structured_outputs",
+          "tools",
+          "tool_choice",
+          "logprobs",
+          "top_logprobs"
+        ],
+        "supports_tool_choice": {
+          "none": true,
+          "auto": true,
+          "required": true,
+          "function": true
+        },
+        "status": 0,
+        "uptime_last_30m": 99.88399071925754,
+        "uptime_last_5m": 100,
+        "uptime_last_1d": 99.97154755438297,
+        "supports_implicit_caching": false,
+        "supports_voice_cloning": false,
+        "latency_last_30m": null,
+        "throughput_last_30m": null
+      },
+      {
+        "name": "StreamLake | qwen/qwen3-coder-next-2025-02-03",
+        "model_id": "qwen/qwen3-coder-next",
+        "model_name": "Qwen: Qwen3 Coder Next",
+        "context_length": 256000,
+        "pricing": {
+          "prompt": "0.00000018",
+          "completion": "0.0000009",
+          "input_cache_read": "0.000000036",
+          "discount": 0.4
+        },
+        "provider_name": "StreamLake",
+        "tag": "streamlake",
+        "quantization": "unknown",
+        "max_completion_tokens": 64000,
+        "max_prompt_tokens": null,
+        "supported_parameters": [
+          "tools",
+          "tool_choice",
+          "response_format",
+          "max_tokens",
+          "temperature",
+          "top_p",
+          "stop",
+          "presence_penalty"
+        ],
+        "supports_tool_choice": {
+          "none": false,
+          "auto": true,
+          "required": false,
+          "function": false
+        },
+        "status": 0,
+        "uptime_last_30m": 99.8371335504886,
+        "uptime_last_5m": 100,
+        "uptime_last_1d": 99.57291996203733,
+        "supports_implicit_caching": false,
+        "supports_voice_cloning": false,
+        "latency_last_30m": null,
+        "throughput_last_30m": null
+      },
+      {
+        "name": "Novita | qwen/qwen3-coder-next-2025-02-03",
+        "model_id": "qwen/qwen3-coder-next",
+        "model_name": "Qwen: Qwen3 Coder Next",
+        "context_length": 262144,
+        "pricing": {
+          "prompt": "0.0000002",
+          "completion": "0.0000015",
+          "discount": 0
+        },
+        "provider_name": "Novita",
+        "tag": "novita/fp8",
+        "quantization": "fp8",
+        "max_completion_tokens": 65536,
+        "max_prompt_tokens": null,
+        "supported_parameters": [
+          "max_tokens",
+          "temperature",
+          "top_p",
+          "stop",
+          "frequency_penalty",
+          "presence_penalty",
+          "seed",
+          "top_k",
+          "repetition_penalty",
+          "tools",
+          "tool_choice",
+          "response_format"
+        ],
+        "supports_tool_choice": {
+          "none": true,
+          "auto": true,
+          "required": true,
+          "function": true
+        },
+        "status": 0,
+        "uptime_last_30m": null,
+        "uptime_last_5m": null,
+        "uptime_last_1d": 99.6946423614324,
+        "supports_implicit_caching": false,
+        "supports_voice_cloning": false,
+        "latency_last_30m": null,
+        "throughput_last_30m": null
+      },
+      {
+        "name": "Alibaba | qwen/qwen3-coder-next-2025-02-03",
+        "model_id": "qwen/qwen3-coder-next",
+        "model_name": "Qwen: Qwen3 Coder Next",
+        "context_length": 262144,
+        "pricing": {
+          "prompt": "0.0000003",
+          "completion": "0.0000015",
+          "discount": 0,
+          "overrides": [
+            {
+              "min_prompt_tokens": 32000,
+              "prompt": "0.0000005",
+              "completion": "0.0000025"
+            },
+            {
+              "min_prompt_tokens": 128000,
+              "prompt": "0.0000008",
+              "completion": "0.000004"
+            }
+          ]
+        },
+        "provider_name": "Alibaba",
+        "tag": "alibaba",
+        "quantization": "unknown",
+        "max_completion_tokens": 65536,
+        "max_prompt_tokens": 204800,
+        "supported_parameters": [
+          "max_tokens",
+          "temperature",
+          "top_p",
+          "seed",
+          "presence_penalty",
+          "response_format",
+          "tools",
+          "tool_choice"
+        ],
+        "supports_tool_choice": {
+          "none": false,
+          "auto": true,
+          "required": false,
+          "function": false
+        },
+        "status": 0,
+        "uptime_last_30m": null,
+        "uptime_last_5m": null,
+        "uptime_last_1d": 99.57976130442091,
+        "supports_implicit_caching": false,
+        "supports_voice_cloning": false,
+        "latency_last_30m": null,
+        "throughput_last_30m": null
+      }
+    ]
+  }
+}
