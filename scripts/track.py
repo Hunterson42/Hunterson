@@ -1,14 +1,12 @@
 """
 Candidate tracker.
-Reads EVERY day of census already collected and writes data/track.md: one row
-per candidate, one column per day, showing the number of DISTINCT providers
-serving that model at its native precision. Also computes, for each challenger,
-how many consecutive days it has led the current reference, which is the
-20-day stickiness test in the methodology.
+Reads EVERY day of census already collected and writes data/track.md:
+a summary table of the latest day, then one row per candidate per day of
+history, then the stickiness streaks, then the watchlist.
 
 Config lives in candidates.json at the repository root. Re-run any time; it
-rebuilds the whole history from the saved census, so a gap or a fix in the
-config is picked up retrospectively.
+rebuilds the whole history from the saved census, so a fix in the config is
+picked up retrospectively.
 """
 import json
 import os
@@ -55,25 +53,33 @@ days = sorted(os.path.basename(p) for p in glob.glob(os.path.join("data", "censu
 if not days:
     raise SystemExit("no census data found")
 
-lines = [f"# Candidate tracking, rebuilt {datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%d %H:%M UTC')}",
-         "",
-         "Qualifying providers = distinct providers serving the checkpoint at its native precision.",
-         "Bracketed figure is the total provider count at any precision, for context.",
-         ""]
-
+# Pass one: compute every series once, as (qualifying, total) per day.
 series = {}
-summary = []
-
-# Pass one: compute every series, so the latest table can be written first.
 for grade, entries in cfg["grades"].items():
     for e in entries:
         per_day = {}
         for d in days:
-            q, total = series[(grade, e["openrouter_id"])][d]
-            per_day[d] = q
+            per_day[d] = qualifying_count(os.path.join("data", "census", d),
+                                          e["openrouter_id"], e["native_precision"])
         series[(grade, e["openrouter_id"])] = per_day
+
+lines = [f"# Candidate tracking, rebuilt {datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%d %H:%M UTC')}",
+         "",
+         "Qualifying providers = distinct providers serving the checkpoint at its native precision.",
+         "Bracketed figure in the history tables is the total provider count at any precision.",
+         ""]
+
+# Summary of the latest day.
+lines += [f"## Latest: {days[-1]}", "",
+          "Change is against seven days earlier. Share is qualifying providers as a percentage of all providers serving the model.",
+          "",
+          "| Grade | Model | Qualifying | All | Share | 7d change |",
+          "|---|---|---|---|---|---|"]
+prev_day = days[-8] if len(days) >= 8 else days[0]
+for grade, entries in cfg["grades"].items():
+    for e in entries:
+        per_day = series[(grade, e["openrouter_id"])]
         latest_q, latest_total = per_day[days[-1]]
-        prev_day = days[-8] if len(days) >= 8 else days[0]
         prev_q = per_day[prev_day][0]
         if latest_q is None:
             change = "-"
@@ -83,39 +89,27 @@ for grade, entries in cfg["grades"].items():
             diff = latest_q - prev_q
             change = f"{diff:+d}" if diff else "0"
         share = "-" if not latest_q or not latest_total else f"{100 * latest_q / latest_total:.0f}%"
-        summary.append({"grade": grade, "model": e["openrouter_id"],
-                        "ref": bool(e.get("reference")), "q": latest_q,
-                        "total": latest_total, "change": change, "share": share})
-
-lines += [f"## Latest: {days[-1]}", "",
-          "Change is against seven days earlier. Share is qualifying providers as a percentage of all providers serving the model.",
-          "",
-          "| Grade | Model | Qualifying | All | Share | 7d change |",
-          "|---|---|---|---|---|---|"]
-for s in summary:
-    marker = " *(reference)*" if s["ref"] else ""
-    lines.append(f"| {s['grade'].split(' (')[0]} | {s['model']}{marker} | "
-                 f"**{'-' if s['q'] is None else s['q']}** | {s['total'] or '-'} | {s['share']} | {s['change']} |")
+        marker = " *(reference)*" if e.get("reference") else ""
+        lines.append(f"| {grade.split(' (')[0]} | {e['openrouter_id']}{marker} | "
+                     f"**{'-' if latest_q is None else latest_q}** | {latest_total or '-'} | {share} | {change} |")
 lines.append("")
 
+# History tables and stickiness.
 for grade, entries in cfg["grades"].items():
     lines += [f"## {grade}", "",
               "| Model | Native | " + " | ".join(d[5:] for d in days) + " |",
               "|---|---|" + "---|" * len(days)]
     for e in entries:
-        row, per_day = [], {}
+        row = []
         for d in days:
-            q, total = qualifying_count(os.path.join("data", "census", d), e["openrouter_id"], e["native_precision"])
-            per_day[d] = q
+            q, total = series[(grade, e["openrouter_id"])][d]
             row.append("-" if q is None else f"**{q}** ({total})")
-        series[(grade, e["openrouter_id"])] = per_day
         marker = " *(reference)*" if e.get("reference") else ""
         prec = e["native_precision"]
         prec_str = " or ".join(prec) if isinstance(prec, list) else prec
         lines.append(f"| {e['openrouter_id']}{marker} | {prec_str} | " + " | ".join(row) + " |")
     lines.append("")
 
-    # Stickiness: consecutive days each non-reference entry beat the reference.
     ref = next((e for e in entries if e.get("reference")), None)
     if ref:
         ref_series = series[(grade, ref["openrouter_id"])]
@@ -125,7 +119,8 @@ for grade, entries in cfg["grades"].items():
                 continue
             streak = 0
             for d in reversed(days):
-                a, b = series[(grade, e["openrouter_id"])].get(d), ref_series.get(d)
+                a = series[(grade, e["openrouter_id"])][d][0]
+                b = ref_series[d][0]
                 if a is None or b is None or a <= b:
                     break
                 streak += 1
@@ -138,14 +133,14 @@ for grade, entries in cfg["grades"].items():
             lines.append(f"- {e['openrouter_id']}: {state}")
         lines.append("")
 
-# Watchlist: any model in the grade's price band that is not yet a candidate
+# Watchlist.
 lines += ["## Watchlist", "",
           "Models seen in the census with five or more providers at a single declared",
           "precision that are not listed above. Check whether they belong in a grade.", ""]
-latest = os.path.join("data", "census", days[-1], "endpoints")
+latest_dir = os.path.join("data", "census", days[-1], "endpoints")
 known = {e["openrouter_id"] for entries in cfg["grades"].values() for e in entries}
 found = []
-for path in glob.glob(os.path.join(latest, "*.json")):
+for path in glob.glob(os.path.join(latest_dir, "*.json")):
     try:
         with open(path) as f:
             data = json.load(f)
