@@ -69,8 +69,8 @@ for grade, entries in cfg["grades"].items():
     for e in entries:
         per_day = {}
         for d in days:
-            q, total = qualifying_count(os.path.join("data", "census", d), e["openrouter_id"], e["native_precision"])
-            per_day[d] = (q, total)
+            q, total = series[(grade, e["openrouter_id"])][d]
+            per_day[d] = q
         series[(grade, e["openrouter_id"])] = per_day
         latest_q, latest_total = per_day[days[-1]]
         prev_day = days[-8] if len(days) >= 8 else days[0]
