@@ -1,0 +1,66 @@
+{
+  "data": {
+    "id": "qwen/qwen3-235b-a22b",
+    "name": "Qwen: Qwen3 235B A22B",
+    "created": 1745875757,
+    "description": "Qwen3-235B-A22B is a 235B parameter mixture-of-experts (MoE) model developed by Qwen, activating 22B parameters per forward pass. It supports seamless switching between a \"thinking\" mode for complex reasoning, math, and...",
+    "architecture": {
+      "tokenizer": "Qwen3",
+      "instruct_type": "qwen3",
+      "modality": "text->text",
+      "input_modalities": [
+        "text"
+      ],
+      "output_modalities": [
+        "text"
+      ]
+    },
+    "endpoints": [
+      {
+        "name": "Alibaba | qwen/qwen3-235b-a22b-04-28",
+        "model_id": "qwen/qwen3-235b-a22b",
+        "model_name": "Qwen: Qwen3 235B A22B",
+        "context_length": 131072,
+        "pricing": {
+          "prompt": "0.000000455",
+          "completion": "0.00000182",
+          "discount": 0
+        },
+        "provider_name": "Alibaba",
+        "tag": "alibaba",
+        "quantization": "unknown",
+        "max_completion_tokens": 8192,
+        "max_prompt_tokens": 98304,
+        "supported_parameters": [
+          "reasoning",
+          "include_reasoning",
+          "max_tokens",
+          "temperature",
+          "top_p",
+          "seed",
+          "presence_penalty",
+          "response_format",
+          "tools",
+          "tool_choice",
+          "top_k",
+          "frequency_penalty",
+          "stop"
+        ],
+        "supports_tool_choice": {
+          "none": true,
+          "auto": true,
+          "required": false,
+          "function": false
+        },
+        "status": -2,
+        "uptime_last_30m": 93.23308270676691,
+        "uptime_last_5m": 96.55172413793103,
+        "uptime_last_1d": 98.66098267475543,
+        "supports_implicit_caching": false,
+        "supports_voice_cloning": false,
+        "latency_last_30m": null,
+        "throughput_last_30m": null
+      }
+    ]
+  }
+}

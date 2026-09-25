@@ -1,0 +1,66 @@
+{
+  "data": {
+    "id": "bytedance-seed/seed-2-1-turbo",
+    "name": "ByteDance Seed: Seed 2.1 Turbo",
+    "created": 1786552176,
+    "description": "Seed 2.1 Turbo is a multimodal model from ByteDance Seed for coding and long-horizon agent workflows. It is suited for end-to-end software delivery, multi-step task execution, and understanding visual and...",
+    "architecture": {
+      "tokenizer": "Other",
+      "instruct_type": null,
+      "modality": "text+image+video->text",
+      "input_modalities": [
+        "text",
+        "image",
+        "video"
+      ],
+      "output_modalities": [
+        "text"
+      ]
+    },
+    "endpoints": [
+      {
+        "name": "Seed | bytedance-seed/seed-2-1-turbo-20260810",
+        "model_id": "bytedance-seed/seed-2-1-turbo",
+        "model_name": "ByteDance Seed: Seed 2.1 Turbo",
+        "context_length": 262144,
+        "pricing": {
+          "prompt": "0.0000005",
+          "completion": "0.0000025",
+          "discount": 0
+        },
+        "provider_name": "Seed",
+        "tag": "seed/fp8",
+        "quantization": "fp8",
+        "max_completion_tokens": 235929,
+        "max_prompt_tokens": null,
+        "supported_parameters": [
+          "reasoning",
+          "include_reasoning",
+          "frequency_penalty",
+          "max_tokens",
+          "temperature",
+          "top_p",
+          "stop",
+          "tools",
+          "response_format",
+          "structured_outputs",
+          "tool_choice"
+        ],
+        "supports_tool_choice": {
+          "none": true,
+          "auto": true,
+          "required": false,
+          "function": false
+        },
+        "status": 0,
+        "uptime_last_30m": 100,
+        "uptime_last_5m": null,
+        "uptime_last_1d": 99.75770925110132,
+        "supports_implicit_caching": false,
+        "supports_voice_cloning": false,
+        "latency_last_30m": null,
+        "throughput_last_30m": null
+      }
+    ]
+  }
+}
