@@ -61,7 +61,42 @@ lines = [f"# Candidate tracking, rebuilt {datetime.datetime.now(datetime.timezon
          "Bracketed figure is the total provider count at any precision, for context.",
          ""]
 
-series = {}   # (grade, model) -> {day: qualifying}
+series = {}
+summary = []
+
+# Pass one: compute every series, so the latest table can be written first.
+for grade, entries in cfg["grades"].items():
+    for e in entries:
+        per_day = {}
+        for d in days:
+            q, total = qualifying_count(os.path.join("data", "census", d), e["openrouter_id"], e["native_precision"])
+            per_day[d] = (q, total)
+        series[(grade, e["openrouter_id"])] = per_day
+        latest_q, latest_total = per_day[days[-1]]
+        prev_day = days[-8] if len(days) >= 8 else days[0]
+        prev_q = per_day[prev_day][0]
+        if latest_q is None:
+            change = "-"
+        elif prev_q is None:
+            change = "new"
+        else:
+            diff = latest_q - prev_q
+            change = f"{diff:+d}" if diff else "0"
+        share = "-" if not latest_q or not latest_total else f"{100 * latest_q / latest_total:.0f}%"
+        summary.append({"grade": grade, "model": e["openrouter_id"],
+                        "ref": bool(e.get("reference")), "q": latest_q,
+                        "total": latest_total, "change": change, "share": share})
+
+lines += [f"## Latest: {days[-1]}", "",
+          "Change is against seven days earlier. Share is qualifying providers as a percentage of all providers serving the model.",
+          "",
+          "| Grade | Model | Qualifying | All | Share | 7d change |",
+          "|---|---|---|---|---|---|"]
+for s in summary:
+    marker = " *(reference)*" if s["ref"] else ""
+    lines.append(f"| {s['grade'].split(' (')[0]} | {s['model']}{marker} | "
+                 f"**{'-' if s['q'] is None else s['q']}** | {s['total'] or '-'} | {s['share']} | {s['change']} |")
+lines.append("")
 
 for grade, entries in cfg["grades"].items():
     lines += [f"## {grade}", "",
