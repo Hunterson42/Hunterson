@@ -1,7 +1,28 @@
-# Candidate tracking, rebuilt 2026-09-25 06:10 UTC
+# Candidate tracking, rebuilt 2026-09-25 12:42 UTC
 
 Qualifying providers = distinct providers serving the checkpoint at its native precision.
-Bracketed figure is the total provider count at any precision, for context.
+Bracketed figure in the history tables is the total provider count at any precision.
+
+## Latest: 2026-09-25
+
+Change is against seven days earlier. Share is qualifying providers as a percentage of all providers serving the model.
+
+| Grade | Model | Qualifying | All | Share | 7d change |
+|---|---|---|---|---|---|
+| Standard | z-ai/glm-5.3-flash *(reference)* | **14** | 31 | 45% | -1 |
+| Standard | deepseek/deepseek-v4-flash-0731 | **13** | 29 | 45% | +2 |
+| Standard | deepseek/deepseek-v4.1-flash | **13** | 26 | 50% | +4 |
+| Standard | openai/gpt-oss-120b | **5** | 20 | 25% | 0 |
+| Standard | qwen/qwen3.6-35b-a3b | **7** | 9 | 78% | -1 |
+| Standard | google/gemma-4-26b-a4b-it | **6** | 12 | 50% | +1 |
+| Heavy | z-ai/glm-5.3 *(reference)* | **11** | 31 | 35% | -2 |
+| Heavy | z-ai/glm-5.2 | **11** | 22 | 50% | -1 |
+| Heavy | deepseek/deepseek-v4-pro-0813 | **9** | 22 | 41% | +1 |
+| Heavy | moonshotai/kimi-k2.6 | **6** | 20 | 30% | 0 |
+| Frontier | moonshotai/kimi-k3 *(reference)* | **7** | 17 | 41% | 0 |
+| Frontier | qwen/qwen3.8-2.4t-a95b | **1** | 7 | 14% | 0 |
+| Soft edge, monitoring only | qwen/qwen3.8-27b *(reference)* | **7** | 16 | 44% | -2 |
+| Soft edge, monitoring only | qwen/qwen3.6-27b | **4** | 6 | 67% | 0 |
 
 ## Standard (30B active or fewer)
 
