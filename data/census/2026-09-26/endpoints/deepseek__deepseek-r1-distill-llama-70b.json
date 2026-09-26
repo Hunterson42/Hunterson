@@ -1,0 +1,66 @@
+{
+  "data": {
+    "id": "deepseek/deepseek-r1-distill-llama-70b",
+    "name": "DeepSeek: R1 Distill Llama 70B",
+    "created": 1737663169,
+    "description": "DeepSeek R1 Distill Llama 70B is a distilled large language model based on [Llama-3.3-70B-Instruct](/meta-llama/llama-3.3-70b-instruct), using outputs from [DeepSeek R1](/deepseek/deepseek-r1). The model combines advanced distillation techniques to achieve high performance across...",
+    "architecture": {
+      "tokenizer": "Llama3",
+      "instruct_type": "deepseek-r1",
+      "modality": "text->text",
+      "input_modalities": [
+        "text"
+      ],
+      "output_modalities": [
+        "text"
+      ]
+    },
+    "endpoints": [
+      {
+        "name": "Novita | deepseek/deepseek-r1-distill-llama-70b",
+        "model_id": "deepseek/deepseek-r1-distill-llama-70b",
+        "model_name": "DeepSeek: R1 Distill Llama 70B",
+        "context_length": 8192,
+        "pricing": {
+          "prompt": "0.0000008",
+          "completion": "0.0000008",
+          "discount": 0
+        },
+        "provider_name": "Novita",
+        "tag": "novita/bf16",
+        "quantization": "bf16",
+        "max_completion_tokens": 7372,
+        "max_prompt_tokens": null,
+        "supported_parameters": [
+          "reasoning",
+          "include_reasoning",
+          "max_tokens",
+          "temperature",
+          "top_p",
+          "stop",
+          "frequency_penalty",
+          "presence_penalty",
+          "seed",
+          "top_k",
+          "repetition_penalty"
+        ],
+        "supports_tool_choice": {
+          "none": true,
+          "auto": true,
+          "required": true,
+          "function": true
+        },
+        "status": 0,
+        "uptime_last_30m": 98.42271293375394,
+        "uptime_last_5m": null,
+        "uptime_last_1d": 99.85923423423422,
+        "supports_implicit_caching": false,
+        "supports_voice_cloning": false,
+        "supports_multiple_audio_references": false,
+        "supports_image_reference": false,
+        "latency_last_30m": null,
+        "throughput_last_30m": null
+      }
+    ]
+  }
+}

@@ -1,0 +1,117 @@
+{
+  "data": {
+    "id": "upstage/solar-mini4",
+    "name": "Upstage: Solar Mini 4",
+    "created": 1790160358,
+    "description": "Solar Mini 4 is Upstage's compact, cost-efficient language model, a 35B-parameter mixture-of-experts with 3B active parameters and a 524K context window. It is built for agentic use cases where response...",
+    "architecture": {
+      "tokenizer": "Other",
+      "instruct_type": null,
+      "modality": "text->text",
+      "input_modalities": [
+        "text"
+      ],
+      "output_modalities": [
+        "text"
+      ]
+    },
+    "endpoints": [
+      {
+        "name": "Upstage | upstage/solar-mini4-20260922",
+        "model_id": "upstage/solar-mini4",
+        "model_name": "Upstage: Solar Mini 4",
+        "context_length": 524288,
+        "pricing": {
+          "prompt": "0.00000005",
+          "completion": "0.0000002",
+          "input_cache_read": "0.000000005",
+          "discount": 0.5
+        },
+        "provider_name": "Upstage",
+        "tag": "upstage/zdr",
+        "quantization": "unknown",
+        "max_completion_tokens": 131072,
+        "max_prompt_tokens": null,
+        "supported_parameters": [
+          "reasoning",
+          "include_reasoning",
+          "temperature",
+          "max_tokens",
+          "top_p",
+          "frequency_penalty",
+          "presence_penalty",
+          "parallel_tool_calls",
+          "response_format",
+          "structured_outputs",
+          "tools",
+          "tool_choice",
+          "reasoning_effort"
+        ],
+        "supports_tool_choice": {
+          "none": true,
+          "auto": true,
+          "required": true,
+          "function": true
+        },
+        "status": 0,
+        "uptime_last_30m": 100,
+        "uptime_last_5m": 100,
+        "uptime_last_1d": 100,
+        "supports_implicit_caching": false,
+        "supports_voice_cloning": false,
+        "supports_multiple_audio_references": false,
+        "supports_image_reference": false,
+        "latency_last_30m": null,
+        "throughput_last_30m": null
+      },
+      {
+        "name": "Upstage | upstage/solar-mini4-20260922",
+        "model_id": "upstage/solar-mini4",
+        "model_name": "Upstage: Solar Mini 4",
+        "context_length": 524288,
+        "pricing": {
+          "prompt": "0.00000005",
+          "completion": "0.0000002",
+          "input_cache_read": "0.000000005",
+          "discount": 0.5
+        },
+        "provider_name": "Upstage",
+        "tag": "upstage",
+        "quantization": "unknown",
+        "max_completion_tokens": 131072,
+        "max_prompt_tokens": null,
+        "supported_parameters": [
+          "reasoning",
+          "include_reasoning",
+          "temperature",
+          "max_tokens",
+          "top_p",
+          "frequency_penalty",
+          "presence_penalty",
+          "parallel_tool_calls",
+          "response_format",
+          "structured_outputs",
+          "tools",
+          "tool_choice",
+          "reasoning_effort"
+        ],
+        "supports_tool_choice": {
+          "none": true,
+          "auto": true,
+          "required": true,
+          "function": true
+        },
+        "status": 0,
+        "uptime_last_30m": 100,
+        "uptime_last_5m": 100,
+        "uptime_last_1d": 100,
+        "supports_implicit_caching": false,
+        "supports_voice_cloning": false,
+        "supports_multiple_audio_references": false,
+        "supports_image_reference": false,
+        "latency_last_30m": null,
+        "throughput_last_30m": null
+      }
+    ]
+  }
+}
