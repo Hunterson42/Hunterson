@@ -1,0 +1,22 @@
+{
+  "data": {
+    "id": "~x-ai/grok-latest",
+    "name": "xAI: Grok Latest",
+    "created": 1783519360,
+    "description": "This model always redirects to the latest Grok model from xAI.",
+    "architecture": {
+      "tokenizer": "Router",
+      "instruct_type": null,
+      "modality": "text+image+file->text",
+      "input_modalities": [
+        "text",
+        "image",
+        "file"
+      ],
+      "output_modalities": [
+        "text"
+      ]
+    },
+    "endpoints": []
+  }
+}
