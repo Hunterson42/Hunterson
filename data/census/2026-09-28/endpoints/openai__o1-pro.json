@@ -1,0 +1,64 @@
+{
+  "data": {
+    "id": "openai/o1-pro",
+    "name": "OpenAI: o1-pro",
+    "created": 1742423211,
+    "description": "The o1 series of models are trained with reinforcement learning to think before they answer and perform complex reasoning. The o1-pro model uses more compute to think harder and provide...",
+    "architecture": {
+      "tokenizer": "GPT",
+      "instruct_type": null,
+      "modality": "text+image+file->text",
+      "input_modalities": [
+        "text",
+        "image",
+        "file"
+      ],
+      "output_modalities": [
+        "text"
+      ]
+    },
+    "endpoints": [
+      {
+        "name": "OpenAI | openai/o1-pro",
+        "model_id": "openai/o1-pro",
+        "model_name": "OpenAI: o1-pro",
+        "context_length": 200000,
+        "pricing": {
+          "prompt": "0.00015",
+          "completion": "0.0006",
+          "web_search": "0.01",
+          "discount": 0
+        },
+        "provider_name": "OpenAI",
+        "tag": "openai",
+        "quantization": "unknown",
+        "max_completion_tokens": 100000,
+        "max_prompt_tokens": null,
+        "supported_parameters": [
+          "reasoning",
+          "include_reasoning",
+          "seed",
+          "max_tokens",
+          "response_format",
+          "structured_outputs"
+        ],
+        "supports_tool_choice": {
+          "none": true,
+          "auto": true,
+          "required": true,
+          "function": true
+        },
+        "status": 0,
+        "uptime_last_30m": null,
+        "uptime_last_5m": null,
+        "uptime_last_1d": 100,
+        "supports_implicit_caching": false,
+        "supports_voice_cloning": false,
+        "supports_multiple_audio_references": false,
+        "supports_image_reference": false,
+        "latency_last_30m": null,
+        "throughput_last_30m": null
+      }
+    ]
+  }
+}

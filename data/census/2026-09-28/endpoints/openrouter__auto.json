@@ -1,0 +1,25 @@
+{
+  "data": {
+    "id": "openrouter/auto",
+    "name": "Auto Router",
+    "created": 1699401600,
+    "description": "The Auto Router automatically selects the best model for your prompt, powered by the wisdom of the market. It routes you based on what the OpenRouter community collectively spends on...",
+    "architecture": {
+      "tokenizer": "Router",
+      "instruct_type": null,
+      "modality": "text+image+file+audio+video->text+image",
+      "input_modalities": [
+        "text",
+        "image",
+        "audio",
+        "file",
+        "video"
+      ],
+      "output_modalities": [
+        "text",
+        "image"
+      ]
+    },
+    "endpoints": []
+  }
+}

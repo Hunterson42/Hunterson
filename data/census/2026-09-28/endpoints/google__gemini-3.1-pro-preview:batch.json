@@ -1,0 +1,83 @@
+{
+  "data": {
+    "id": "google/gemini-3.1-pro-preview:batch",
+    "name": "Google: Gemini 3.1 Pro Preview (batch)",
+    "created": 1771509627,
+    "description": "Gemini 3.1 Pro Preview is Google\u2019s frontier reasoning model, delivering enhanced software engineering performance, improved agentic reliability, and more efficient token usage across complex workflows. Building on the multimodal foundation...",
+    "architecture": {
+      "tokenizer": "Gemini",
+      "instruct_type": null,
+      "modality": "text+image+file+audio+video->text",
+      "input_modalities": [
+        "audio",
+        "file",
+        "image",
+        "text",
+        "video"
+      ],
+      "output_modalities": [
+        "text"
+      ]
+    },
+    "endpoints": [
+      {
+        "name": "Google | google/gemini-3.1-pro-preview-20260219:batch",
+        "model_id": "google/gemini-3.1-pro-preview:batch",
+        "model_name": "Google: Gemini 3.1 Pro Preview",
+        "context_length": 1048576,
+        "pricing": {
+          "prompt": "0.000001",
+          "completion": "0.000006",
+          "image": "0.000001",
+          "audio": "0.000001",
+          "web_search": "0.014",
+          "internal_reasoning": "0.000006",
+          "discount": 0,
+          "overrides": [
+            {
+              "min_prompt_tokens": 200000,
+              "prompt": "0.000002",
+              "completion": "0.000009",
+              "audio": "0.000002"
+            }
+          ]
+        },
+        "provider_name": "Google",
+        "tag": "google-vertex/global",
+        "quantization": "unknown",
+        "max_completion_tokens": 65536,
+        "max_prompt_tokens": null,
+        "supported_parameters": [
+          "reasoning",
+          "include_reasoning",
+          "max_tokens",
+          "temperature",
+          "top_p",
+          "seed",
+          "response_format",
+          "tools",
+          "tool_choice",
+          "stop",
+          "structured_outputs",
+          "reasoning_effort"
+        ],
+        "supports_tool_choice": {
+          "none": true,
+          "auto": true,
+          "required": true,
+          "function": true
+        },
+        "status": 0,
+        "uptime_last_30m": null,
+        "uptime_last_5m": null,
+        "uptime_last_1d": null,
+        "supports_implicit_caching": false,
+        "supports_voice_cloning": false,
+        "supports_multiple_audio_references": false,
+        "supports_image_reference": false,
+        "latency_last_30m": null,
+        "throughput_last_30m": null
+      }
+    ]
+  }
+}
