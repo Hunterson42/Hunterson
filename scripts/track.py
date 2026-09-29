@@ -15,6 +15,7 @@ import datetime
 
 CONFIG = "candidates.json"
 OUT = os.path.join("data", "track.md")
+SITE_OUT = os.path.join("data", "site", "track.json")
 STICKINESS_DAYS = 20
 
 
@@ -55,6 +56,7 @@ if not days:
 
 # Pass one: compute every series once, as (qualifying, total) per day.
 series = {}
+stickiness = {}  # (grade, id) -> (state text, streak); filled below, shared by both outputs
 for grade, entries in cfg["grades"].items():
     for e in entries:
         per_day = {}
@@ -130,6 +132,7 @@ for grade, entries in cfg["grades"].items():
                 state = f"**ROLLOVER TRIGGERED**, {streak} consecutive days"
             else:
                 state = f"leading {streak} of {STICKINESS_DAYS} consecutive days"
+            stickiness[(grade, e["openrouter_id"])] = (state.replace("**", ""), streak)
             lines.append(f"- {e['openrouter_id']}: {state}")
         lines.append("")
 
@@ -168,4 +171,48 @@ if not found:
 os.makedirs("data", exist_ok=True)
 with open(OUT, "w") as f:
     f.write("\n".join(lines) + "\n")
+# Machine-readable copy for the website, built from the SAME series, stickiness
+# and watchlist computed above, so the page and track.md cannot disagree.
+def _unpublished(name):
+    low = name.lower()
+    return "not published" in low or "monitoring only" in low
+
+
+site = {
+    "schema_version": 1,
+    "generated_utc": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+    "first_day": days[0],
+    "latest_day": days[-1],
+    "days": days,
+    "stickiness_days": STICKINESS_DAYS,
+    "grades": [],
+    "watchlist": [{"id": mid, "providers": n, "precision": prec} for n, mid, prec in found[:25]],
+}
+for grade, entries in cfg["grades"].items():
+    ref = next((e for e in entries if e.get("reference")), None)
+    g = {
+        "name": grade,
+        "short": grade.split(" (")[0],
+        "published": not _unpublished(grade),
+        "reference": ref["openrouter_id"] if ref else None,
+        "candidates": [],
+    }
+    for e in entries:
+        per_day = series[(grade, e["openrouter_id"])]
+        prec = e["native_precision"]
+        state, streak = stickiness.get((grade, e["openrouter_id"]), (None, 0))
+        g["candidates"].append({
+            "id": e["openrouter_id"],
+            "reference": bool(e.get("reference")),
+            "native_precision": prec if isinstance(prec, list) else [prec],
+            "qualifying": [per_day[d][0] for d in days],
+            "all": [per_day[d][1] for d in days],
+            "stickiness": None if e.get("reference") else {"state": state, "streak": streak},
+        })
+    site["grades"].append(g)
+
+os.makedirs(os.path.dirname(SITE_OUT), exist_ok=True)
+with open(SITE_OUT, "w") as f:
+    json.dump(site, f, indent=1)
+
 print(f"Tracked {len(days)} days across {sum(len(v) for v in cfg['grades'].values())} candidates.")
