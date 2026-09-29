@@ -1,0 +1,653 @@
+{
+ "schema_version": 1,
+ "date": "2026-09-29",
+ "models_with_endpoints": 435,
+ "models_with_five_plus_providers": 58,
+ "rows": [
+  {
+   "rank": 1,
+   "model": "z-ai/glm-5.3",
+   "providers": 31,
+   "endpoints": 39,
+   "quantisation": {
+    "unknown": 16,
+    "fp8": 13,
+    "fp4": 7,
+    "nvfp4": 3
+   },
+   "output_usd_per_m": {
+    "low": 1.14,
+    "median": 4.4,
+    "high": 8.8
+   }
+  },
+  {
+   "rank": 2,
+   "model": "z-ai/glm-5.3-flash",
+   "providers": 31,
+   "endpoints": 34,
+   "quantisation": {
+    "fp8": 17,
+    "unknown": 10,
+    "fp4": 5,
+    "nvfp4": 2
+   },
+   "output_usd_per_m": {
+    "low": 0.14,
+    "median": 0.5,
+    "high": 1.0
+   }
+  },
+  {
+   "rank": 3,
+   "model": "deepseek/deepseek-v4.1-flash",
+   "providers": 29,
+   "endpoints": 31,
+   "quantisation": {
+    "fp8": 16,
+    "unknown": 13,
+    "fp4": 2
+   },
+   "output_usd_per_m": {
+    "low": 0.4,
+    "median": 0.9,
+    "high": 1.8
+   }
+  },
+  {
+   "rank": 4,
+   "model": "deepseek/deepseek-v4-flash-0731",
+   "providers": 28,
+   "endpoints": 30,
+   "quantisation": {
+    "fp8": 14,
+    "unknown": 10,
+    "fp4": 5,
+    "bf16": 1
+   },
+   "output_usd_per_m": {
+    "low": 0.132,
+    "median": 0.3567,
+    "high": 1.32
+   }
+  },
+  {
+   "rank": 5,
+   "model": "z-ai/glm-5.2",
+   "providers": 24,
+   "endpoints": 31,
+   "quantisation": {
+    "fp8": 15,
+    "unknown": 8,
+    "fp4": 6,
+    "mxfp4": 1,
+    "nvfp4": 1
+   },
+   "output_usd_per_m": {
+    "low": 1.54,
+    "median": 4.4,
+    "high": 8.0
+   }
+  },
+  {
+   "rank": 6,
+   "model": "deepseek/deepseek-v4-pro-0813",
+   "providers": 21,
+   "endpoints": 21,
+   "quantisation": {
+    "unknown": 10,
+    "fp8": 10,
+    "fp4": 1
+   },
+   "output_usd_per_m": {
+    "low": 1.9584,
+    "median": 3.96,
+    "high": 4.95
+   }
+  },
+  {
+   "rank": 7,
+   "model": "openai/gpt-oss-120b",
+   "providers": 20,
+   "endpoints": 24,
+   "quantisation": {
+    "unknown": 9,
+    "fp4": 6,
+    "bf16": 5,
+    "fp8": 3,
+    "fp16": 1
+   },
+   "output_usd_per_m": {
+    "low": 0.17,
+    "median": 0.6,
+    "high": 0.95
+   }
+  },
+  {
+   "rank": 8,
+   "model": "moonshotai/kimi-k2.6",
+   "providers": 18,
+   "endpoints": 18,
+   "quantisation": {
+    "int4": 6,
+    "unknown": 4,
+    "fp4": 4,
+    "fp8": 3,
+    "bf16": 1
+   },
+   "output_usd_per_m": {
+    "low": 2.4,
+    "median": 3.5,
+    "high": 4.6
+   }
+  },
+  {
+   "rank": 9,
+   "model": "moonshotai/kimi-k3",
+   "providers": 18,
+   "endpoints": 20,
+   "quantisation": {
+    "unknown": 9,
+    "fp4": 4,
+    "mxfp4": 4,
+    "fp8": 2,
+    "bf16": 1
+   },
+   "output_usd_per_m": {
+    "low": 8.7934,
+    "median": 15.0,
+    "high": 22.5
+   }
+  },
+  {
+   "rank": 10,
+   "model": "qwen/qwen3.8-27b",
+   "providers": 16,
+   "endpoints": 16,
+   "quantisation": {
+    "unknown": 7,
+    "fp8": 7,
+    "fp4": 1,
+    "bf16": 1
+   },
+   "output_usd_per_m": {
+    "low": 1.875,
+    "median": 2.525,
+    "high": 4.4
+   }
+  },
+  {
+   "rank": 11,
+   "model": "deepseek/deepseek-v4-flash",
+   "providers": 15,
+   "endpoints": 15,
+   "quantisation": {
+    "fp8": 10,
+    "unknown": 3,
+    "fp4": 2
+   },
+   "output_usd_per_m": {
+    "low": 0.1652,
+    "median": 0.28,
+    "high": 1.28
+   }
+  },
+  {
+   "rank": 12,
+   "model": "deepseek/deepseek-v4-pro",
+   "providers": 15,
+   "endpoints": 15,
+   "quantisation": {
+    "fp8": 9,
+    "unknown": 4,
+    "fp4": 2
+   },
+   "output_usd_per_m": {
+    "low": 1.9105,
+    "median": 3.2,
+    "high": 3.83
+   }
+  },
+  {
+   "rank": 13,
+   "model": "google/gemma-4-26b-a4b-it",
+   "providers": 14,
+   "endpoints": 14,
+   "quantisation": {
+    "bf16": 7,
+    "unknown": 5,
+    "fp8": 2
+   },
+   "output_usd_per_m": {
+    "low": 0.2,
+    "median": 0.335,
+    "high": 0.6
+   }
+  },
+  {
+   "rank": 14,
+   "model": "z-ai/glm-5.1",
+   "providers": 14,
+   "endpoints": 14,
+   "quantisation": {
+    "fp8": 11,
+    "unknown": 2,
+    "fp4": 1
+   },
+   "output_usd_per_m": {
+    "low": 3.036,
+    "median": 4.3,
+    "high": 4.4044
+   }
+  },
+  {
+   "rank": 15,
+   "model": "deepseek/deepseek-v3.2",
+   "providers": 13,
+   "endpoints": 13,
+   "quantisation": {
+    "unknown": 7,
+    "fp8": 5,
+    "fp4": 1
+   },
+   "output_usd_per_m": {
+    "low": 0.2016,
+    "median": 0.96,
+    "high": 4.5
+   }
+  },
+  {
+   "rank": 16,
+   "model": "google/gemma-4-31b-it",
+   "providers": 13,
+   "endpoints": 15,
+   "quantisation": {
+    "fp4": 5,
+    "unknown": 4,
+    "fp8": 4,
+    "bf16": 2
+   },
+   "output_usd_per_m": {
+    "low": 0.3,
+    "median": 0.4,
+    "high": 1.15
+   }
+  },
+  {
+   "rank": 17,
+   "model": "minimax/minimax-m3",
+   "providers": 13,
+   "endpoints": 13,
+   "quantisation": {
+    "fp8": 8,
+    "unknown": 3,
+    "fp4": 2
+   },
+   "output_usd_per_m": {
+    "low": 0.96,
+    "median": 1.2,
+    "high": 3.0
+   }
+  },
+  {
+   "rank": 18,
+   "model": "moonshotai/kimi-k2.7-code",
+   "providers": 12,
+   "endpoints": 13,
+   "quantisation": {
+    "int4": 6,
+    "fp8": 3,
+    "fp4": 2,
+    "unknown": 2
+   },
+   "output_usd_per_m": {
+    "low": 3.0,
+    "median": 3.84,
+    "high": 8.0
+   }
+  },
+  {
+   "rank": 19,
+   "model": "openai/gpt-oss-20b",
+   "providers": 11,
+   "endpoints": 12,
+   "quantisation": {
+    "fp4": 4,
+    "unknown": 4,
+    "fp8": 2,
+    "bf16": 2
+   },
+   "output_usd_per_m": {
+    "low": 0.09,
+    "median": 0.15,
+    "high": 0.3
+   }
+  },
+  {
+   "rank": 20,
+   "model": "meta-llama/llama-3.3-70b-instruct",
+   "providers": 10,
+   "endpoints": 11,
+   "quantisation": {
+    "unknown": 5,
+    "fp8": 4,
+    "bf16": 1,
+    "fp16": 1
+   },
+   "output_usd_per_m": {
+    "low": 0.32,
+    "median": 0.72,
+    "high": 2.253
+   }
+  },
+  {
+   "rank": 21,
+   "model": "qwen/qwen3.5-397b-a17b",
+   "providers": 10,
+   "endpoints": 10,
+   "quantisation": {
+    "unknown": 6,
+    "fp8": 4
+   },
+   "output_usd_per_m": {
+    "low": 2.34,
+    "median": 3.55,
+    "high": 4.5
+   }
+  },
+  {
+   "rank": 22,
+   "model": "qwen/qwen3.6-35b-a3b",
+   "providers": 10,
+   "endpoints": 10,
+   "quantisation": {
+    "fp8": 7,
+    "unknown": 2,
+    "fp4": 1
+   },
+   "output_usd_per_m": {
+    "low": 0.7,
+    "median": 1.0,
+    "high": 1.8
+   }
+  },
+  {
+   "rank": 23,
+   "model": "qwen/qwen3-235b-a22b-2507",
+   "providers": 9,
+   "endpoints": 10,
+   "quantisation": {
+    "fp8": 6,
+    "unknown": 4
+   },
+   "output_usd_per_m": {
+    "low": 0.35,
+    "median": 0.675,
+    "high": 1.0
+   }
+  },
+  {
+   "rank": 24,
+   "model": "minimax/minimax-m2.7",
+   "providers": 8,
+   "endpoints": 9,
+   "quantisation": {
+    "fp8": 6,
+    "unknown": 3
+   },
+   "output_usd_per_m": {
+    "low": 0.84,
+    "median": 1.2,
+    "high": 2.4
+   }
+  },
+  {
+   "rank": 25,
+   "model": "z-ai/glm-5",
+   "providers": 8,
+   "endpoints": 8,
+   "quantisation": {
+    "fp8": 7,
+    "unknown": 1
+   },
+   "output_usd_per_m": {
+    "low": 1.92,
+    "median": 2.875,
+    "high": 3.2
+   }
+  },
+  {
+   "rank": 26,
+   "model": "deepseek/deepseek-chat-v3.1",
+   "providers": 7,
+   "endpoints": 7,
+   "quantisation": {
+    "fp8": 4,
+    "unknown": 2,
+    "fp4": 1
+   },
+   "output_usd_per_m": {
+    "low": 0.95,
+    "median": 1.5,
+    "high": 1.7
+   }
+  },
+  {
+   "rank": 27,
+   "model": "minimax/minimax-m2.5",
+   "providers": 7,
+   "endpoints": 8,
+   "quantisation": {
+    "unknown": 4,
+    "fp8": 4
+   },
+   "output_usd_per_m": {
+    "low": 0.95,
+    "median": 1.2,
+    "high": 2.4
+   }
+  },
+  {
+   "rank": 28,
+   "model": "qwen/qwen3.5-35b-a3b",
+   "providers": 7,
+   "endpoints": 7,
+   "quantisation": {
+    "fp8": 4,
+    "unknown": 2,
+    "fp4": 1
+   },
+   "output_usd_per_m": {
+    "low": 0.75,
+    "median": 1.25,
+    "high": 1.8
+   }
+  },
+  {
+   "rank": 29,
+   "model": "qwen/qwen3.8-2.4t-a95b",
+   "providers": 7,
+   "endpoints": 7,
+   "quantisation": {
+    "unknown": 5,
+    "fp8": 1,
+    "fp4": 1
+   },
+   "output_usd_per_m": {
+    "low": 6.0,
+    "median": 6.0,
+    "high": 6.0
+   }
+  },
+  {
+   "rank": 30,
+   "model": "xiaomi/mimo-v2.5-pro",
+   "providers": 7,
+   "endpoints": 7,
+   "quantisation": {
+    "fp8": 3,
+    "unknown": 3,
+    "bf16": 1
+   },
+   "output_usd_per_m": {
+    "low": 0.609,
+    "median": 0.9605,
+    "high": 1.8
+   }
+  },
+  {
+   "rank": 31,
+   "model": "z-ai/glm-4.7",
+   "providers": 7,
+   "endpoints": 7,
+   "quantisation": {
+    "fp4": 4,
+    "fp8": 2,
+    "unknown": 1
+   },
+   "output_usd_per_m": {
+    "low": 1.75,
+    "median": 1.98,
+    "high": 2.5
+   }
+  },
+  {
+   "rank": 32,
+   "model": "mistralai/mistral-nemo",
+   "providers": 6,
+   "endpoints": 6,
+   "quantisation": {
+    "fp8": 4,
+    "fp16": 1,
+    "unknown": 1
+   },
+   "output_usd_per_m": {
+    "low": 0.03,
+    "median": 0.0798,
+    "high": 0.17
+   }
+  },
+  {
+   "rank": 33,
+   "model": "qwen/qwen3.5-27b",
+   "providers": 6,
+   "endpoints": 6,
+   "quantisation": {
+    "fp8": 3,
+    "unknown": 2,
+    "bf16": 1
+   },
+   "output_usd_per_m": {
+    "low": 1.56,
+    "median": 2.28,
+    "high": 2.6
+   }
+  },
+  {
+   "rank": 34,
+   "model": "qwen/qwen3.5-9b",
+   "providers": 6,
+   "endpoints": 6,
+   "quantisation": {
+    "fp8": 2,
+    "bf16": 2,
+    "fp4": 1,
+    "unknown": 1
+   },
+   "output_usd_per_m": {
+    "low": 0.13,
+    "median": 0.15,
+    "high": 0.25
+   }
+  },
+  {
+   "rank": 35,
+   "model": "qwen/qwen3.6-27b",
+   "providers": 6,
+   "endpoints": 6,
+   "quantisation": {
+    "fp8": 4,
+    "unknown": 2
+   },
+   "output_usd_per_m": {
+    "low": 2.0,
+    "median": 2.95,
+    "high": 3.25
+   }
+  },
+  {
+   "rank": 36,
+   "model": "tencent/hy3",
+   "providers": 6,
+   "endpoints": 6,
+   "quantisation": {
+    "fp8": 2,
+    "unknown": 2,
+    "fp4": 1,
+    "bf16": 1
+   },
+   "output_usd_per_m": {
+    "low": 0.528,
+    "median": 0.58,
+    "high": 0.8
+   }
+  },
+  {
+   "rank": 37,
+   "model": "xiaomi/mimo-v2.5",
+   "providers": 6,
+   "endpoints": 6,
+   "quantisation": {
+    "fp8": 5,
+    "unknown": 1
+   },
+   "output_usd_per_m": {
+    "low": 0.238,
+    "median": 0.308,
+    "high": 2.0
+   }
+  },
+  {
+   "rank": 38,
+   "model": "anthropic/claude-fable-5",
+   "providers": 5,
+   "endpoints": 6,
+   "quantisation": {
+    "unknown": 6
+   },
+   "output_usd_per_m": {
+    "low": 50.0,
+    "median": 50.0,
+    "high": 55.0
+   }
+  },
+  {
+   "rank": 39,
+   "model": "anthropic/claude-opus-4.5",
+   "providers": 5,
+   "endpoints": 6,
+   "quantisation": {
+    "unknown": 6
+   },
+   "output_usd_per_m": {
+    "low": 25.0,
+    "median": 25.0,
+    "high": 27.5
+   }
+  },
+  {
+   "rank": 40,
+   "model": "anthropic/claude-opus-4.6",
+   "providers": 5,
+   "endpoints": 6,
+   "quantisation": {
+    "unknown": 6
+   },
+   "output_usd_per_m": {
+    "low": 25.0,
+    "median": 25.0,
+    "high": 27.5
+   }
+  }
+ ]
+}

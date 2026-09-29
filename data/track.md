@@ -1,4 +1,4 @@
-# Candidate tracking, rebuilt 2026-09-29 06:11 UTC
+# Candidate tracking, rebuilt 2026-09-29 13:22 UTC
 
 Qualifying providers = distinct providers serving the checkpoint at its native precision.
 Bracketed figure in the history tables is the total provider count at any precision.
