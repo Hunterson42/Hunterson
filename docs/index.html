@@ -1,0 +1,498 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Hunterson Standard Inference</title>
+<meta name="description" content="Daily census of open-weight AI inference providers, the evidence base for Hunterson Standard Inference, Europe.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root {
+  color-scheme: light;
+  --paper: #f7f8fa;
+  --panel: #ffffff;
+  --ink: #0e1522;
+  --ink-2: #454e5e;
+  --muted: #6b7384;
+  --rule: #dfe3ea;
+  --rule-strong: #c4cad5;
+  --accent: #1d3a6b;
+  --accent-soft: #e6ecf6;
+  --up: #1c6b3a;
+  --down: #9a2f2f;
+  --warn-bg: #fff4d6;
+  --warn-ink: #6a4a00;
+  --s1: #2a78d6; --s2: #eb6834; --s3: #1baf7a; --s4: #eda100; --s5: #e87ba4; --s6: #008300;
+  --sans: Arial, "Helvetica Neue", Helvetica, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --paper: #0f1420; --panel: #161c2a; --ink: #eef1f6; --ink-2: #c3c9d4; --muted: #939bab;
+    --rule: #262e3f; --rule-strong: #38425a; --accent: #9dbbef; --accent-soft: #1d2740;
+    --up: #6fcf8f; --down: #f08a8a; --warn-bg: #3a2f10; --warn-ink: #f3d68a;
+    --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #c98500; --s5: #d55181; --s6: #2f9a2f;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --paper: #0f1420; --panel: #161c2a; --ink: #eef1f6; --ink-2: #c3c9d4; --muted: #939bab;
+  --rule: #262e3f; --rule-strong: #38425a; --accent: #9dbbef; --accent-soft: #1d2740;
+  --up: #6fcf8f; --down: #f08a8a; --warn-bg: #3a2f10; --warn-ink: #f3d68a;
+  --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #c98500; --s5: #d55181; --s6: #2f9a2f;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--paper); color: var(--ink);
+  font: 15px/1.55 var(--sans);
+  padding-inline: 16px; padding-block: 0 48px;
+}
+.wrap { max-width: 1080px; margin: 0 auto; display: grid; gap: 40px; }
+a { color: var(--accent); text-underline-offset: 2px; }
+a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
+.mono { font-family: var(--mono); font-size: 0.92em; }
+.num { font-variant-numeric: tabular-nums; }
+h1, h2, h3 { text-wrap: balance; margin: 0; }
+h2 { font-size: 20px; letter-spacing: -0.01em; }
+h3 { font-size: 16px; }
+p { margin: 0; max-width: 68ch; }
+.label { font-size: 11.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); font-weight: 700; }
+
+/* Masthead */
+header.mast { border-bottom: 2px solid var(--ink); padding-block: 28px 18px; display: grid; gap: 10px; }
+.mast .brand { font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase; font-weight: 700; color: var(--accent); }
+.mast h1 { font-size: clamp(28px, 5vw, 44px); line-height: 1.08; letter-spacing: -0.02em; }
+.status { display: flex; flex-wrap: wrap; gap: 8px 18px; align-items: center; color: var(--ink-2); font-size: 14px; }
+.pill { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--rule-strong); border-radius: 999px; padding: 2px 10px; font-size: 12.5px; font-weight: 700; color: var(--ink); background: var(--panel); }
+.pill::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); }
+.notice { background: var(--warn-bg); color: var(--warn-ink); border-radius: 4px; padding: 10px 14px; font-size: 14px; }
+.notice a { color: inherit; font-weight: 700; }
+
+/* Headline figures */
+.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+.tile { background: var(--panel); border: 1px solid var(--rule); border-radius: 6px; padding: 20px 22px 18px; display: grid; gap: 4px; align-content: start; }
+.tile .fig { font-size: clamp(72px, 13vw, 104px); line-height: 0.95; font-weight: 700; letter-spacing: -0.04em; font-variant-numeric: tabular-nums; margin-block: 6px 4px; }
+.tile .fig a { color: inherit; text-decoration: none; }
+.tile .fig a:hover { text-decoration: underline; text-decoration-thickness: 3px; }
+.tile .model { font-family: var(--mono); font-size: 14px; color: var(--ink); overflow-wrap: anywhere; }
+.tile .sub { color: var(--ink-2); font-size: 14px; }
+.chg { font-weight: 700; font-variant-numeric: tabular-nums; }
+.chg.up { color: var(--up); } .chg.down { color: var(--down); } .chg.flat { color: var(--muted); }
+.tile.record .fig { color: var(--accent); }
+
+/* Definitions */
+details.defs { background: var(--panel); border: 1px solid var(--rule); border-radius: 6px; }
+details.defs > summary { cursor: pointer; padding: 14px 18px; font-weight: 700; list-style: none; display: flex; justify-content: space-between; gap: 12px; }
+details.defs > summary::after { content: "Show"; color: var(--accent); font-weight: 400; font-size: 14px; }
+details.defs[open] > summary::after { content: "Hide"; }
+dl.deflist { margin: 0; padding: 0 18px 18px; display: grid; grid-template-columns: minmax(150px, 220px) 1fr; gap: 10px 24px; }
+dl.deflist dt { font-weight: 700; }
+dl.deflist dd { margin: 0; color: var(--ink-2); max-width: 68ch; }
+@media (max-width: 620px) { dl.deflist { grid-template-columns: 1fr; gap: 2px; } dl.deflist dd { margin-bottom: 10px; } }
+
+/* Grade sections */
+section.grade { display: grid; gap: 16px; }
+.grade-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: 10px 20px; border-top: 1px solid var(--rule-strong); padding-top: 18px; }
+.grade-head p { color: var(--ink-2); font-size: 14px; }
+.seg { display: inline-flex; border: 1px solid var(--rule-strong); border-radius: 5px; overflow: hidden; background: var(--panel); }
+.seg button { font: inherit; font-size: 13px; border: 0; background: transparent; color: var(--ink-2); padding: 6px 12px; cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--accent); color: var(--paper); font-weight: 700; }
+.chartbox { background: var(--panel); border: 1px solid var(--rule); border-radius: 6px; padding: 14px 14px 10px; display: grid; gap: 10px; }
+.canvas-wrap { position: relative; height: 300px; }
+@media (max-width: 520px) { .canvas-wrap { height: 250px; } }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 13px; color: var(--ink-2); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; font-family: var(--mono); font-size: 12.5px; }
+.legend svg { flex: none; }
+.daylink { font-size: 13px; color: var(--muted); min-height: 1.5em; }
+.daylink strong { color: var(--ink); }
+
+.tablewrap { overflow-x: auto; background: var(--panel); border: 1px solid var(--rule); border-radius: 6px; }
+table { border-collapse: collapse; width: 100%; font-size: 14px; }
+th, td { padding: 9px 12px; text-align: left; border-bottom: 1px solid var(--rule); white-space: nowrap; }
+th { font-size: 11.5px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); font-weight: 700; background: var(--panel); }
+td.r, th.r { text-align: right; font-variant-numeric: tabular-nums; }
+tr:last-child td { border-bottom: 0; }
+td .ref { font-size: 11px; font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 3px; padding: 1px 6px; margin-left: 6px; font-family: var(--sans); letter-spacing: 0.04em; text-transform: uppercase; }
+.state-roll { font-weight: 700; color: var(--warn-ink); background: var(--warn-bg); padding: 2px 8px; border-radius: 3px; }
+.state-lead { font-weight: 700; color: var(--ink); }
+.state-none { color: var(--muted); }
+details.history > summary { cursor: pointer; color: var(--accent); font-size: 14px; padding-block: 4px; }
+details.history table { font-size: 12.5px; }
+details.history td, details.history th { padding: 6px 8px; }
+
+details.monitor { border-top: 1px solid var(--rule-strong); padding-top: 18px; }
+details.monitor > summary { cursor: pointer; list-style: none; display: grid; gap: 4px; }
+details.monitor > summary h2::after { content: "  Show"; color: var(--accent); font-weight: 400; font-size: 14px; }
+details.monitor[open] > summary h2::after { content: "  Hide"; }
+details.monitor .inner { display: grid; gap: 40px; margin-top: 18px; }
+
+.watch { columns: 2 260px; column-gap: 32px; padding: 0; margin: 0; list-style: none; font-size: 14px; }
+.watch li { break-inside: avoid; display: flex; justify-content: space-between; gap: 12px; border-bottom: 1px dotted var(--rule-strong); padding-block: 5px; }
+.watch li span:last-child { color: var(--ink-2); font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+.context-note { font-size: 14px; color: var(--ink-2); border-left: 3px solid var(--rule-strong); padding-left: 12px; }
+
+footer.evidence { border-top: 2px solid var(--ink); padding-top: 22px; display: grid; gap: 16px; }
+.links { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 10px 28px; padding: 0; margin: 0; list-style: none; font-size: 14px; }
+.links li { display: grid; gap: 1px; }
+.links li span { color: var(--muted); font-size: 13px; }
+.fine { font-size: 13px; color: var(--muted); }
+.error { background: var(--panel); border: 1px solid var(--rule-strong); border-radius: 6px; padding: 20px; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="mast">
+    <div class="brand">Hunterson</div>
+    <h1>Hunterson Standard Inference, Europe</h1>
+    <div class="status">
+      <span class="pill">Census phase</span>
+      <span>No price is being assessed yet.</span>
+      <span id="lastRun">Loading census data</span>
+    </div>
+    <div id="notices" style="display:grid;gap:8px"></div>
+  </header>
+
+  <main id="main" class="wrap" style="gap:40px"></main>
+
+  <footer class="evidence">
+    <h2>Evidence and history</h2>
+    <p class="fine" style="max-width:none">Every figure on this page comes from files in the public repository. The census is collected from OpenRouter's public model and endpoint listings at 06:00 UTC each day by a GitHub Actions workflow.</p>
+    <ul class="links" id="evidenceLinks"></ul>
+    <p class="fine">History is rebuilt from the saved census on every run, so a change to the grade configuration applies to past days. Changes are visible in the configuration history.</p>
+  </footer>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+(function () {
+  "use strict";
+  var REPO = "https://github.com/Hunterson42/Hunterson";
+  var RAW = "https://raw.githubusercontent.com/Hunterson42/Hunterson/main/data/site/";
+  var RANK_FIRST_DAY = "2026-09-14"; // daily ranking files begin on this date
+  var STALE_HOURS = 36;
+  var DASHES = [[], [7, 4], [2, 3], [10, 3, 2, 3], [4, 4], [1, 2]];
+  var charts = [];
+
+  function el(tag, attrs, html) {
+    var n = document.createElement(tag);
+    if (attrs) for (var k in attrs) { if (k === "class") n.className = attrs[k]; else n.setAttribute(k, attrs[k]); }
+    if (html != null) n.innerHTML = html;
+    return n;
+  }
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+  function css(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+  function seriesColour(i) { return css("--s" + ((i % 6) + 1)); }
+  function censusUrl(day) { return REPO + "/tree/main/data/census/" + day; }
+  function rankUrl(day) { return day >= RANK_FIRST_DAY ? REPO + "/blob/main/data/rank/" + day + ".md" : REPO + "/tree/main/data/rank"; }
+  function fmtDay(d) {
+    var m = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+    var p = d.split("-"); return +p[2] + " " + m[+p[1] - 1] + " " + p[0];
+  }
+  function shortDay(d) { var m = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]; var p = d.split("-"); return +p[2] + " " + m[+p[1] - 1]; }
+  function sevenDay(arr) {
+    var n = arr.length, last = arr[n - 1], prev = n >= 8 ? arr[n - 8] : arr[0];
+    if (last == null) return null;
+    if (prev == null) return "new";
+    return last - prev;
+  }
+  function chgHtml(c) {
+    if (c === null) return '<span class="chg flat">no data</span>';
+    if (c === "new") return '<span class="chg flat">new</span>';
+    if (c === 0) return '<span class="chg flat">no change</span>';
+    return '<span class="chg ' + (c > 0 ? "up" : "down") + '">' + (c > 0 ? "+" : "−") + Math.abs(c) + "</span>";
+  }
+  function chgCell(c) {
+    if (c === null) return "-"; if (c === "new") return "new"; if (c === 0) return "0";
+    return (c > 0 ? "+" : "−") + Math.abs(c);
+  }
+  function share(q, a) { return (q == null || !a) ? "-" : Math.round(100 * q / a) + "%"; }
+  function dashSvg(i, colour, ref) {
+    var d = DASHES[i % DASHES.length].join(" ");
+    return '<svg width="28" height="10" aria-hidden="true"><line x1="1" y1="5" x2="27" y2="5" stroke="' + colour + '" stroke-width="' + (ref ? 3.5 : 2) + '" stroke-dasharray="' + d + '" stroke-linecap="round"/></svg>';
+  }
+  function stateHtml(s) {
+    if (!s) return '<span class="state-none">reference</span>';
+    if (/ROLLOVER/i.test(s.state)) return '<span class="state-roll">' + esc(s.state) + "</span>";
+    if (s.streak > 0) return '<span class="state-lead">' + esc(s.state) + "</span>";
+    return '<span class="state-none">' + esc(s.state) + "</span>";
+  }
+
+  function loadJson(name) {
+    return fetch(RAW + name, { cache: "no-cache" }).then(function (r) {
+      if (!r.ok) throw new Error(name + " returned " + r.status);
+      return r.json();
+    });
+  }
+
+  function load() {
+    var embedded = window.HUNTERSON_EMBED;
+    return Promise.all([loadJson("track.json"), loadJson("rank-latest.json").catch(function () { return null; })])
+      .then(function (res) { return { track: res[0], rank: res[1], snapshot: false }; })
+      .catch(function (err) {
+        if (embedded) return { track: embedded.track, rank: embedded.rank, snapshot: true };
+        throw err;
+      });
+  }
+
+  function renderError(msg) {
+    document.getElementById("lastRun").textContent = "Census data could not be loaded.";
+    document.getElementById("main").innerHTML =
+      '<div class="error"><h2>Census data could not be loaded</h2><p style="margin-top:8px">' + esc(msg) +
+      '. The same figures are published in the repository as <a href="' + REPO + '/blob/main/data/track.md">data/track.md</a>.</p></div>';
+  }
+
+  function renderTiles(track, main) {
+    var tiles = el("div", { class: "tiles" });
+    track.grades.filter(function (g) { return g.published; }).forEach(function (g) {
+      var ref = g.candidates.filter(function (c) { return c.reference; })[0];
+      if (!ref) return;
+      var q = ref.qualifying[ref.qualifying.length - 1], a = ref.all[ref.all.length - 1];
+      var t = el("div", { class: "tile" });
+      t.innerHTML =
+        '<div class="label">' + esc(g.short) + " grade, reference checkpoint</div>" +
+        '<div class="fig"><a href="' + REPO + '/blob/main/data/track.md" title="Open data/track.md">' + (q == null ? "-" : q) + "</a></div>" +
+        '<div class="sub">qualifying providers at native ' + esc(ref.native_precision.join(" or ")) + "</div>" +
+        '<div class="model">' + esc(ref.id) + "</div>" +
+        '<div class="sub">of ' + (a == null ? "-" : a) + " providers at any precision · 7 day change " + chgHtml(sevenDay(ref.qualifying)) + "</div>";
+      tiles.appendChild(t);
+    });
+    var rec = el("div", { class: "tile record" });
+    rec.innerHTML =
+      '<div class="label">Unbroken daily record</div>' +
+      '<div class="fig"><a href="' + REPO + '/tree/main/data/census" title="Open the census folders">' + track.days.length + "</a></div>" +
+      '<div class="sub">days of census, ' + fmtDay(track.first_day) + " to " + fmtDay(track.latest_day) + "</div>" +
+      '<div class="sub">one saved snapshot per day, never overwritten</div>';
+    tiles.appendChild(rec);
+    main.appendChild(tiles);
+  }
+
+  function renderDefs(track, main) {
+    var d = el("details", { class: "defs" });
+    d.innerHTML =
+      "<summary>How to read these figures</summary>" +
+      '<dl class="deflist">' +
+      "<dt>Qualifying provider</dt><dd>A distinct provider serving the checkpoint at its native precision on that day. Several endpoints from one provider count once.</dd>" +
+      "<dt>All providers</dt><dd>Distinct providers serving the checkpoint at any declared precision, including undeclared. Shown for context.</dd>" +
+      "<dt>Native precision</dt><dd>The numerical format the lab released the weights in (for example fp8). Serving at a lower precision can change output quality, so only native serving qualifies.</dd>" +
+      "<dt>Grade</dt><dd>Standard is 30 billion active parameters or fewer; Heavy is above 30 billion. Active parameters, not total, set cost and speed, because only the active portion is used per token.</dd>" +
+      "<dt>Reference checkpoint</dt><dd>The one model per grade that the assessment will be built on. Other candidates are tracked against it.</dd>" +
+      "<dt>Stickiness and rollover</dt><dd>A candidate leads when it has more qualifying providers than the reference. " + track.stickiness_days + " consecutive leading days triggers a rollover review of the reference.</dd>" +
+      "</dl>" +
+      '<p class="fine" style="padding:0 18px 18px">Full reasoning for each grade and reference decision is kept in <a href="' + REPO + '/blob/main/notes/selection.md">notes/selection.md</a>.</p>';
+    main.appendChild(d);
+  }
+
+  function renderGrade(track, g, container) {
+    var sec = el("section", { class: "grade", id: "grade-" + g.short.toLowerCase().replace(/[^a-z]+/g, "-") });
+    var head = el("div", { class: "grade-head" });
+    head.innerHTML = "<div style='display:grid;gap:4px'><h2>" + esc(g.name) + "</h2><p>Reference: <span class='mono'>" + esc(g.reference || "none") + "</span>. " + g.candidates.length + " checkpoints tracked.</p></div>";
+    var seg = el("div", { class: "seg", role: "group", "aria-label": "Measure for " + g.short });
+    seg.innerHTML = '<button type="button" aria-pressed="true" data-m="qualifying">Qualifying</button><button type="button" aria-pressed="false" data-m="all">All providers</button>';
+    head.appendChild(seg);
+    sec.appendChild(head);
+
+    var box = el("div", { class: "chartbox" });
+    var legend = el("div", { class: "legend", "aria-hidden": "true" });
+    var wrap = el("div", { class: "canvas-wrap" });
+    var canvas = el("canvas", { role: "img", "aria-label": "Daily provider counts for the " + g.short + " grade; figures are in the tables below." });
+    wrap.appendChild(canvas);
+    var dayLink = el("div", { class: "daylink" });
+    dayLink.innerHTML = "Select a day on the chart to open its census snapshot and ranking.";
+    box.appendChild(legend); box.appendChild(wrap); box.appendChild(dayLink);
+    sec.appendChild(box);
+
+    // Latest table
+    var rows = g.candidates.map(function (c, i) {
+      var q = c.qualifying[c.qualifying.length - 1], a = c.all[c.all.length - 1];
+      return "<tr><td class='mono'>" + dashSvg(i, "var(--s" + ((i % 6) + 1) + ")", c.reference).replace('stroke="var', 'style="stroke:var').replace(')" stroke-width', ')" stroke-width') + " " + esc(c.id) + (c.reference ? "<span class='ref'>Reference</span>" : "") + "</td>" +
+        "<td>" + esc(c.native_precision.join(" or ")) + "</td>" +
+        "<td class='r'><strong>" + (q == null ? "-" : q) + "</strong></td>" +
+        "<td class='r'>" + (a == null ? "-" : a) + "</td>" +
+        "<td class='r'>" + share(q, a) + "</td>" +
+        "<td class='r'>" + chgCell(sevenDay(c.qualifying)) + "</td>" +
+        "<td>" + stateHtml(c.stickiness) + "</td></tr>";
+    }).join("");
+    var tw = el("div", { class: "tablewrap" });
+    tw.innerHTML = "<table><caption class='label' style='text-align:left;padding:10px 12px 0'>Latest day, " + fmtDay(track.latest_day) + "</caption><thead><tr><th>Model</th><th>Native</th><th class='r'>Qualifying</th><th class='r'>All</th><th class='r'>Share</th><th class='r'>7 day</th><th>Against reference</th></tr></thead><tbody>" + rows + "</tbody></table>";
+    sec.appendChild(tw);
+
+    // Full history table (the chart's table view)
+    var hist = el("details", { class: "history" });
+    var hh = "<tr><th>Model</th>" + track.days.map(function (d) { return "<th class='r'><a href='" + censusUrl(d) + "'>" + d.slice(5) + "</a></th>"; }).join("") + "</tr>";
+    var hb = g.candidates.map(function (c) {
+      return "<tr><td class='mono'>" + esc(c.id) + "</td>" + track.days.map(function (d, j) {
+        var q = c.qualifying[j], a = c.all[j];
+        return "<td class='r'>" + (q == null ? "-" : "<strong>" + q + "</strong> (" + a + ")") + "</td>";
+      }).join("") + "</tr>";
+    }).join("");
+    hist.innerHTML = "<summary>Show every day as a table (qualifying, with all providers in brackets)</summary><div class='tablewrap' style='margin-top:8px'><table><thead>" + hh + "</thead><tbody>" + hb + "</tbody></table></div>";
+    sec.appendChild(hist);
+    container.appendChild(sec);
+
+    var state = { measure: "qualifying" };
+    var chart = null;
+
+    function build() {
+      if (chart) chart.destroy();
+      var ink = css("--ink"), muted = css("--muted"), rule = css("--rule"), panel = css("--panel");
+      legend.innerHTML = g.candidates.map(function (c, i) {
+        return "<span>" + dashSvg(i, seriesColour(i), c.reference) + esc(c.id) + (c.reference ? " (reference)" : "") + "</span>";
+      }).join("");
+      var datasets = g.candidates.map(function (c, i) {
+        var col = seriesColour(i);
+        return {
+          label: c.id,
+          data: c[state.measure],
+          borderColor: col, backgroundColor: col,
+          borderWidth: c.reference ? 3.5 : 2,
+          borderDash: DASHES[i % DASHES.length],
+          pointRadius: 0, pointHoverRadius: 5, pointHitRadius: 12,
+          pointBackgroundColor: col, pointBorderColor: panel, pointBorderWidth: 2,
+          spanGaps: false, tension: 0, order: c.reference ? 0 : 1
+        };
+      });
+      var allVals = [];
+      g.candidates.forEach(function (c) { c[state.measure].forEach(function (v) { if (v != null) allVals.push(v); }); });
+      var maxV = Math.max.apply(null, allVals.concat([1]));
+      chart = new Chart(canvas, {
+        type: "line",
+        data: { labels: track.days.map(shortDay), datasets: datasets },
+        options: {
+          responsive: true, maintainAspectRatio: false, animation: false,
+          interaction: { mode: "index", intersect: false },
+          layout: { padding: { top: 6, right: 8 } },
+          scales: {
+            x: { grid: { display: false }, border: { color: rule }, ticks: { color: muted, maxRotation: 0, autoSkip: true, autoSkipPadding: 14, font: { family: "Arial", size: 11 } } },
+            y: { beginAtZero: true, suggestedMax: Math.ceil(maxV * 1.1), grid: { color: rule }, border: { display: false }, ticks: { color: muted, precision: 0, font: { family: "Arial", size: 11 } },
+                 title: { display: true, text: state.measure === "qualifying" ? "Qualifying providers" : "Providers at any precision", color: muted, font: { family: "Arial", size: 11 } } }
+          },
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              backgroundColor: panel, titleColor: ink, bodyColor: ink, borderColor: css("--rule-strong"), borderWidth: 1,
+              padding: 10, boxPadding: 4, usePointStyle: true,
+              titleFont: { family: "Arial", weight: "bold" }, bodyFont: { family: "Arial" },
+              itemSort: function (a, b) { return (b.raw == null ? -1 : b.raw) - (a.raw == null ? -1 : a.raw); },
+              callbacks: {
+                title: function (items) { return fmtDay(track.days[items[0].dataIndex]); },
+                label: function (it) {
+                  var c = g.candidates[it.datasetIndex], j = it.dataIndex;
+                  var q = c.qualifying[j], a = c.all[j];
+                  if (q == null) return " " + c.id + ": no data";
+                  return " " + c.id + ": " + q + " qualifying of " + a + " (" + share(q, a) + ")";
+                }
+              }
+            }
+          },
+          onClick: function (evt, els) {
+            var pts = chart.getElementsAtEventForMode(evt, "index", { intersect: false }, false);
+            if (!pts.length) return;
+            var d = track.days[pts[0].index];
+            dayLink.innerHTML = "<strong>" + fmtDay(d) + "</strong>: <a href='" + censusUrl(d) + "'>Open census snapshot</a> · <a href='" + rankUrl(d) + "'>Open ranking</a>";
+          }
+        }
+      });
+    }
+    seg.addEventListener("click", function (e) {
+      var b = e.target.closest("button"); if (!b) return;
+      state.measure = b.getAttribute("data-m");
+      Array.prototype.forEach.call(seg.querySelectorAll("button"), function (x) { x.setAttribute("aria-pressed", x === b ? "true" : "false"); });
+      build();
+    });
+    build();
+    charts.push(build);
+  }
+
+  function renderWatch(track, main) {
+    var s = el("section", { class: "grade" });
+    s.innerHTML = "<div class='grade-head'><div style='display:grid;gap:4px'><h2>Watchlist</h2><p>Models in the latest census with five or more providers at a single declared precision that are not in any grade. Checked for inclusion.</p></div></div>";
+    var ul = el("ul", { class: "watch" });
+    ul.innerHTML = track.watchlist.length ? track.watchlist.map(function (w) {
+      return "<li><span class='mono'>" + esc(w.id) + "</span><span>" + w.providers + " at " + esc(w.precision) + "</span></li>";
+    }).join("") : "<li>None</li>";
+    s.appendChild(ul);
+    main.appendChild(s);
+  }
+
+  function renderContext(rank, main) {
+    if (!rank) return;
+    var s = el("section", { class: "grade" });
+    var f = function (x) { return x == null ? "-" : "$" + x.toFixed(2); };
+    var rows = rank.rows.slice(0, 15).map(function (r) {
+      var p = r.output_usd_per_m;
+      return "<tr><td class='r'>" + r.rank + "</td><td class='mono'>" + esc(r.model) + "</td><td class='r'>" + r.providers + "</td><td class='r'>" + r.endpoints + "</td><td class='r'><strong>" + f(p.median) + "</strong></td><td class='r'>" + f(p.low) + " to " + f(p.high) + "</td></tr>";
+    }).join("");
+    s.innerHTML = "<div class='grade-head'><div style='display:grid;gap:4px'><h2>Market context</h2><p>Most widely served models in the census of " + fmtDay(rank.date) + ", out of " + rank.models_with_endpoints + " models listed.</p></div></div>" +
+      "<p class='context-note'>Posted list prices across all endpoints and precisions. Context only; not an assessed price.</p>" +
+      "<div class='tablewrap'><table><thead><tr><th class='r'>Rank</th><th>Model</th><th class='r'>Providers</th><th class='r'>Endpoints</th><th class='r'>Output median, $/M tokens</th><th class='r'>Range</th></tr></thead><tbody>" + rows + "</tbody></table></div>" +
+      "<p class='fine'>Full ranking with quantisation breakdown: <a href='" + rankUrl(rank.date) + "'>data/rank/" + rank.date + ".md</a></p>";
+    main.appendChild(s);
+  }
+
+  function renderEvidence(track) {
+    var L = [
+      ["Tracking file", "data/track.md", REPO + "/blob/main/data/track.md"],
+      ["Tracking file history", "every daily rebuild", REPO + "/commits/main/data/track.md"],
+      ["Latest ranking", "data/rank/" + track.latest_day + ".md", rankUrl(track.latest_day)],
+      ["Latest raw census", "data/census/" + track.latest_day, censusUrl(track.latest_day)],
+      ["All census days", "one folder per day since " + fmtDay(track.first_day), REPO + "/tree/main/data/census"],
+      ["Grade configuration", "candidates.json", REPO + "/blob/main/candidates.json"],
+      ["Configuration history", "every change, dated", REPO + "/commits/main/candidates.json"],
+      ["Selection decisions", "notes/selection.md", REPO + "/blob/main/notes/selection.md"],
+      ["Collector code", "scripts/", REPO + "/tree/main/scripts"],
+      ["Run log", "GitHub Actions, daily at 06:00 UTC", REPO + "/actions"],
+      ["Data behind this page", "data/site/track.json", REPO + "/blob/main/data/site/track.json"]
+    ];
+    document.getElementById("evidenceLinks").innerHTML = L.map(function (x) {
+      return "<li><a href='" + x[2] + "'>" + esc(x[0]) + "</a><span>" + esc(x[1]) + "</span></li>";
+    }).join("");
+  }
+
+  function render(data) {
+    var track = data.track;
+    if (!track || track.schema_version !== 1) { renderError("The data file has an unrecognised format"); return; }
+    var gen = new Date(track.generated_utc);
+    document.getElementById("lastRun").innerHTML = "Last census " + fmtDay(track.latest_day) + ", rebuilt " +
+      gen.toISOString().slice(11, 16) + " UTC";
+    var notices = document.getElementById("notices");
+    if (data.snapshot) {
+      notices.appendChild(el("div", { class: "notice" }, "Preview snapshot of the census as at " + fmtDay(track.latest_day) + ". The published site reads the repository directly and updates after each daily run."));
+    } else if ((Date.now() - gen.getTime()) / 36e5 > STALE_HOURS) {
+      notices.appendChild(el("div", { class: "notice" }, "Census overdue. The last successful run was " + fmtDay(track.latest_day) + ". <a href='" + REPO + "/actions'>Check the run log</a>."));
+    }
+    var main = document.getElementById("main");
+    main.innerHTML = "";
+    renderTiles(track, main);
+    renderDefs(track, main);
+    track.grades.filter(function (g) { return g.published; }).forEach(function (g) { renderGrade(track, g, main); });
+    var unpub = track.grades.filter(function (g) { return !g.published; });
+    if (unpub.length) {
+      var mon = el("details", { class: "monitor" });
+      mon.innerHTML = "<summary><h2>Monitoring only</h2><p style='color:var(--ink-2);font-size:14px'>" + unpub.map(function (g) { return esc(g.name); }).join(" and ") + ". Not part of the assessment.</p></summary>";
+      var inner = el("div", { class: "inner" });
+      mon.appendChild(inner);
+      main.appendChild(mon);
+      var built = false;
+      mon.addEventListener("toggle", function () { if (mon.open && !built) { built = true; unpub.forEach(function (g) { renderGrade(track, g, inner); }); } });
+    }
+    renderWatch(track, main);
+    renderContext(data.rank, main);
+    renderEvidence(track);
+
+    var rebuild = function () { charts.forEach(function (b) { b(); }); };
+    try { matchMedia("(prefers-color-scheme: dark)").addEventListener("change", rebuild); } catch (e) {}
+    new MutationObserver(rebuild).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+  }
+
+  renderEvidence({ latest_day: "", first_day: "" });
+  if (typeof Chart === "undefined") { renderError("The charting library did not load"); return; }
+  load().then(render).catch(function (e) { renderError(e.message || "Network error"); });
+})();
+</script>
+</body>
+</html>

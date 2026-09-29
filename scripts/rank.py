@@ -90,4 +90,31 @@ for r in eligible:
 with open(os.path.join(out_dir, f"{today}.md"), "w") as f:
     f.write("\n".join(lines) + "\n")
 
+# Machine-readable copy for the website (same rows as the markdown above).
+site_dir = os.path.join("data", "site")
+os.makedirs(site_dir, exist_ok=True)
+site = {
+    "schema_version": 1,
+    "date": today,
+    "models_with_endpoints": len(rows),
+    "models_with_five_plus_providers": len(eligible),
+    "rows": [
+        {
+            "rank": i,
+            "model": r["model"],
+            "providers": r["providers"],
+            "endpoints": r["endpoints"],
+            "quantisation": dict(sorted(r["quants"].items(), key=lambda kv: -kv[1])),
+            "output_usd_per_m": {
+                "low": None if r["lo"] is None else round(r["lo"], 4),
+                "median": None if r["mid"] is None else round(r["mid"], 4),
+                "high": None if r["hi"] is None else round(r["hi"], 4),
+            },
+        }
+        for i, r in enumerate(rows[:40], 1)
+    ],
+}
+with open(os.path.join(site_dir, "rank-latest.json"), "w") as f:
+    json.dump(site, f, indent=1)
+
 print(f"Ranking written for {today}: {len(rows)} models, {len(eligible)} with 5+ providers.")
