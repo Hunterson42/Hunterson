@@ -1,0 +1,24 @@
+{
+  "data": {
+    "id": "~google/gemini-pro-latest",
+    "name": "Google: Gemini Pro Latest",
+    "created": 1777318451,
+    "description": "This model always redirects to the latest model in the Gemini Pro family.",
+    "architecture": {
+      "tokenizer": "Router",
+      "instruct_type": null,
+      "modality": "text+image+file+audio+video->text",
+      "input_modalities": [
+        "audio",
+        "file",
+        "image",
+        "text",
+        "video"
+      ],
+      "output_modalities": [
+        "text"
+      ]
+    },
+    "endpoints": []
+  }
+}
