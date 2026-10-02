@@ -1,6 +1,6 @@
 {
  "schema_version": 1,
- "generated_utc": "2026-10-02T06:11:01Z",
+ "generated_utc": "2026-10-02T14:35:06Z",
  "first_day": "2026-09-11",
  "latest_day": "2026-10-02",
  "days": [
@@ -390,9 +390,9 @@
    ]
   },
   {
-   "name": "Heavy (above 30B active)",
+   "name": "Heavy (above 30B active, not published)",
    "short": "Heavy",
-   "published": true,
+   "published": false,
    "reference": "z-ai/glm-5.3",
    "candidates": [
     {

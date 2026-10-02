@@ -1,4 +1,4 @@
-# Candidate tracking, rebuilt 2026-10-02 06:11 UTC
+# Candidate tracking, rebuilt 2026-10-02 14:35 UTC
 
 Qualifying providers = distinct providers serving the checkpoint at its native precision.
 Bracketed figure in the history tables is the total provider count at any precision.
@@ -43,7 +43,7 @@ Change is against seven days earlier. Share is qualifying providers as a percent
 - qwen/qwen3.6-35b-a3b: not leading
 - google/gemma-4-26b-a4b-it: not leading
 
-## Heavy (above 30B active)
+## Heavy (above 30B active, not published)
 
 | Model | Native | 09-11 | 09-12 | 09-13 | 09-14 | 09-15 | 09-16 | 09-17 | 09-18 | 09-19 | 09-20 | 09-21 | 09-22 | 09-23 | 09-24 | 09-25 | 09-26 | 09-27 | 09-28 | 09-29 | 09-30 | 10-01 | 10-02 |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
