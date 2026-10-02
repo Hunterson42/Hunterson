@@ -14,7 +14,7 @@
       {"openrouter_id": "qwen/qwen3.6-35b-a3b", "native_precision": "fp8"},
       {"openrouter_id": "google/gemma-4-26b-a4b-it", "native_precision": "bf16"}
     ],
-    "Heavy (above 30B active)": [
+    "Heavy (above 30B active, not published)": [
       {"openrouter_id": "z-ai/glm-5.3", "native_precision": "fp8", "reference": true},
       {"openrouter_id": "z-ai/glm-5.2", "native_precision": "fp8"},
       {"openrouter_id": "deepseek/deepseek-v4-pro-0813", "native_precision": "fp8"},
