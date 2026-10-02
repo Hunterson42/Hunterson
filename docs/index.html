@@ -140,9 +140,11 @@ footer.evidence { border-top: 2px solid var(--ink); padding-top: 22px; display: 
 .links li { display: grid; gap: 1px; }
 .links li span { color: var(--muted); font-size: 13px; }
 .fine { font-size: 13px; color: var(--muted); }
-.error { background: var(--panel); border: 1px solid var(--rule-strong); border-radius: 6px; padding: 20px; }
+.error, .nojs { background: var(--panel); border: 1px solid var(--rule-strong); border-radius: 6px; padding: 20px; }
+.nojs { display: grid; gap: 8px; }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
 </style>
+<noscript><style>#lastRun { display: none; }</style></noscript>
 </head>
 <body>
 <div class="wrap">
@@ -156,6 +158,14 @@ footer.evidence { border-top: 2px solid var(--ink); padding-top: 22px; display: 
     </div>
     <div id="notices" style="display:grid;gap:8px"></div>
   </header>
+
+  <noscript>
+    <div class="nojs">
+      <h2>The figures on this page are built in your browser</h2>
+      <p>With JavaScript unavailable, the same figures are published as plain text in <a href="https://github.com/Hunterson42/Hunterson/blob/main/data/track.md">data/track.md</a>, rebuilt after each daily census.</p>
+      <p>The raw census is in <a href="https://github.com/Hunterson42/Hunterson/tree/main/data/census">data/census</a>, one folder per day, and the reasoning behind each grade and reference decision is in <a href="https://github.com/Hunterson42/Hunterson/blob/main/notes/selection.md">notes/selection.md</a>.</p>
+    </div>
+  </noscript>
 
   <main id="main" class="wrap" style="gap:40px"></main>
 
@@ -473,7 +483,7 @@ footer.evidence { border-top: 2px solid var(--ink); padding-top: 22px; display: 
     var unpub = track.grades.filter(function (g) { return !g.published; });
     if (unpub.length) {
       var mon = el("details", { class: "monitor" });
-      mon.innerHTML = "<summary><h2>Monitoring only</h2><p style='color:var(--ink-2);font-size:14px'>" + unpub.map(function (g) { return esc(g.name); }).join(" and ") + ". Not part of the assessment.</p></summary>";
+      mon.innerHTML = "<summary><h2>Monitoring only</h2><p style='color:var(--ink-2);font-size:14px'>" + unpub.map(function (g) { return esc(g.name); }).join("; ") + ". Not part of the assessment.</p></summary>";
       var inner = el("div", { class: "inner" });
       mon.appendChild(inner);
       main.appendChild(mon);
