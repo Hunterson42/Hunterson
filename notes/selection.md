@@ -2,7 +2,7 @@
 
 Working record for choosing and monitoring the reference checkpoint for each grade. Kept in the repository so that every selection decision has a dated, public trail. Nothing here is published; the methodology is the published document.
 
-Last updated: 17 September 2026.
+Last updated: 2 October 2026.
 
 ---
 
@@ -95,6 +95,35 @@ published rather than withheld, because the number of providers able to agree
 on how to serve a frontier open-weight model is itself a measure of how
 commoditised the top of the market is.
 
+**Amendment, 2 October: Heavy is not launched as a priced grade.** Heavy is
+published at launch as a daily qualifying count with the reason, on the same
+footing as Frontier. `candidates.json` marks the grade "not published" from
+2 October, which moves it out of the headline figures on the site.
+
+**Why.** The reference, GLM-5.3, has fallen from 13 qualifying providers to 11
+and has been led for two consecutive days by GLM-5.2, the model it supersedes.
+GLM-5.2 also led on 12 and 13 September and has tied the reference on eight
+other days. A grade whose reference cannot hold a lead over its own predecessor
+is not yet a settled product.
+
+**This is a judgement, and the rule does not yet say it.** On the threshold as
+written above, Heavy qualifies: its reference has held at least 11 on every one
+of 22 census days. The exclusion needs a stated rule before methodology 1.0, or
+it is discretion. Two wordings have been considered:
+
+- "The reference has not declined across the qualifying window." Not usable as
+  worded, because the answer depends on the day the window starts. GLM-5.3 was
+  at 13 on 11 September and at 11 on 13 September.
+- "No challenger has a running lead over the reference at launch." Well defined
+  and readable straight from `data/track.md`, but it would also hold back
+  Standard on a one day wobble, so it would need a minimum streak before it
+  bites.
+
+Open item 3 carries this.
+
+**Consequence, replacing the one above.** Standard launches on 3 November.
+Heavy and Frontier publish a daily qualifying count with no price.
+
 ### 1.5 The census is written once per day
 
 `census.py` refuses to overwrite a day's census once written. A manual re-run
@@ -112,6 +141,55 @@ published price was marked against data that did not exist at the assessment
 time, and the raw data would no longer support the number.
 
 Re-analysing is free. Re-collecting is not.
+
+### 1.6 Reference selection before first publication
+
+Recorded 2 October 2026.
+
+**Rule.** Until the first assessment is published, the stickiness test alone
+selects the reference. A challenger that holds more qualifying providers than
+the reference on 20 consecutive census days becomes the reference on the
+twentieth day. There is no parallel period and no conversion ratio.
+
+**From first publication onward** the full rollover procedure applies: 20
+consecutive leading days, then 30 assessment days of parallel publication with
+the ratio between the two published daily.
+
+**Why.** Parallel publication protects people who rely on a published number.
+Before launch nobody does, so there is nothing to convert and nobody to give
+notice to.
+
+**What it replaces.** A review on 25 September proposed fixing the reference on
+that date, freezing it through the shadow period and starting the stickiness
+clock at first publication. That proposal was never recorded in this file and
+is not adopted. Under it, a reference that had already been overtaken would
+launch on 3 November with a rollover certain, and the parallel period would
+fall in the first weeks of the series.
+
+**No discretion.** The `reference` flag in `candidates.json` changes only when
+`data/track.md` reports the trigger for that grade, and it is changed on that
+day. Leading means strictly more qualifying providers. A tie breaks the streak,
+which is how the tracker already computes it.
+
+**Position when recorded.** The Standard reference is GLM-5.3-Flash. DeepSeek
+V4.1-Flash tied it on 29 September and has led on 30 September, 1 October and
+2 October, 3 of 20. If the lead is unbroken, the trigger falls on the census of
+19 October. If it breaks, the count restarts. This rule is recorded before
+either outcome is known.
+
+**Scope.** Standard only for now. Heavy and Frontier are not being launched
+(rule 1.4), and a Heavy reference overtaken by the model it supersedes is
+treated as evidence against launching the grade, not as a reason to adopt the
+older model.
+
+**Consequences for the build.**
+
+- Provider accounts are opened to cover both checkpoints. Nine providers serve
+  both at fp8 on 2 October (section 2, reading of 2 October).
+- The shadow probe runs against both, so a change of reference before launch
+  costs no shadow days.
+- Methodology 1.0 names the reference this rule gives on the day it is frozen,
+  and states the rule.
 
 ---
 
@@ -207,6 +285,91 @@ correct counts are 12 and 12. GLM-5.3 was recorded as 12 then 15; the correct
 counts are 12 and 13. Every candidate block in sections 3 to 5 needs the same
 correction applied.
 
+### Reading, 2 October
+
+Twenty-two census days, 11 September to 2 October, with no gaps. Figures are
+qualifying providers from `data/site/track.json` as generated at 06:11 UTC on
+2 October.
+
+**Gap in this record.** Nothing was written here between 17 September and
+2 October. A review took place on 25 September but its conclusions were not
+recorded at the time, so nothing in this file should be read as a decision
+dated 25 September. For the record, the census shows GLM-5.3-Flash ahead of
+every Standard challenger on each of the 15 days to 25 September, at 14 against
+13 and 13 on that day.
+
+| Grade | Model | 11 Sep | 17 Sep | 25 Sep | 29 Sep | 30 Sep | 1 Oct | 2 Oct |
+|---|---|---|---|---|---|---|---|---|
+| Standard | GLM-5.3-Flash (reference) | 14 | 15 | 14 | 15 | 15 | 14 | 13 |
+| Standard | DeepSeek V4.1-Flash | 6 | 9 | 13 | 15 | 16 | 15 | 15 |
+| Standard | DeepSeek V4 Flash 0731 | 11 | 12 | 13 | 13 | 12 | 12 | 12 |
+| Heavy | GLM-5.3 (reference) | 13 | 13 | 11 | 11 | 11 | 11 | 11 |
+| Heavy | GLM-5.2 | 13 | 12 | 11 | 11 | 11 | 12 | 12 |
+| Heavy | DeepSeek V4 Pro 0813 | 8 | 8 | 9 | 10 | 9 | 9 | 9 |
+| Frontier | Kimi K3 (reference) | 6 | 7 | 7 | 8 | 9 | 9 | 9 |
+
+**Standard: the reference has been overtaken.** DeepSeek V4.1-Flash has gone
+from 6 qualifying providers to 15 in three weeks, peaking at 16 on
+30 September. It tied the reference on 29 September and has led on each of the
+three days since. GLM-5.3-Flash peaked at 16 on five days in September and is
+now at 13, its lowest of the record.
+
+**The 17 September reading of V4.1-Flash was wrong.** It said the model "is not
+behaving as a challenger" and that "whatever adoption it was going to get on
+release, it has had". It had 9 qualifying providers then and has 15 now.
+
+**Heavy: the reference is being led by the model it supersedes.** GLM-5.2 is at
+12 against GLM-5.3 at 11 on 1 and 2 October. It also led on 12 and
+13 September. See the amendment to rule 1.4.
+
+**Frontier is one provider short of the launch threshold.** Kimi K3 held 7 from
+17 to 28 September, then moved to 8 on 29 September and 9 from 30 September.
+Providers at any precision rose from 17 to 19 over the same days. It would need
+to reach 10 and hold it for 20 days.
+
+**Native share keeps falling for the older references.** Qualifying providers
+as a share of all providers serving the model:
+
+- GLM-5.3-Flash: 14 of 25 on 11 September, 56 per cent. 13 of 32 on 2 October,
+  41 per cent
+- GLM-5.3: 13 of 27, 48 per cent. Now 11 of 31, 35 per cent
+- DeepSeek V4.1-Flash: 15 of 30, 50 per cent
+- gpt-oss-120b: 5 of 20, 25 per cent, and exactly at the floor of 5 on all 22
+  days
+
+New serving capacity keeps arriving for the older models, and it keeps arriving
+below native precision or undeclared.
+
+**Panel overlap between the two leading Standard checkpoints, 2 October.**
+
+- fp8 for both, 9 providers: AtlasCloud, BaseTen, GMICloud, Io Net, Morph,
+  NextBit, Novita, SiliconFlow, StreamLake
+- fp8 for GLM-5.3-Flash only, 4: Inceptron, Near AI, Phala, Z.AI
+- fp8 for DeepSeek V4.1-Flash only, 6: Baidu, CoreWeave, DeepInfra, Makora,
+  Parasail, Venice
+
+Nineteen accounts cover both panels in full.
+
+**Posted price context, not an assessment.** Taking each fp8 provider's lowest
+posted output price on 2 October, in US dollars per million tokens:
+
+- GLM-5.3-Flash: median 0.45, range 0.28 to 0.70, 13 providers
+- DeepSeek V4.1-Flash: median 0.84, range 0.37 to 1.50, 15 providers
+
+A change of reference would move the level by a factor of about 1.9. After
+launch the published conversion ratio would carry that step. Before launch
+there is nothing to convert, which is the case for settling the reference
+first under rule 1.6.
+
+**Corrections to the 17 September tables above.**
+
+- gpt-oss-120b should read 5 on every day from 11 to 17 September. The 6 and 7
+  shown were written before the tracker ran with the accepted tags for that
+  model
+- DeepSeek V4.1-Flash on 17 September reads 9 in the saved census. The 8 shown
+  came from an earlier run the same day, before rule 1.5 made a day's census
+  immutable
+
 ---
 
 ## 3. Standard grade candidates
@@ -229,6 +392,7 @@ correction applied.
 - Parameters: 304B total (Safetensors, includes DSpark speculative decoding module), 284B main model (technical report), 13B active (technical report, arXiv:2606.19348 abstract)
 - Report caveat: the report describes the April preview; the 0731 card states the same structure plus the DSpark module
 - Native precision: **fp8**, per card tags. Tensor types BF16, I64, F32, F8_E4M3, I8
+- Checked 2 October: `config.json` `quantization_config` gives quant_method "fp8", fmt "e4m3", weight_block_size 128 by 128, with no `expert_dtype` key. Confirms fp8. It does not explain the open question on repository size below
 - Licence: MIT
 - Census 17 Sep: 27 providers, 29 endpoints. fp8 13, unknown 9, fp4 6, bf16 1. **Qualifying: 12**
 - Hugging Face serving partners: Together, Novita, Fireworks, DeepInfra, Baseten, Scaleway
@@ -247,14 +411,28 @@ correction applied.
 - Note: providers declaring bf16 are serving an upconverted version, not a shrunk one. Still not the published product
 - Sibling: gpt-oss-20b, 21B total, 3.6B active
 
-### 3.4 deepseek/deepseek-v4.1-flash
+### 3.4 deepseek-ai/DeepSeek-V4.1-Flash
+
+Card collected on 2 October 2026 from the Hugging Face repository page, its
+`config.json` and its commit history. Confirm the commit hash by hand from
+Files and versions before it is used as a reference identifier.
 
 - OpenRouter id: `deepseek/deepseek-v4.1-flash`
-- Commit hash: [to collect]
-- Parameters: [to collect]
-- Native precision: fp8 assumed from the census; confirm from the card
-- Census 17 Sep: 18 providers, 19 endpoints. fp8 9, unknown 8, fp4 2. **Qualifying: 9**
-- Status: new entrant, first seen between 14 and 17 September. Live rollover candidate. Collect the card before 25 September
+- Commit hash: `2cba9e42aa026125f3ed06c6d98c1db82f7ca027`, the head on 2 October, "Adding chat template (#68)", shown as one day old
+- Commit history: 12 commits. Weights uploaded about 10 September at `678ae2a`. `config.json` unchanged since `517ef62` of the same date
+- Parameters: 552B backbone (model card). 763B in the Safetensors box. The difference is not reconciled; `config.json` shows components outside the backbone: Engram embedding tables, a DSpark speculative decoding module and a vision tower
+- Active parameters: **8B per token during prefill, 16B during decode** (model card). Standard on either figure
+- First candidate to state two active figures. The grade definition needs a line saying which governs. Decode is the larger and is the one that applies to output tokens
+- Architecture: MoE, 384 routed experts, 6 per token, 1 shared, 40 layers, hidden 5120. Context 1,048,576. Vision tower of 32 layers; the card is tagged Image-Text-to-Text
+- **Native precision: fp8 with fp4 experts.** `config.json` `quantization_config` gives quant_method "fp8", expert_dtype "fp4", weight_block_size 32 by 32, scale_fmt "ue8m0", activation_scheme "dynamic". Base dtype bfloat16. Tensor types BF16, F32, F8_E4M3, I8. Card tags: fp8 and 8-bit precision
+- Mixed precision is new in this series. The V4 Flash 0731 config has no `expert_dtype` key
+- **Accepted tag: fp8, provisional.** It is the lab's own label for the release and the tag the tracker has counted since 11 September
+- Decision needed before this checkpoint could be a reference: whether endpoints tagged bare fp4 are serving the published form, whose experts are fp4, or a four-bit requantisation of the whole model. A separate `nvidia/DeepSeek-V4.1-Flash-NVFP4` repository is listed on Hugging Face, so four-bit tags cannot be assumed to mean the published form. Rule 1.3 does not settle it, because the published format has two bit widths. Two providers are tagged fp4 on 2 October, so the lead does not depend on the answer
+- Licence: MIT
+- Census 2 Oct: 30 providers, 33 endpoints. By provider: fp8 15, unknown 13, fp4 2, fp32 1 (BaseTen, also listed at fp8). **Qualifying: 15**
+- Watch: the head commit adds a chat template file with no change to weights. A template change is material under the methodology, so the hash to pin is the head, not the weights commit. An earlier commit, `dba1be0`, changed prompt encoding for tool namespaces
+- Paper: listed on Hugging Face as arXiv 2609.19969, "DeepSeek-V4.1-Flash: Pushing the Limits of KV Cache Compression". Not read
+- Correction: this entry previously said the model was first seen between 14 and 17 September. It is in the census from 11 September, the first census day, at 6 qualifying providers. The repository dates from about 10 September
 
 ---
 
@@ -365,17 +543,21 @@ The ambiguity of bare `fp4` is a live problem for gpt-oss, whose native format i
 
 ---
 
-## 8. Open items before 25 September
+## 8. Open items
 
-1. Collect the model card for DeepSeek V4.1-Flash: hash, total and active
-   parameters, native precision
-2. Resolve whether the Qwen 27B models are dense; if so, record the soft-edge
+1. Confirm the DeepSeek V4.1-Flash commit hash by hand, and decide whether
+   endpoints tagged fp4 serve its published form (section 3.4)
+2. Add a line to the grade definition saying which active parameter figure
+   governs when a card states more than one (section 3.4)
+3. State the rule that keeps Heavy out of the launch, or reverse the decision
+   (rule 1.4, amendment of 2 October)
+4. Resolve whether the Qwen 27B models are dense; if so, record the soft-edge
    finding properly
-3. Read the GLM-5.3, Kimi K2.6 and Kimi K3 licences
-4. Check whether Kimi K2.6 config commit `2755962` touched weights
-5. Reconcile the DeepSeek V4 Flash 167 GB against 304B parameters
-6. Check the Minimax M3 card; 8 fp8 providers and never examined
-7. Choose the Standard reference and record the ten daily qualifying counts
-8. Confirm the Heavy reference, noting the GLM-5.2 instability in section 2
-9. Add the once-per-day census rule to the methodology data sources section
-10. Add the launch threshold and maintenance floor to the methodology
+5. Read the GLM-5.3, Kimi K2.6 and Kimi K3 licences
+6. Check whether Kimi K2.6 config commit `2755962` touched weights
+7. Reconcile the DeepSeek V4 Flash 167 GB against 304B parameters. Its
+   `config.json` has no key that explains it (section 3.2)
+8. Check the Minimax M3 card; 8 fp8 providers and never examined
+9. Add to the methodology: the once-per-day census rule (1.5), the launch
+   threshold and maintenance floor (1.4), and reference selection before first
+   publication (1.6)
