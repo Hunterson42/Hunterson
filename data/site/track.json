@@ -1,8 +1,8 @@
 {
  "schema_version": 1,
- "generated_utc": "2026-10-02T14:35:06Z",
+ "generated_utc": "2026-10-03T06:16:31Z",
  "first_day": "2026-09-11",
- "latest_day": "2026-10-02",
+ "latest_day": "2026-10-03",
  "days": [
   "2026-09-11",
   "2026-09-12",
@@ -25,7 +25,8 @@
   "2026-09-29",
   "2026-09-30",
   "2026-10-01",
-  "2026-10-02"
+  "2026-10-02",
+  "2026-10-03"
  ],
  "stickiness_days": 20,
  "grades": [
@@ -63,6 +64,7 @@
       15,
       15,
       14,
+      13,
       13
      ],
      "all": [
@@ -87,6 +89,7 @@
       31,
       31,
       31,
+      32,
       32
      ],
      "stickiness": null
@@ -119,7 +122,8 @@
       13,
       12,
       12,
-      12
+      12,
+      11
      ],
      "all": [
       27,
@@ -143,7 +147,8 @@
       28,
       27,
       27,
-      27
+      27,
+      26
      ],
      "stickiness": {
       "state": "not leading",
@@ -178,7 +183,8 @@
       15,
       16,
       15,
-      15
+      15,
+      14
      ],
      "all": [
       9,
@@ -202,11 +208,12 @@
       29,
       30,
       29,
-      30
+      30,
+      29
      ],
      "stickiness": {
-      "state": "leading 3 of 20 consecutive days",
-      "streak": 3
+      "state": "leading 4 of 20 consecutive days",
+      "streak": 4
      }
     },
     {
@@ -238,6 +245,7 @@
       5,
       5,
       5,
+      5,
       5
      ],
      "all": [
@@ -245,6 +253,7 @@
       19,
       19,
       19,
+      20,
       20,
       20,
       20,
@@ -297,6 +306,7 @@
       7,
       7,
       7,
+      7,
       7
      ],
      "all": [
@@ -321,6 +331,7 @@
       10,
       10,
       10,
+      9,
       9
      ],
      "stickiness": {
@@ -356,6 +367,7 @@
       7,
       7,
       7,
+      7,
       7
      ],
      "all": [
@@ -380,7 +392,8 @@
       14,
       14,
       13,
-      13
+      13,
+      12
      ],
      "stickiness": {
       "state": "not leading",
@@ -423,6 +436,7 @@
       11,
       11,
       11,
+      11,
       11
      ],
      "all": [
@@ -447,7 +461,8 @@
       31,
       31,
       31,
-      31
+      31,
+      32
      ],
      "stickiness": null
     },
@@ -479,6 +494,7 @@
       11,
       11,
       12,
+      12,
       12
      ],
      "all": [
@@ -503,11 +519,12 @@
       24,
       25,
       26,
+      26,
       26
      ],
      "stickiness": {
-      "state": "leading 2 of 20 consecutive days",
-      "streak": 2
+      "state": "leading 3 of 20 consecutive days",
+      "streak": 3
      }
     },
     {
@@ -538,6 +555,7 @@
       10,
       9,
       9,
+      9,
       9
      ],
      "all": [
@@ -562,7 +580,8 @@
       21,
       20,
       21,
-      21
+      21,
+      20
      ],
      "stickiness": {
       "state": "not leading",
@@ -597,6 +616,7 @@
       6,
       6,
       6,
+      6,
       6
      ],
      "all": [
@@ -618,6 +638,7 @@
       19,
       19,
       19,
+      18,
       18,
       18,
       18,
@@ -665,6 +686,7 @@
       8,
       9,
       9,
+      9,
       9
      ],
      "all": [
@@ -687,6 +709,7 @@
       17,
       17,
       18,
+      19,
       19,
       19,
       19
@@ -721,9 +744,11 @@
       1,
       1,
       1,
+      1,
       1
      ],
      "all": [
+      7,
       7,
       7,
       7,
@@ -788,6 +813,7 @@
       7,
       7,
       7,
+      7,
       7
      ],
      "all": [
@@ -812,6 +838,7 @@
       16,
       16,
       16,
+      17,
       17
      ],
      "stickiness": null
@@ -823,6 +850,7 @@
       "fp8"
      ],
      "qualifying": [
+      4,
       4,
       4,
       4,
@@ -868,6 +896,7 @@
       6,
       6,
       6,
+      6,
       6
      ],
      "stickiness": {
@@ -885,12 +914,12 @@
    "precision": "fp8"
   },
   {
-   "id": "deepseek/deepseek-v4-flash",
-   "providers": 10,
+   "id": "deepseek/deepseek-v4-pro",
+   "providers": 9,
    "precision": "fp8"
   },
   {
-   "id": "deepseek/deepseek-v4-pro",
+   "id": "deepseek/deepseek-v4-flash",
    "providers": 9,
    "precision": "fp8"
   },
@@ -910,6 +939,11 @@
    "precision": "unknown"
   },
   {
+   "id": "xiaomi/mimo-v2.6-flash",
+   "providers": 6,
+   "precision": "fp8"
+  },
+  {
    "id": "qwen/qwen3.5-397b-a17b",
    "providers": 6,
    "precision": "unknown"
@@ -917,11 +951,6 @@
   {
    "id": "qwen/qwen3-235b-a22b-2507",
    "providers": 6,
-   "precision": "fp8"
-  },
-  {
-   "id": "tencent/hy4-preview",
-   "providers": 5,
    "precision": "fp8"
   },
   {
