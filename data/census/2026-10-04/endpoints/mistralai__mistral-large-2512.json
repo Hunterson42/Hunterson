@@ -1,0 +1,163 @@
+{
+  "data": {
+    "id": "mistralai/mistral-large-2512",
+    "name": "Mistral: Mistral Large 3 2512",
+    "created": 1764624472,
+    "description": "Mistral Large 3 2512 is Mistral\u2019s most capable model to date, featuring a sparse mixture-of-experts architecture with 41B active parameters (675B total), and released under the Apache 2.0 license.",
+    "architecture": {
+      "tokenizer": "Mistral",
+      "instruct_type": null,
+      "modality": "text+image+file->text",
+      "input_modalities": [
+        "text",
+        "image",
+        "file"
+      ],
+      "output_modalities": [
+        "text"
+      ]
+    },
+    "endpoints": [
+      {
+        "name": "PrimeIntellect | mistralai/mistral-large-2512",
+        "model_id": "mistralai/mistral-large-2512",
+        "model_name": "Mistral: Mistral Large 3 2512",
+        "context_length": 262144,
+        "pricing": {
+          "prompt": "0.0000005",
+          "completion": "0.0000015",
+          "discount": 0
+        },
+        "provider_name": "PrimeIntellect",
+        "tag": "primeintellect",
+        "quantization": "unknown",
+        "max_completion_tokens": 209715,
+        "max_prompt_tokens": null,
+        "supported_parameters": [
+          "frequency_penalty",
+          "max_tokens",
+          "presence_penalty",
+          "seed",
+          "stop",
+          "temperature",
+          "top_p",
+          "response_format",
+          "structured_outputs",
+          "tools",
+          "tool_choice"
+        ],
+        "supports_tool_choice": {
+          "none": true,
+          "auto": true,
+          "required": true,
+          "function": true
+        },
+        "status": 0,
+        "uptime_last_30m": 99.8689384010485,
+        "uptime_last_5m": 97.43589743589743,
+        "uptime_last_1d": 99.70475182441089,
+        "supports_implicit_caching": false,
+        "native_tools": {},
+        "supports_voice_cloning": false,
+        "supports_multiple_audio_references": false,
+        "supports_image_reference": false,
+        "latency_last_30m": null,
+        "throughput_last_30m": null
+      },
+      {
+        "name": "Mistral | mistralai/mistral-large-2512",
+        "model_id": "mistralai/mistral-large-2512",
+        "model_name": "Mistral: Mistral Large 3 2512",
+        "context_length": 262144,
+        "pricing": {
+          "prompt": "0.0000005",
+          "completion": "0.0000015",
+          "input_cache_read": "0.00000005",
+          "discount": 0
+        },
+        "provider_name": "Mistral",
+        "tag": "mistral/zdr",
+        "quantization": "unknown",
+        "max_completion_tokens": 209715,
+        "max_prompt_tokens": null,
+        "supported_parameters": [
+          "max_tokens",
+          "temperature",
+          "top_p",
+          "stop",
+          "frequency_penalty",
+          "presence_penalty",
+          "seed",
+          "response_format",
+          "structured_outputs",
+          "tools",
+          "tool_choice"
+        ],
+        "supports_tool_choice": {
+          "none": false,
+          "auto": true,
+          "required": true,
+          "function": true
+        },
+        "status": 0,
+        "uptime_last_30m": 99.75903614457832,
+        "uptime_last_5m": 99.10714285714286,
+        "uptime_last_1d": 99.91499283511038,
+        "supports_implicit_caching": false,
+        "native_tools": {},
+        "supports_voice_cloning": false,
+        "supports_multiple_audio_references": false,
+        "supports_image_reference": false,
+        "latency_last_30m": null,
+        "throughput_last_30m": null
+      },
+      {
+        "name": "Mistral | mistralai/mistral-large-2512",
+        "model_id": "mistralai/mistral-large-2512",
+        "model_name": "Mistral: Mistral Large 3 2512",
+        "context_length": 262144,
+        "pricing": {
+          "prompt": "0.00000055",
+          "completion": "0.00000165",
+          "input_cache_read": "0.000000055",
+          "discount": 0
+        },
+        "provider_name": "Mistral",
+        "tag": "mistral/eu",
+        "quantization": "unknown",
+        "max_completion_tokens": 209715,
+        "max_prompt_tokens": null,
+        "supported_parameters": [
+          "max_tokens",
+          "temperature",
+          "top_p",
+          "stop",
+          "frequency_penalty",
+          "presence_penalty",
+          "seed",
+          "response_format",
+          "structured_outputs",
+          "tools",
+          "tool_choice"
+        ],
+        "supports_tool_choice": {
+          "none": false,
+          "auto": true,
+          "required": true,
+          "function": true
+        },
+        "status": 0,
+        "uptime_last_30m": 100,
+        "uptime_last_5m": 99.03846153846155,
+        "uptime_last_1d": 99.91190462207082,
+        "supports_implicit_caching": false,
+        "native_tools": {},
+        "supports_voice_cloning": false,
+        "supports_multiple_audio_references": false,
+        "supports_image_reference": false,
+        "latency_last_30m": null,
+        "throughput_last_30m": null
+      }
+    ]
+  }
+}
