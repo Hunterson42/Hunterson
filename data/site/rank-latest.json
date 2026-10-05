@@ -1,33 +1,16 @@
 {
  "schema_version": 1,
- "date": "2026-10-04",
+ "date": "2026-10-05",
  "models_with_endpoints": 440,
- "models_with_five_plus_providers": 58,
+ "models_with_five_plus_providers": 56,
  "rows": [
   {
    "rank": 1,
-   "model": "z-ai/glm-5.3-flash",
-   "providers": 33,
-   "endpoints": 35,
-   "quantisation": {
-    "fp8": 14,
-    "unknown": 12,
-    "fp4": 7,
-    "nvfp4": 2
-   },
-   "output_usd_per_m": {
-    "low": 0.25,
-    "median": 0.5,
-    "high": 1.0
-   }
-  },
-  {
-   "rank": 2,
    "model": "z-ai/glm-5.3",
    "providers": 32,
-   "endpoints": 41,
+   "endpoints": 42,
    "quantisation": {
-    "unknown": 17,
+    "unknown": 18,
     "fp8": 13,
     "fp4": 8,
     "nvfp4": 3
@@ -35,7 +18,24 @@
    "output_usd_per_m": {
     "low": 1.32,
     "median": 4.4,
-    "high": 8.8
+    "high": 12.0
+   }
+  },
+  {
+   "rank": 2,
+   "model": "z-ai/glm-5.3-flash",
+   "providers": 31,
+   "endpoints": 33,
+   "quantisation": {
+    "fp8": 13,
+    "unknown": 11,
+    "fp4": 7,
+    "nvfp4": 2
+   },
+   "output_usd_per_m": {
+    "low": 0.25,
+    "median": 0.5,
+    "high": 1.0
    }
   },
   {
@@ -50,7 +50,7 @@
    },
    "output_usd_per_m": {
     "low": 0.18,
-    "median": 0.975,
+    "median": 1.175,
     "high": 2.4
    }
   },
@@ -74,19 +74,19 @@
   {
    "rank": 5,
    "model": "z-ai/glm-5.2",
-   "providers": 26,
-   "endpoints": 33,
+   "providers": 25,
+   "endpoints": 32,
    "quantisation": {
     "fp8": 16,
-    "unknown": 9,
+    "unknown": 8,
     "fp4": 6,
     "mxfp4": 1,
     "nvfp4": 1
    },
    "output_usd_per_m": {
-    "low": 1.7459,
+    "low": 1.8,
     "median": 4.4,
-    "high": 8.0
+    "high": 16.0
    }
   },
   {
@@ -117,8 +117,8 @@
     "fp8": 2
    },
    "output_usd_per_m": {
-    "low": 11.25,
-    "median": 14.625,
+    "low": 9.0,
+    "median": 15.0,
     "high": 22.5
    }
   },
@@ -187,7 +187,7 @@
     "fp4": 3
    },
    "output_usd_per_m": {
-    "low": 0.056,
+    "low": 0.084,
     "median": 0.28,
     "high": 1.664
    }
@@ -226,19 +226,18 @@
   },
   {
    "rank": 14,
-   "model": "google/gemma-4-31b-it",
+   "model": "google/gemma-4-26b-a4b-it",
    "providers": 13,
-   "endpoints": 14,
+   "endpoints": 13,
    "quantisation": {
-    "fp4": 5,
+    "bf16": 7,
     "unknown": 4,
-    "fp8": 3,
-    "bf16": 2
+    "fp8": 2
    },
    "output_usd_per_m": {
-    "low": 0.33,
-    "median": 0.4,
-    "high": 1.15
+    "low": 0.22,
+    "median": 0.34,
+    "high": 0.6
    }
   },
   {
@@ -274,18 +273,19 @@
   },
   {
    "rank": 17,
-   "model": "google/gemma-4-26b-a4b-it",
+   "model": "google/gemma-4-31b-it",
    "providers": 12,
-   "endpoints": 12,
+   "endpoints": 13,
    "quantisation": {
-    "bf16": 7,
+    "fp4": 5,
     "unknown": 3,
-    "fp8": 2
+    "fp8": 3,
+    "bf16": 2
    },
    "output_usd_per_m": {
-    "low": 0.22,
-    "median": 0.37,
-    "high": 0.6
+    "low": 0.34,
+    "median": 0.4,
+    "high": 1.15
    }
   },
   {
@@ -308,11 +308,11 @@
   {
    "rank": 19,
    "model": "openai/gpt-oss-20b",
-   "providers": 12,
-   "endpoints": 13,
+   "providers": 11,
+   "endpoints": 12,
    "quantisation": {
-    "unknown": 5,
     "fp4": 4,
+    "unknown": 4,
     "fp8": 2,
     "bf16": 2
    },
@@ -325,10 +325,10 @@
   {
    "rank": 20,
    "model": "meta-llama/llama-3.3-70b-instruct",
-   "providers": 11,
-   "endpoints": 12,
+   "providers": 10,
+   "endpoints": 11,
    "quantisation": {
-    "unknown": 6,
+    "unknown": 5,
     "fp8": 4,
     "bf16": 1,
     "fp16": 1
@@ -341,21 +341,6 @@
   },
   {
    "rank": 21,
-   "model": "qwen/qwen3-235b-a22b-2507",
-   "providers": 10,
-   "endpoints": 11,
-   "quantisation": {
-    "fp8": 6,
-    "unknown": 5
-   },
-   "output_usd_per_m": {
-    "low": 0.35,
-    "median": 0.75,
-    "high": 1.0
-   }
-  },
-  {
-   "rank": 22,
    "model": "qwen/qwen3.5-397b-a17b",
    "providers": 10,
    "endpoints": 10,
@@ -367,6 +352,21 @@
     "low": 2.34,
     "median": 3.55,
     "high": 4.5
+   }
+  },
+  {
+   "rank": 22,
+   "model": "qwen/qwen3-235b-a22b-2507",
+   "providers": 9,
+   "endpoints": 10,
+   "quantisation": {
+    "fp8": 6,
+    "unknown": 4
+   },
+   "output_usd_per_m": {
+    "low": 0.35,
+    "median": 0.675,
+    "high": 1.0
    }
   },
   {
@@ -391,8 +391,8 @@
    "providers": 8,
    "endpoints": 9,
    "quantisation": {
-    "unknown": 5,
-    "fp8": 4
+    "fp8": 5,
+    "unknown": 4
    },
    "output_usd_per_m": {
     "low": 0.95,
@@ -402,22 +402,6 @@
   },
   {
    "rank": 25,
-   "model": "xiaomi/mimo-v2.6-flash",
-   "providers": 8,
-   "endpoints": 8,
-   "quantisation": {
-    "fp8": 6,
-    "fp4": 1,
-    "bf16": 1
-   },
-   "output_usd_per_m": {
-    "low": 0.252,
-    "median": 0.28,
-    "high": 0.35
-   }
-  },
-  {
-   "rank": 26,
    "model": "z-ai/glm-5",
    "providers": 8,
    "endpoints": 8,
@@ -432,7 +416,7 @@
    }
   },
   {
-   "rank": 27,
+   "rank": 26,
    "model": "deepseek/deepseek-chat-v3.1",
    "providers": 7,
    "endpoints": 7,
@@ -448,22 +432,7 @@
    }
   },
   {
-   "rank": 28,
-   "model": "minimax/minimax-m2.7",
-   "providers": 7,
-   "endpoints": 8,
-   "quantisation": {
-    "fp8": 5,
-    "unknown": 3
-   },
-   "output_usd_per_m": {
-    "low": 0.84,
-    "median": 1.5,
-    "high": 2.4
-   }
-  },
-  {
-   "rank": 29,
+   "rank": 27,
    "model": "qwen/qwen3.5-35b-a3b",
    "providers": 7,
    "endpoints": 7,
@@ -479,7 +448,7 @@
    }
   },
   {
-   "rank": 30,
+   "rank": 28,
    "model": "qwen/qwen3.8-2.4t-a95b",
    "providers": 7,
    "endpoints": 7,
@@ -495,7 +464,23 @@
    }
   },
   {
-   "rank": 31,
+   "rank": 29,
+   "model": "xiaomi/mimo-v2.6-flash",
+   "providers": 7,
+   "endpoints": 7,
+   "quantisation": {
+    "fp8": 5,
+    "fp4": 1,
+    "bf16": 1
+   },
+   "output_usd_per_m": {
+    "low": 0.252,
+    "median": 0.28,
+    "high": 0.35
+   }
+  },
+  {
+   "rank": 30,
    "model": "z-ai/glm-4.7",
    "providers": 7,
    "endpoints": 7,
@@ -508,6 +493,21 @@
     "low": 1.75,
     "median": 1.98,
     "high": 2.5
+   }
+  },
+  {
+   "rank": 31,
+   "model": "minimax/minimax-m2.7",
+   "providers": 6,
+   "endpoints": 7,
+   "quantisation": {
+    "fp8": 5,
+    "unknown": 2
+   },
+   "output_usd_per_m": {
+    "low": 0.84,
+    "median": 1.2,
+    "high": 2.4
    }
   },
   {
@@ -528,37 +528,6 @@
   },
   {
    "rank": 33,
-   "model": "qwen/qwen3-30b-a3b-instruct-2507",
-   "providers": 6,
-   "endpoints": 6,
-   "quantisation": {
-    "unknown": 4,
-    "fp8": 2
-   },
-   "output_usd_per_m": {
-    "low": 0.193,
-    "median": 0.3,
-    "high": 0.52
-   }
-  },
-  {
-   "rank": 34,
-   "model": "qwen/qwen3-vl-235b-a22b-instruct",
-   "providers": 6,
-   "endpoints": 6,
-   "quantisation": {
-    "fp8": 3,
-    "unknown": 2,
-    "bf16": 1
-   },
-   "output_usd_per_m": {
-    "low": 0.88,
-    "median": 1.5,
-    "high": 1.9
-   }
-  },
-  {
-   "rank": 35,
    "model": "qwen/qwen3.5-27b",
    "providers": 6,
    "endpoints": 6,
@@ -574,7 +543,7 @@
    }
   },
   {
-   "rank": 36,
+   "rank": 34,
    "model": "qwen/qwen3.5-9b",
    "providers": 6,
    "endpoints": 6,
@@ -591,7 +560,7 @@
    }
   },
   {
-   "rank": 37,
+   "rank": 35,
    "model": "qwen/qwen3.6-27b",
    "providers": 6,
    "endpoints": 6,
@@ -606,7 +575,7 @@
    }
   },
   {
-   "rank": 38,
+   "rank": 36,
    "model": "tencent/hy3",
    "providers": 6,
    "endpoints": 6,
@@ -623,7 +592,7 @@
    }
   },
   {
-   "rank": 39,
+   "rank": 37,
    "model": "xiaomi/mimo-v2.5-pro",
    "providers": 6,
    "endpoints": 6,
@@ -639,7 +608,7 @@
    }
   },
   {
-   "rank": 40,
+   "rank": 38,
    "model": "anthropic/claude-fable-5",
    "providers": 5,
    "endpoints": 6,
@@ -650,6 +619,34 @@
     "low": 50.0,
     "median": 50.0,
     "high": 55.0
+   }
+  },
+  {
+   "rank": 39,
+   "model": "anthropic/claude-opus-4.5",
+   "providers": 5,
+   "endpoints": 6,
+   "quantisation": {
+    "unknown": 6
+   },
+   "output_usd_per_m": {
+    "low": 25.0,
+    "median": 25.0,
+    "high": 27.5
+   }
+  },
+  {
+   "rank": 40,
+   "model": "anthropic/claude-opus-4.6",
+   "providers": 5,
+   "endpoints": 6,
+   "quantisation": {
+    "unknown": 6
+   },
+   "output_usd_per_m": {
+    "low": 25.0,
+    "median": 25.0,
+    "high": 27.5
    }
   }
  ]
