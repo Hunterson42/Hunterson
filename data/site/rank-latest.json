@@ -1,7 +1,7 @@
 {
  "schema_version": 1,
- "date": "2026-10-06",
- "models_with_endpoints": 438,
+ "date": "2026-10-07",
+ "models_with_endpoints": 439,
  "models_with_five_plus_providers": 56,
  "rows": [
   {
@@ -10,9 +10,9 @@
    "providers": 32,
    "endpoints": 41,
    "quantisation": {
-    "unknown": 17,
+    "unknown": 16,
     "fp8": 13,
-    "fp4": 8,
+    "fp4": 9,
     "nvfp4": 3
    },
    "output_usd_per_m": {
@@ -24,13 +24,13 @@
   {
    "rank": 2,
    "model": "z-ai/glm-5.3-flash",
-   "providers": 31,
-   "endpoints": 34,
+   "providers": 30,
+   "endpoints": 33,
    "quantisation": {
-    "fp8": 13,
     "unknown": 11,
+    "fp8": 11,
     "fp4": 8,
-    "nvfp4": 2
+    "nvfp4": 3
    },
    "output_usd_per_m": {
     "low": 0.25,
@@ -41,45 +41,28 @@
   {
    "rank": 3,
    "model": "deepseek/deepseek-v4.1-flash",
-   "providers": 29,
-   "endpoints": 31,
+   "providers": 27,
+   "endpoints": 29,
    "quantisation": {
     "fp8": 15,
-    "unknown": 13,
-    "fp4": 3
+    "unknown": 12,
+    "fp4": 2
    },
    "output_usd_per_m": {
     "low": 0.18,
     "median": 1.2,
-    "high": 2.64
+    "high": 2.4
    }
   },
   {
    "rank": 4,
-   "model": "deepseek/deepseek-v4-flash-0731",
-   "providers": 27,
-   "endpoints": 29,
-   "quantisation": {
-    "fp8": 13,
-    "unknown": 9,
-    "fp4": 6,
-    "bf16": 1
-   },
-   "output_usd_per_m": {
-    "low": 0.132,
-    "median": 0.528,
-    "high": 1.408
-   }
-  },
-  {
-   "rank": 5,
    "model": "z-ai/glm-5.2",
    "providers": 26,
    "endpoints": 33,
    "quantisation": {
     "fp8": 16,
-    "unknown": 8,
-    "fp4": 7,
+    "fp4": 8,
+    "unknown": 7,
     "mxfp4": 1,
     "nvfp4": 1
    },
@@ -90,19 +73,35 @@
    }
   },
   {
+   "rank": 5,
+   "model": "deepseek/deepseek-v4-flash-0731",
+   "providers": 24,
+   "endpoints": 26,
+   "quantisation": {
+    "fp8": 11,
+    "unknown": 9,
+    "fp4": 6
+   },
+   "output_usd_per_m": {
+    "low": 0.132,
+    "median": 0.564,
+    "high": 1.408
+   }
+  },
+  {
    "rank": 6,
    "model": "deepseek/deepseek-v4-pro-0813",
-   "providers": 22,
-   "endpoints": 23,
+   "providers": 21,
+   "endpoints": 22,
    "quantisation": {
     "unknown": 10,
-    "fp8": 10,
+    "fp8": 9,
     "fp4": 3
    },
    "output_usd_per_m": {
     "low": 1.98,
     "median": 3.96,
-    "high": 6.0
+    "high": 5.0
    }
   },
   {
@@ -118,7 +117,7 @@
    },
    "output_usd_per_m": {
     "low": 9.75,
-    "median": 14.125,
+    "median": 14.625,
     "high": 22.5
    }
   },
@@ -195,17 +194,17 @@
   {
    "rank": 12,
    "model": "deepseek/deepseek-v4-pro",
-   "providers": 16,
-   "endpoints": 16,
+   "providers": 15,
+   "endpoints": 15,
    "quantisation": {
-    "fp8": 9,
+    "fp8": 8,
     "unknown": 5,
     "fp4": 2
    },
    "output_usd_per_m": {
     "low": 0.4176,
-    "median": 3.2505,
-    "high": 9.0
+    "median": 3.2,
+    "high": 12.0
    }
   },
   {
