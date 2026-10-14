@@ -140,6 +140,7 @@ footer.evidence { border-top: 2px solid var(--ink); padding-top: 22px; display: 
 .links li { display: grid; gap: 1px; }
 .links li span { color: var(--muted); font-size: 13px; }
 .fine { font-size: 13px; color: var(--muted); }
+td .inelig { font-size: 11px; font-weight: 700; color: var(--ink-2); border: 1px solid var(--rule-strong); border-radius: 3px; padding: 0 6px; margin-left: 6px; font-family: var(--sans); white-space: nowrap; }
 .error, .nojs { background: var(--panel); border: 1px solid var(--rule-strong); border-radius: 6px; padding: 20px; }
 .nojs { display: grid; gap: 8px; }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
@@ -301,6 +302,7 @@ footer.evidence { border-top: 2px solid var(--ink); padding-top: 22px; display: 
       "<dt>Grade</dt><dd>Standard is 30 billion active parameters or fewer. Heavy is above 30 billion. Frontier is provisionally above 70 billion. Active parameters, not total, set cost and speed, because only the active portion is used per token. Heavy and Frontier are tracked but not yet published.</dd>" +
       "<dt>Reference checkpoint</dt><dd>The one model per grade that the assessment will be built on. Other candidates are tracked against it.</dd>" +
       "<dt>Stickiness and rollover</dt><dd>A candidate leads when it has strictly more qualifying providers than the reference; a tie breaks the streak. Before the first published assessment, a candidate that leads for " + track.stickiness_days + " consecutive census days becomes the reference on that day. After it, the old and new references are published side by side for 30 days with the ratio between them.</dd>" +
+      "<dt>Eligible reference</dt><dd>A checkpoint can be a reference only if its thinking mode can be switched off, because thinking tokens are billed as output and would make prices incomparable. Checkpoints marked thinking mandatory are tracked but cannot be chosen.</dd>" +
       "<dt>Launch threshold</dt><dd>A grade is first published only after its reference has, on each of the last " + track.stickiness_days + " consecutive census days, held at least 10 qualifying providers and at least as many as every other candidate in its grade, and has completed its own shadow period.</dd>" +
       "</dl>" +
       '<p class="fine" style="padding:0 18px 18px">Full reasoning for each grade and reference decision is kept in <a href="' + REPO + '/blob/main/notes/selection.md">notes/selection.md</a>.</p>';
@@ -329,7 +331,7 @@ footer.evidence { border-top: 2px solid var(--ink); padding-top: 22px; display: 
     // Latest table
     var rows = g.candidates.map(function (c, i) {
       var q = c.qualifying[c.qualifying.length - 1], a = c.all[c.all.length - 1];
-      return "<tr><td class='mono'>" + dashSvg(i, "var(--s" + ((i % 6) + 1) + ")", c.reference).replace('stroke="var', 'style="stroke:var').replace(')" stroke-width', ')" stroke-width') + " " + esc(c.id) + (c.reference ? "<span class='ref'>Reference</span>" : "") + "</td>" +
+      return "<tr><td class='mono'>" + dashSvg(i, "var(--s" + ((i % 6) + 1) + ")", c.reference).replace('stroke="var', 'style="stroke:var').replace(')" stroke-width', ')" stroke-width') + " " + esc(c.id) + (c.reference ? "<span class='ref'>Reference</span>" : "") + (c.thinking_optional === false ? "<span class='inelig' title='Thinking cannot be switched off, so this checkpoint cannot be a reference (rule 1.8)'>Thinking mandatory</span>" : "") + "</td>" +
         "<td>" + esc(c.native_precision.join(" or ")) + "</td>" +
         "<td class='r'><strong>" + (q == null ? "-" : q) + "</strong></td>" +
         "<td class='r'>" + (a == null ? "-" : a) + "</td>" +

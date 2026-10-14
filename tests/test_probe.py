@@ -61,7 +61,7 @@ class ProbeTests(unittest.TestCase):
     def expected_targets(self):
         """Distinct providers at fp8 in the saved census, per probed checkpoint."""
         n = 0
-        for cp in ("z-ai/glm-5.3-flash", "deepseek/deepseek-v4.1-flash"):
+        for cp in load(os.path.join(ROOT, "panel.json"))["probe"]:
             with open(os.path.join(CENSUS, "endpoints", cp.replace("/", "__") + ".json")) as f:
                 eps = json.load(f)["data"]["endpoints"]
             n += len({e["provider_name"] for e in eps if e.get("quantization") == "fp8"})
@@ -104,7 +104,8 @@ class ProbeTests(unittest.TestCase):
     def test_one_endpoint_per_provider_lowest_price(self):
         self.run_probe("--rehearsal")
         tags = {b["provider"]["only"][0] for b in mock_openrouter.SEEN}
-        with open(os.path.join(CENSUS, "endpoints", "z-ai__glm-5.3-flash.json")) as f:
+        first = load(os.path.join(ROOT, "panel.json"))["probe"][0]
+        with open(os.path.join(CENSUS, "endpoints", first.replace("/", "__") + ".json")) as f:
             eps = json.load(f)["data"]["endpoints"]
         for ep in eps:
             if ep.get("quantization") != "fp8":

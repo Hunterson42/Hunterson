@@ -48,11 +48,38 @@ def qualifying_count(census_dir, openrouter_id, native_precision):
     return len(native_providers), len(all_providers)
 
 
+def thinking_mandatory(day):
+    """Model id -> True if OpenRouter marks thinking as mandatory on that day,
+    False if it can be switched off, missing if the listing does not say.
+    Rule 1.8: a checkpoint whose thinking cannot be switched off cannot be a
+    reference, because thinking tokens are billed as output."""
+    path = os.path.join("data", "census", day, "models.json")
+    try:
+        with open(path) as f:
+            models = json.load(f).get("data") or []
+    except (json.JSONDecodeError, OSError):
+        return {}
+    out = {}
+    for m in models:
+        r = m.get("reasoning")
+        if isinstance(r, dict) and "mandatory" in r:
+            out[m.get("id")] = bool(r["mandatory"])
+    return out
+
+
 cfg = load_config()
 days = sorted(os.path.basename(p) for p in glob.glob(os.path.join("data", "census", "*"))
               if os.path.isdir(p))
 if not days:
     raise SystemExit("no census data found")
+
+mandatory = thinking_mandatory(days[-1])
+
+
+def eligibility(mid):
+    m = mandatory.get(mid)
+    return "unknown" if m is None else ("no, thinking mandatory" if m else "yes")
+
 
 # Pass one: compute every series once, as (qualifying, total) per day.
 series = {}
@@ -74,9 +101,10 @@ lines = [f"# Candidate tracking, rebuilt {datetime.datetime.now(datetime.timezon
 # Summary of the latest day.
 lines += [f"## Latest: {days[-1]}", "",
           "Change is against seven days earlier. Share is qualifying providers as a percentage of all providers serving the model.",
+          "Eligible means thinking can be switched off, from the latest listing (rule 1.8). Only an eligible checkpoint can be a reference.",
           "",
-          "| Grade | Model | Qualifying | All | Share | 7d change |",
-          "|---|---|---|---|---|---|"]
+          "| Grade | Model | Qualifying | All | Share | 7d change | Eligible |",
+          "|---|---|---|---|---|---|---|"]
 prev_day = days[-8] if len(days) >= 8 else days[0]
 for grade, entries in cfg["grades"].items():
     for e in entries:
@@ -93,7 +121,7 @@ for grade, entries in cfg["grades"].items():
         share = "-" if not latest_q or not latest_total else f"{100 * latest_q / latest_total:.0f}%"
         marker = " *(reference)*" if e.get("reference") else ""
         lines.append(f"| {grade.split(' (')[0]} | {e['openrouter_id']}{marker} | "
-                     f"**{'-' if latest_q is None else latest_q}** | {latest_total or '-'} | {share} | {change} |")
+                     f"**{'-' if latest_q is None else latest_q}** | {latest_total or '-'} | {share} | {change} | {eligibility(e['openrouter_id'])} |")
 lines.append("")
 
 # History tables and stickiness.
@@ -116,6 +144,8 @@ for grade, entries in cfg["grades"].items():
     if ref:
         ref_series = series[(grade, ref["openrouter_id"])]
         lines += [f"### Stickiness against {ref['openrouter_id']}", ""]
+        if mandatory.get(ref["openrouter_id"]):
+            lines += [f"- **WARNING**: the reference {ref['openrouter_id']} has mandatory thinking and is not eligible under rule 1.8", ""]
         for e in entries:
             if e.get("reference"):
                 continue
@@ -126,7 +156,9 @@ for grade, entries in cfg["grades"].items():
                 if a is None or b is None or a <= b:
                     break
                 streak += 1
-            if streak == 0:
+            if mandatory.get(e["openrouter_id"]):
+                state = "not eligible, thinking mandatory" + (f" (leading {streak} days)" if streak else "")
+            elif streak == 0:
                 state = "not leading"
             elif streak >= STICKINESS_DAYS:
                 state = f"**ROLLOVER TRIGGERED**, {streak} consecutive days"
@@ -208,6 +240,7 @@ for grade, entries in cfg["grades"].items():
             "qualifying": [per_day[d][0] for d in days],
             "all": [per_day[d][1] for d in days],
             "stickiness": None if e.get("reference") else {"state": state, "streak": streak},
+            "thinking_optional": None if mandatory.get(e["openrouter_id"]) is None else not mandatory[e["openrouter_id"]],
         })
     site["grades"].append(g)
 

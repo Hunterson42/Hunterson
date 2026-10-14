@@ -244,6 +244,54 @@ it has met the launch threshold and completed its own shadow period. Frontier
 shadow probing to be reconsidered in November if Kimi K3 still holds 10 or
 more. The same applies to Heavy.
 
+### 1.8 A reference must allow thinking to be switched off
+
+Recorded 14 October 2026, decision D8.
+
+**Rule.** A checkpoint can be a reference only if its thinking mode can be
+switched off. Eligibility is read each day from the census listing, field
+`reasoning.mandatory` in `models.json`, and shown in `data/track.md`.
+Checkpoints with mandatory thinking stay in the tracker but cannot be chosen,
+and cannot trigger a change of reference however long they lead.
+
+**Why.** The specification requires thinking to be off, because thinking
+tokens are billed as output tokens. With thinking on, the same job would cost
+an unpredictable amount more from one provider to the next, and the price
+would stop comparing like with like. Allowing thinking at its lowest setting
+was considered and rejected for the same reason.
+
+**What found it.** The first probe test on 14 October. Every request for
+GLM-5.3-Flash failed with "Reasoning is mandatory for this endpoint and cannot
+be disabled", while DeepSeek V4.1-Flash passed with no thinking tokens. The
+listing marks GLM-5.3-Flash `mandatory: true`, and has done on every census
+day since 11 September. It was not checked when GLM-5.3-Flash was chosen.
+
+**Candidates affected, from the listing on 14 October.** Thinking mandatory:
+GLM-5.3-Flash, gpt-oss-120b, GLM-5.3 and Qwen 3.8 (2.4T). All other
+candidates can switch it off.
+
+**Consequences, applied 14 October.**
+
+- Standard: DeepSeek V4.1-Flash becomes the reference now, by this rule, not
+  on 19 October by rule 1.6. It has led GLM-5.3-Flash every day since
+  30 September and leads every eligible candidate
+- Heavy: GLM-5.2 becomes the reference. The grade remains unpublished
+- The probe covers DeepSeek V4.1-Flash and DeepSeek V4 Flash 0731, the next
+  eligible Standard checkpoint, so a second model stays in shadow
+- Rule 1.6 continues to apply between eligible candidates
+
+### 1.9 The frozen test piece
+
+Recorded 14 October 2026.
+
+`prompt.txt` is frozen at SHA-256
+`140afc12e0c154fd2cb843197da5d3bc673c9e1cea6e0585236b2f41a2a8b24a`: the
+instruction block, Act 1 Scene 2 of The Tempest and the opening of Act 2
+Scene 1 (Project Gutenberg ebook 1540), ending on a speech by Sebastian. It
+measured 7,613 input tokens on DeepSeek V4.1-Flash. The acceptance strings are
+`ISLAND DUKE Prospero` and `LAST SPEAKER Sebastian`, compared without regard
+to letter case, because the play prints names in capitals.
+
 ---
 
 ## 2. Daily tracking
