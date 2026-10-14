@@ -19,6 +19,15 @@ if os.path.exists(os.path.join(out_dir, "models.json")) and not os.environ.get("
     print(f"Census for {today} already exists; not overwriting. Set FORCE_CENSUS=1 to override.")
     raise SystemExit(0)
 
+started = datetime.datetime.now(datetime.timezone.utc)
+meta = {
+    "day": today,
+    "started_utc": started.strftime("%Y-%m-%dT%H:%M:%SZ"),
+    "trigger": os.environ.get("GITHUB_EVENT_NAME", "manual"),
+    "run_id": os.environ.get("GITHUB_RUN_ID"),
+}
+
+
 def get_json(url):
     req = urllib.request.Request(url, headers={"User-Agent": "inference-assessment-census/0.1"})
     with urllib.request.urlopen(req, timeout=60) as resp:
@@ -44,5 +53,11 @@ for m in models.get("data", []):
         with open(os.path.join(endpoints_dir, f"{safe_name}.ERROR.txt"), "w") as f:
             f.write(str(e))
     time.sleep(0.4)
+
+meta["finished_utc"] = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+meta["models"] = len(models.get("data", []))
+meta["errors"] = len([n for n in os.listdir(endpoints_dir) if n.endswith(".ERROR.txt")])
+with open(os.path.join(out_dir, "meta.json"), "w") as f:
+    json.dump(meta, f, indent=2)
 
 print(f"Census complete for {today}: {len(models.get('data', []))} models.")

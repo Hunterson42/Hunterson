@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Hunterson Standard Inference</title>
 <meta name="description" content="Daily census of open-weight AI inference providers, the evidence base for Hunterson Standard Inference, Europe.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
+@font-face { font-family: "IBM Plex Mono"; font-style: normal; font-weight: 400; font-display: swap; src: url("vendor/fonts/ibm-plex-mono-latin-400-normal.woff2") format("woff2"); }
+@font-face { font-family: "IBM Plex Mono"; font-style: normal; font-weight: 500; font-display: swap; src: url("vendor/fonts/ibm-plex-mono-latin-500-normal.woff2") format("woff2"); }
 :root {
   color-scheme: light;
   --paper: #f7f8fa;
@@ -159,25 +159,23 @@ footer.evidence { border-top: 2px solid var(--ink); padding-top: 22px; display: 
     <div id="notices" style="display:grid;gap:8px"></div>
   </header>
 
-  <noscript>
-    <div class="nojs">
+  <main id="main" class="wrap" style="gap:40px">
+    <div class="nojs" id="fallback">
       <h2>The figures on this page are built in your browser</h2>
-      <p>With JavaScript unavailable, the same figures are published as plain text in <a href="https://github.com/Hunterson42/Hunterson/blob/main/data/track.md">data/track.md</a>, rebuilt after each daily census.</p>
+      <p>If they do not appear, the same figures are published as plain text in <a href="https://github.com/Hunterson42/Hunterson/blob/main/data/track.md">data/track.md</a>, rebuilt after each daily census.</p>
       <p>The raw census is in <a href="https://github.com/Hunterson42/Hunterson/tree/main/data/census">data/census</a>, one folder per day, and the reasoning behind each grade and reference decision is in <a href="https://github.com/Hunterson42/Hunterson/blob/main/notes/selection.md">notes/selection.md</a>.</p>
     </div>
-  </noscript>
-
-  <main id="main" class="wrap" style="gap:40px"></main>
+  </main>
 
   <footer class="evidence">
     <h2>Evidence and history</h2>
-    <p class="fine" style="max-width:none">Every figure on this page comes from files in the public repository. The census is collected from OpenRouter's public model and endpoint listings at 06:00 UTC each day by a GitHub Actions workflow.</p>
+    <p class="fine" style="max-width:none">Every figure on this page comes from files in the public repository. The census is collected from OpenRouter's public model and endpoint listings once a day by a GitHub Actions workflow scheduled for 06:00 UTC, with retries at 09:00 and 12:00 because GitHub can start scheduled runs late. From 14 October each day's folder records its own collection time in <span class="mono">meta.json</span>.</p>
     <ul class="links" id="evidenceLinks"></ul>
     <p class="fine">History is rebuilt from the saved census on every run, so a change to the grade configuration applies to past days. Changes are visible in the configuration history.</p>
   </footer>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="vendor/chart.umd.js"></script>
 <script>
 (function () {
   "use strict";
@@ -232,6 +230,15 @@ footer.evidence { border-top: 2px solid var(--ink); padding-top: 22px; display: 
     return '<span class="state-none">' + esc(s.state) + "</span>";
   }
 
+  function missingDays(days) {
+    var out = [], have = {};
+    days.forEach(function (d) { have[d] = true; });
+    if (!days.length) return out;
+    var t = Date.parse(days[0] + "T00:00:00Z"), end = Date.parse(days[days.length - 1] + "T00:00:00Z");
+    for (; t <= end; t += 864e5) { var d = new Date(t).toISOString().slice(0, 10); if (!have[d]) out.push(d); }
+    return out;
+  }
+
   function loadJson(name) {
     return fetch(RAW + name, { cache: "no-cache" }).then(function (r) {
       if (!r.ok) throw new Error(name + " returned " + r.status);
@@ -271,12 +278,14 @@ footer.evidence { border-top: 2px solid var(--ink); padding-top: 22px; display: 
         '<div class="sub">of ' + (a == null ? "-" : a) + " providers at any precision · 7 day change " + chgHtml(sevenDay(ref.qualifying)) + "</div>";
       tiles.appendChild(t);
     });
+    var missing = missingDays(track.days);
     var rec = el("div", { class: "tile record" });
     rec.innerHTML =
-      '<div class="label">Unbroken daily record</div>' +
+      '<div class="label">' + (missing.length ? "Daily record, " + missing.length + (missing.length === 1 ? " day" : " days") + " missing" : "Unbroken daily record") + "</div>" +
       '<div class="fig"><a href="' + REPO + '/tree/main/data/census" title="Open the census folders">' + track.days.length + "</a></div>" +
       '<div class="sub">days of census, ' + fmtDay(track.first_day) + " to " + fmtDay(track.latest_day) + "</div>" +
-      '<div class="sub">one saved snapshot per day, never overwritten</div>';
+      (missing.length ? '<div class="sub">missing: ' + missing.map(shortDay).join(", ") + "</div>" : "") +
+      '<div class="sub">written once a day and never overwritten since 18 Sep 2026</div>';
     tiles.appendChild(rec);
     main.appendChild(tiles);
   }
@@ -289,9 +298,10 @@ footer.evidence { border-top: 2px solid var(--ink); padding-top: 22px; display: 
       "<dt>Qualifying provider</dt><dd>A distinct provider serving the checkpoint at its native precision on that day. Several endpoints from one provider count once.</dd>" +
       "<dt>All providers</dt><dd>Distinct providers serving the checkpoint at any declared precision, including undeclared. Shown for context.</dd>" +
       "<dt>Native precision</dt><dd>The numerical format the lab released the weights in (for example fp8). Serving at a lower precision can change output quality, so only native serving qualifies.</dd>" +
-      "<dt>Grade</dt><dd>Standard is 30 billion active parameters or fewer; Heavy is above 30 billion. Active parameters, not total, set cost and speed, because only the active portion is used per token.</dd>" +
+      "<dt>Grade</dt><dd>Standard is 30 billion active parameters or fewer. Heavy is above 30 billion. Frontier is provisionally above 70 billion. Active parameters, not total, set cost and speed, because only the active portion is used per token. Heavy and Frontier are tracked but not yet published.</dd>" +
       "<dt>Reference checkpoint</dt><dd>The one model per grade that the assessment will be built on. Other candidates are tracked against it.</dd>" +
-      "<dt>Stickiness and rollover</dt><dd>A candidate leads when it has more qualifying providers than the reference. " + track.stickiness_days + " consecutive leading days triggers a rollover review of the reference.</dd>" +
+      "<dt>Stickiness and rollover</dt><dd>A candidate leads when it has strictly more qualifying providers than the reference; a tie breaks the streak. Before the first published assessment, a candidate that leads for " + track.stickiness_days + " consecutive census days becomes the reference on that day. After it, the old and new references are published side by side for 30 days with the ratio between them.</dd>" +
+      "<dt>Launch threshold</dt><dd>A grade is first published only after its reference has, on each of the last " + track.stickiness_days + " consecutive census days, held at least 10 qualifying providers and at least as many as every other candidate in its grade, and has completed its own shadow period.</dd>" +
       "</dl>" +
       '<p class="fine" style="padding:0 18px 18px">Full reasoning for each grade and reference decision is kept in <a href="' + REPO + '/blob/main/notes/selection.md">notes/selection.md</a>.</p>';
     main.appendChild(d);
@@ -455,7 +465,7 @@ footer.evidence { border-top: 2px solid var(--ink); padding-top: 22px; display: 
       ["Configuration history", "every change, dated", REPO + "/commits/main/candidates.json"],
       ["Selection decisions", "notes/selection.md", REPO + "/blob/main/notes/selection.md"],
       ["Collector code", "scripts/", REPO + "/tree/main/scripts"],
-      ["Run log", "GitHub Actions, daily at 06:00 UTC", REPO + "/actions"],
+      ["Run log", "GitHub Actions, scheduled daily from 06:00 UTC", REPO + "/actions"],
       ["Data behind this page", "data/site/track.json", REPO + "/blob/main/data/site/track.json"]
     ];
     document.getElementById("evidenceLinks").innerHTML = L.map(function (x) {
