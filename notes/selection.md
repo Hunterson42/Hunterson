@@ -191,6 +191,59 @@ older model.
 - Methodology 1.0 names the reference this rule gives on the day it is frozen,
   and states the rule.
 
+### 1.7 Decisions of 14 October
+
+Recorded 14 October 2026. Seven decisions, taken together, on the
+recommendations in roadmap version 6, section 1.4.
+
+**D1. Route.** Hybrid. Every assessed observation is bought through
+OpenRouter, pinned to one provider endpoint by its tag, with fallback switched
+off. Six direct accounts run alongside as a control group: Novita, GMI Cloud,
+SiliconFlow, BaseTen, Z.AI and DeepInfra. The control group never enters the
+assessed figure.
+
+**D2. Pricing basis.** The price listed for the pinned endpoint during the
+delivery window, confirmed by the cost on the receipt to within one per cent.
+Promotional discounts open to any buyer are included, and the figure with
+discounts removed is published beside it. The venue's fee for buying credit is
+excluded and stated. A provider whose receipt does not match is excluded that
+day, with the reason published.
+
+**Why D1 and D2.** On 2 October Novita listed GLM-5.3-Flash at $0.28 output
+on OpenRouter and $0.50 on its own site. Testing direct while taking the price
+from the listing, as version 4 planned, would have published a price nobody
+paid. Price and delivery must be observed in the same place.
+
+**D3. Launch threshold, amended.** A grade is first published only after the
+checkpoint that is its reference has, on each of the last 20 consecutive census
+days, held at least 10 qualifying providers and at least as many as every other
+candidate in its grade. The days count whether or not the checkpoint was the
+reference on them. This replaces the judgement recorded in the amendment to
+rule 1.4 of 2 October with a rule. Census days, not assessment days. Every
+model on the tracker's watchlist is placed in a grade or on the ignore list
+within ten working days, because the rule depends on the candidate list being
+complete.
+
+**D4. Email on old commits.** Email privacy to be switched on in GitHub. The
+existing commits are not rewritten unless the pseudonym is to be kept separate
+from the owner's name, and in that case only before first publication.
+
+**D5. DeepSeek V4.1-Flash.** Accepted tag `fp8` only. Providers tagged plain
+`fp4` are excluded until they confirm in writing that they serve the published
+form, fp8 with fp4 experts. Where a model card states two active parameter
+figures, the larger governs: for this model, 16B during decode, not 8B during
+prefill.
+
+**D6. Launch on a gate.** The first assessment is published on the first
+weekday on which all nine conditions in roadmap version 6, section 1.2, hold.
+3 November was the target; on 14 October the realistic date became 5 November
+at the earliest.
+
+**D7. Frontier.** Not probed in shadow for now. A grade is launched only after
+it has met the launch threshold and completed its own shadow period. Frontier
+shadow probing to be reconsidered in November if Kimi K3 still holds 10 or
+more. The same applies to Heavy.
+
 ---
 
 ## 2. Daily tracking
@@ -545,12 +598,10 @@ The ambiguity of bare `fp4` is a live problem for gpt-oss, whose native format i
 
 ## 8. Open items
 
-1. Confirm the DeepSeek V4.1-Flash commit hash by hand, and decide whether
-   endpoints tagged fp4 serve its published form (section 3.4)
-2. Add a line to the grade definition saying which active parameter figure
-   governs when a card states more than one (section 3.4)
-3. State the rule that keeps Heavy out of the launch, or reverse the decision
-   (rule 1.4, amendment of 2 October)
+1. Confirm the DeepSeek V4.1-Flash commit hash by hand (section 3.4). The fp4
+   question is settled by D5 (rule 1.7)
+2. Settled 14 October: the larger active figure governs (D5, rule 1.7)
+3. Settled 14 October: the amended launch threshold (D3, rule 1.7)
 4. Resolve whether the Qwen 27B models are dense; if so, record the soft-edge
    finding properly
 5. Read the GLM-5.3, Kimi K2.6 and Kimi K3 licences
