@@ -25,4 +25,4 @@ The census has run every day since 11 September 2026. It records which providers
 
 ## Licence
 
-The data and the written material in this repository are licensed under Creative Commons Attribution 4.0 International. See `LICENSE.md`. The site includes Chart.js, under the MIT licence, and the IBM Plex Mono font, under the SIL Open Font License; their licences are in `docs/vendor/`.
+The derived data and the written material in this repository are licensed under Creative Commons Attribution 4.0 International. The raw OpenRouter responses in `data/census/` are not; they remain OpenRouter's, under its terms. See `LICENSE.md`. The site includes Chart.js, under the MIT licence, and the IBM Plex Mono font, under the SIL Open Font License; their licences are in `docs/vendor/`.

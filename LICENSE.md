@@ -1,6 +1,8 @@
 # Licence
 
-The data in this repository, including everything under `data/`, and its written material, including `notes/`, `README.md` and the text of the site, are licensed under the **Creative Commons Attribution 4.0 International** licence (CC BY 4.0).
+The derived data in this repository, meaning the tracking, ranking and site files under `data/track.md`, `data/rank/` and `data/site/`, and its written material, including `notes/`, `README.md` and the text of the site, are licensed under the **Creative Commons Attribution 4.0 International** licence (CC BY 4.0).
+
+**Not covered.** The raw files under `data/census/` are responses from OpenRouter's public API, kept as fetched so that every figure can be checked against its source. They are OpenRouter's material, governed by OpenRouter's terms of service, and are not licensed by this repository. The same applies to any listing snapshots saved by the probe.
 
 You may share and adapt them for any purpose, including commercially, provided you give appropriate credit, link to the licence, and indicate if changes were made.
 
