@@ -1,6 +1,6 @@
 {
  "schema_version": 1,
- "date": "2026-10-13",
+ "date": "2026-10-14",
  "models_with_endpoints": 435,
  "models_with_five_plus_providers": 55,
  "rows": [
@@ -10,13 +10,13 @@
    "providers": 33,
    "endpoints": 42,
    "quantisation": {
-    "fp8": 15,
-    "unknown": 15,
+    "unknown": 16,
+    "fp8": 14,
     "fp4": 9,
     "nvfp4": 3
    },
    "output_usd_per_m": {
-    "low": 2.1956,
+    "low": 2.2,
     "median": 4.4,
     "high": 8.8
    }
@@ -33,24 +33,24 @@
     "fp32": 1
    },
    "output_usd_per_m": {
-    "low": 0.1752,
-    "median": 0.97,
+    "low": 0.18,
+    "median": 0.8955,
     "high": 2.4
    }
   },
   {
    "rank": 3,
    "model": "z-ai/glm-5.3-flash",
-   "providers": 28,
-   "endpoints": 32,
+   "providers": 29,
+   "endpoints": 33,
    "quantisation": {
     "fp8": 11,
+    "unknown": 10,
     "fp4": 9,
-    "unknown": 9,
     "nvfp4": 3
    },
    "output_usd_per_m": {
-    "low": 0.05,
+    "low": 0.145,
     "median": 0.5,
     "high": 1.6
    }
@@ -68,7 +68,7 @@
     "nvfp4": 1
    },
    "output_usd_per_m": {
-    "low": 1.68,
+    "low": 1.8,
     "median": 4.4,
     "high": 9.0
    }
@@ -114,14 +114,14 @@
    "providers": 20,
    "endpoints": 22,
    "quantisation": {
-    "unknown": 12,
+    "unknown": 11,
     "fp8": 8,
-    "fp4": 2
+    "fp4": 3
    },
    "output_usd_per_m": {
-    "low": 0.7762,
-    "median": 3.267,
-    "high": 5.0
+    "low": 1.98,
+    "median": 3.96,
+    "high": 8.0
    }
   },
   {
@@ -137,25 +137,25 @@
    },
    "output_usd_per_m": {
     "low": 9.5,
-    "median": 14.9,
+    "median": 15.0,
     "high": 24.0
    }
   },
   {
    "rank": 9,
    "model": "qwen/qwen3.8-27b",
-   "providers": 20,
-   "endpoints": 20,
+   "providers": 19,
+   "endpoints": 19,
    "quantisation": {
     "fp8": 9,
     "unknown": 6,
-    "fp4": 3,
+    "fp4": 2,
     "bf16": 1,
     "fp16": 1
    },
    "output_usd_per_m": {
-    "low": 0.5,
-    "median": 2.325,
+    "low": 1.25,
+    "median": 2.35,
     "high": 3.2
    }
   },
@@ -167,12 +167,12 @@
    "quantisation": {
     "int4": 6,
     "unknown": 4,
-    "fp4": 3,
     "fp8": 3,
+    "fp4": 3,
     "bf16": 1
    },
    "output_usd_per_m": {
-    "low": 1.836,
+    "low": 1.95,
     "median": 3.5,
     "high": 4.6
    }
@@ -204,8 +204,8 @@
     "fp4": 1
    },
    "output_usd_per_m": {
-    "low": 0.8923,
-    "median": 3.12,
+    "low": 1.9105,
+    "median": 3.135,
     "high": 10.5
    }
   },
@@ -221,7 +221,7 @@
    },
    "output_usd_per_m": {
     "low": 0.22,
-    "median": 0.34,
+    "median": 0.33,
     "high": 0.6
    }
   },
@@ -231,14 +231,14 @@
    "providers": 13,
    "endpoints": 13,
    "quantisation": {
-    "fp8": 8,
+    "fp8": 9,
     "unknown": 3,
-    "fp4": 2
+    "fp4": 1
    },
    "output_usd_per_m": {
     "low": 0.96,
     "median": 1.2,
-    "high": 3.0
+    "high": 2.4
    }
   },
   {
@@ -292,17 +292,17 @@
   {
    "rank": 18,
    "model": "moonshotai/kimi-k2.7-code",
-   "providers": 11,
-   "endpoints": 12,
+   "providers": 12,
+   "endpoints": 13,
    "quantisation": {
     "int4": 6,
+    "unknown": 3,
     "fp8": 3,
-    "unknown": 2,
     "fp4": 1
    },
    "output_usd_per_m": {
     "low": 3.0,
-    "median": 3.92,
+    "median": 4.0,
     "high": 8.0
    }
   },
@@ -498,21 +498,6 @@
   },
   {
    "rank": 31,
-   "model": "qwen/qwen3.8-2.4t-a95b",
-   "providers": 6,
-   "endpoints": 6,
-   "quantisation": {
-    "unknown": 5,
-    "fp8": 1
-   },
-   "output_usd_per_m": {
-    "low": 6.0,
-    "median": 6.0,
-    "high": 6.0
-   }
-  },
-  {
-   "rank": 32,
    "model": "xiaomi/mimo-v2.5-pro",
    "providers": 6,
    "endpoints": 6,
@@ -528,7 +513,7 @@
    }
   },
   {
-   "rank": 33,
+   "rank": 32,
    "model": "z-ai/glm-4.7",
    "providers": 6,
    "endpoints": 6,
@@ -544,7 +529,7 @@
    }
   },
   {
-   "rank": 34,
+   "rank": 33,
    "model": "anthropic/claude-fable-5",
    "providers": 5,
    "endpoints": 6,
@@ -558,7 +543,7 @@
    }
   },
   {
-   "rank": 35,
+   "rank": 34,
    "model": "anthropic/claude-haiku-5.5",
    "providers": 5,
    "endpoints": 10,
@@ -572,7 +557,7 @@
    }
   },
   {
-   "rank": 36,
+   "rank": 35,
    "model": "anthropic/claude-opus-4.5",
    "providers": 5,
    "endpoints": 6,
@@ -586,7 +571,7 @@
    }
   },
   {
-   "rank": 37,
+   "rank": 36,
    "model": "anthropic/claude-opus-4.6",
    "providers": 5,
    "endpoints": 6,
@@ -600,7 +585,7 @@
    }
   },
   {
-   "rank": 38,
+   "rank": 37,
    "model": "anthropic/claude-opus-4.7",
    "providers": 5,
    "endpoints": 8,
@@ -614,7 +599,7 @@
    }
   },
   {
-   "rank": 39,
+   "rank": 38,
    "model": "anthropic/claude-opus-4.8",
    "providers": 5,
    "endpoints": 11,
@@ -628,7 +613,7 @@
    }
   },
   {
-   "rank": 40,
+   "rank": 39,
    "model": "anthropic/claude-opus-5",
    "providers": 5,
    "endpoints": 11,
@@ -639,6 +624,20 @@
     "low": 25.0,
     "median": 27.5,
     "high": 50.0
+   }
+  },
+  {
+   "rank": 40,
+   "model": "anthropic/claude-opus-5.5",
+   "providers": 5,
+   "endpoints": 11,
+   "quantisation": {
+    "unknown": 11
+   },
+   "output_usd_per_m": {
+    "low": 20.0,
+    "median": 22.0,
+    "high": 40.0
    }
   }
  ]
