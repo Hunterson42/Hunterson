@@ -16,7 +16,11 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "tests"))
 import mock_openrouter  # noqa: E402
 
-CENSUS = sorted(glob.glob(os.path.join(ROOT, "data", "census", "*")))[-1]
+_DAYS = sorted(glob.glob(os.path.join(ROOT, "data", "census", "*")))
+if not _DAYS:
+    print("These tests need the raw census, which is kept in the private repository. Skipped.")
+    sys.exit(0)
+CENSUS = _DAYS[-1]
 
 
 def load(path):

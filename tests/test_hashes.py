@@ -1,0 +1,86 @@
+"""
+Tests for scripts/hashes.py and scripts/mirror.sh.
+Run from the repository root:  python3 tests/test_hashes.py
+Uses temporary folders only.
+"""
+import os
+import shutil
+import subprocess
+import sys
+import tempfile
+import unittest
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(ROOT, "scripts"))
+import hashes  # noqa: E402
+
+
+def write(path, text):
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    with open(path, "w") as f:
+        f.write(text)
+
+
+class HashTests(unittest.TestCase):
+    def setUp(self):
+        self.src = tempfile.mkdtemp()
+        self.dst = tempfile.mkdtemp()
+        write(os.path.join(self.src, "data/census/2026-10-01/models.json"), '{"data": []}')
+        write(os.path.join(self.src, "data/census/2026-10-01/endpoints/a__b.json"), '{"x": 1}')
+        write(os.path.join(self.src, "data/probes/2026-10-15/manifest.json"), "{}")
+        write(os.path.join(self.src, "data/probes/2026-10-15/listing/m.json"), "{}")
+        # Incomplete days are not fingerprinted.
+        write(os.path.join(self.src, "data/census/2026-10-02/endpoints/a__b.json"), "{}")
+        write(os.path.join(self.src, "data/probes/2026-10-16/listing/m.json"), "{}")
+
+    def tearDown(self):
+        shutil.rmtree(self.src)
+        shutil.rmtree(self.dst)
+
+    def test_writes_one_manifest_per_complete_day(self):
+        self.assertEqual(hashes.run(self.src, self.dst), 0)
+        out = os.path.join(self.dst, "data/hashes")
+        self.assertTrue(os.path.exists(os.path.join(out, "census/2026-10-01.sha256")))
+        self.assertTrue(os.path.exists(os.path.join(out, "probes/2026-10-15.sha256")))
+        self.assertFalse(os.path.exists(os.path.join(out, "census/2026-10-02.sha256")))
+        self.assertFalse(os.path.exists(os.path.join(out, "probes/2026-10-16.sha256")))
+
+    def test_manifest_checks_with_sha256sum(self):
+        hashes.run(self.src, self.dst)
+        manifest = os.path.join(self.dst, "data/hashes/census/2026-10-01.sha256")
+        result = subprocess.run(["sha256sum", "-c", manifest], cwd=self.src, capture_output=True, text=True)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
+    def test_rerun_changes_nothing(self):
+        hashes.run(self.src, self.dst)
+        manifest = os.path.join(self.dst, "data/hashes/census/2026-10-01.sha256")
+        before = open(manifest).read()
+        self.assertEqual(hashes.run(self.src, self.dst), 0)
+        self.assertEqual(open(manifest).read(), before)
+
+    def test_changed_raw_file_is_an_error_and_manifest_is_kept(self):
+        hashes.run(self.src, self.dst)
+        manifest = os.path.join(self.dst, "data/hashes/census/2026-10-01.sha256")
+        before = open(manifest).read()
+        write(os.path.join(self.src, "data/census/2026-10-01/models.json"), '{"data": ["changed"]}')
+        self.assertEqual(hashes.run(self.src, self.dst), 1)
+        self.assertEqual(open(manifest).read(), before)
+
+    def test_mirror_never_copies_raw_files_or_workflows(self):
+        write(os.path.join(self.src, "README.md"), "readme")
+        write(os.path.join(self.src, "notes/selection.md"), "notes")
+        write(os.path.join(self.src, ".github/workflows/main.yml"), "on: schedule")
+        write(os.path.join(self.src, "scripts/hashes.py"), open(os.path.join(ROOT, "scripts/hashes.py")).read())
+        write(os.path.join(self.dst, "data/census/old/models.json"), "{}")
+        subprocess.run(["bash", os.path.join(ROOT, "scripts/mirror.sh"), self.src, self.dst], check=True,
+                       capture_output=True)
+        self.assertTrue(os.path.exists(os.path.join(self.dst, "README.md")))
+        self.assertTrue(os.path.exists(os.path.join(self.dst, "notes/selection.md")))
+        self.assertTrue(os.path.exists(os.path.join(self.dst, "data/hashes/census/2026-10-01.sha256")))
+        self.assertFalse(os.path.exists(os.path.join(self.dst, ".github")))
+        self.assertFalse(os.path.exists(os.path.join(self.dst, "data/census")))
+        self.assertFalse(os.path.exists(os.path.join(self.dst, "data/probes")))
+
+
+if __name__ == "__main__":
+    unittest.main(verbosity=2)

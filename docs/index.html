@@ -164,13 +164,13 @@ td .inelig { font-size: 11px; font-weight: 700; color: var(--ink-2); border: 1px
     <div class="nojs" id="fallback">
       <h2>The figures on this page are built in your browser</h2>
       <p>If they do not appear, the same figures are published as plain text in <a href="https://github.com/Hunterson42/Hunterson/blob/main/data/track.md">data/track.md</a>, rebuilt after each daily census.</p>
-      <p>The raw census is in <a href="https://github.com/Hunterson42/Hunterson/tree/main/data/census">data/census</a>, one folder per day, and the reasoning behind each grade and reference decision is in <a href="https://github.com/Hunterson42/Hunterson/blob/main/notes/selection.md">notes/selection.md</a>.</p>
+      <p>The raw census is OpenRouter's material, so it is kept privately; each day's files are fingerprinted, and the fingerprints are published in <a href="https://github.com/Hunterson42/Hunterson/tree/main/data/hashes/census">data/hashes</a>. The reasoning behind each grade and reference decision is in <a href="https://github.com/Hunterson42/Hunterson/blob/main/notes/selection.md">notes/selection.md</a>.</p>
     </div>
   </main>
 
   <footer class="evidence">
     <h2>Evidence and history</h2>
-    <p class="fine" style="max-width:none">Every figure on this page comes from files in the public repository. The census is collected from OpenRouter's public model and endpoint listings once a day by a GitHub Actions workflow scheduled for 06:00 UTC, with retries at 09:00 and 12:00 because GitHub can start scheduled runs late. From 14 October each day's folder records its own collection time in <span class="mono">meta.json</span>.</p>
+    <p class="fine" style="max-width:none">Every figure on this page comes from files in the public repository. The census is collected from OpenRouter's public model and endpoint listings once a day, scheduled for 06:00 UTC with retries at 09:00 and 12:00, because GitHub can start scheduled runs late. The raw listings are OpenRouter's material, so they are kept privately. Each day's files are fingerprinted with SHA-256 and the fingerprints are published, so that any raw file shown later can be checked against them.</p>
     <ul class="links" id="evidenceLinks"></ul>
     <p class="fine">History is rebuilt from the saved census on every run, so a change to the grade configuration applies to past days. Changes are visible in the configuration history.</p>
   </footer>
@@ -196,7 +196,7 @@ td .inelig { font-size: 11px; font-weight: 700; color: var(--ink-2); border: 1px
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
   function css(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
   function seriesColour(i) { return css("--s" + ((i % 6) + 1)); }
-  function censusUrl(day) { return REPO + "/tree/main/data/census/" + day; }
+  function censusUrl(day) { return REPO + "/blob/main/data/hashes/census/" + day + ".sha256"; }
   function rankUrl(day) { return day >= RANK_FIRST_DAY ? REPO + "/blob/main/data/rank/" + day + ".md" : REPO + "/tree/main/data/rank"; }
   function fmtDay(d) {
     var m = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
@@ -283,7 +283,7 @@ td .inelig { font-size: 11px; font-weight: 700; color: var(--ink-2); border: 1px
     var rec = el("div", { class: "tile record" });
     rec.innerHTML =
       '<div class="label">' + (missing.length ? "Daily record, " + missing.length + (missing.length === 1 ? " day" : " days") + " missing" : "Unbroken daily record") + "</div>" +
-      '<div class="fig"><a href="' + REPO + '/tree/main/data/census" title="Open the census folders">' + track.days.length + "</a></div>" +
+      '<div class="fig"><a href="' + REPO + '/tree/main/data/hashes/census" title="Open the daily fingerprints">' + track.days.length + "</a></div>" +
       '<div class="sub">days of census, ' + fmtDay(track.first_day) + " to " + fmtDay(track.latest_day) + "</div>" +
       (missing.length ? '<div class="sub">missing: ' + missing.map(shortDay).join(", ") + "</div>" : "") +
       '<div class="sub">written once a day and never overwritten since 18 Sep 2026</div>';
@@ -324,7 +324,7 @@ td .inelig { font-size: 11px; font-weight: 700; color: var(--ink-2); border: 1px
     var canvas = el("canvas", { role: "img", "aria-label": "Daily provider counts for the " + g.short + " grade; figures are in the tables below." });
     wrap.appendChild(canvas);
     var dayLink = el("div", { class: "daylink" });
-    dayLink.innerHTML = "Select a day on the chart to open its census snapshot and ranking.";
+    dayLink.innerHTML = "Select a day on the chart to open its census fingerprints and ranking.";
     box.appendChild(legend); box.appendChild(wrap); box.appendChild(dayLink);
     sec.appendChild(box);
 
@@ -415,7 +415,7 @@ td .inelig { font-size: 11px; font-weight: 700; color: var(--ink-2); border: 1px
             var pts = chart.getElementsAtEventForMode(evt, "index", { intersect: false }, false);
             if (!pts.length) return;
             var d = track.days[pts[0].index];
-            dayLink.innerHTML = "<strong>" + fmtDay(d) + "</strong>: <a href='" + censusUrl(d) + "'>Open census snapshot</a> · <a href='" + rankUrl(d) + "'>Open ranking</a>";
+            dayLink.innerHTML = "<strong>" + fmtDay(d) + "</strong>: <a href='" + censusUrl(d) + "'>Census fingerprints</a> · <a href='" + rankUrl(d) + "'>Open ranking</a>";
           }
         }
       });
@@ -461,13 +461,13 @@ td .inelig { font-size: 11px; font-weight: 700; color: var(--ink-2); border: 1px
       ["Tracking file", "data/track.md", REPO + "/blob/main/data/track.md"],
       ["Tracking file history", "every daily rebuild", REPO + "/commits/main/data/track.md"],
       ["Latest ranking", "data/rank/" + track.latest_day + ".md", rankUrl(track.latest_day)],
-      ["Latest raw census", "data/census/" + track.latest_day, censusUrl(track.latest_day)],
-      ["All census days", "one folder per day since " + fmtDay(track.first_day), REPO + "/tree/main/data/census"],
+      ["Latest census fingerprints", "data/hashes/census/" + track.latest_day + ".sha256", censusUrl(track.latest_day)],
+      ["All census fingerprints", "one file per day since " + fmtDay(track.first_day), REPO + "/tree/main/data/hashes/census"],
       ["Grade configuration", "candidates.json", REPO + "/blob/main/candidates.json"],
       ["Configuration history", "every change, dated", REPO + "/commits/main/candidates.json"],
       ["Selection decisions", "notes/selection.md", REPO + "/blob/main/notes/selection.md"],
       ["Collector code", "scripts/", REPO + "/tree/main/scripts"],
-      ["Run log", "GitHub Actions, scheduled daily from 06:00 UTC", REPO + "/actions"],
+      ["Change history", "every update to this record, dated", REPO + "/commits/main"],
       ["Data behind this page", "data/site/track.json", REPO + "/blob/main/data/site/track.json"]
     ];
     document.getElementById("evidenceLinks").innerHTML = L.map(function (x) {
