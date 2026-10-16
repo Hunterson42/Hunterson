@@ -8,7 +8,7 @@ You may share and adapt the covered material for any purpose, including commerci
 
 Full legal text: https://creativecommons.org/licenses/by/4.0/legalcode
 
-Suggested attribution: "Source: Hunterson Standard Inference, Europe, https://hunterson42.github.io/Hunterson/, CC BY 4.0."
+Suggested attribution: "Source: Hunterson Standard Inference, Europe, https://hunterson.org/, CC BY 4.0."
 
 Third-party components keep their own licences: Chart.js (MIT) and IBM Plex Mono (SIL Open Font License 1.1), in `docs/vendor/`.
 

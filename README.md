@@ -2,7 +2,7 @@
 
 A daily price assessment for delivered open-weight AI inference: what a defined AI model actually costs per million tokens, bought, timed and receipted every weekday, with written rules for when the model changes.
 
-**Site:** https://hunterson42.github.io/Hunterson/
+**Site:** https://hunterson.org/
 
 ## Where it stands
 
