@@ -1,8 +1,8 @@
 {
  "schema_version": 1,
- "date": "2026-10-15",
- "models_with_endpoints": 435,
- "models_with_five_plus_providers": 55,
+ "date": "2026-10-16",
+ "models_with_endpoints": 438,
+ "models_with_five_plus_providers": 56,
  "rows": [
   {
    "rank": 1,
@@ -10,13 +10,13 @@
    "providers": 34,
    "endpoints": 43,
    "quantisation": {
-    "unknown": 16,
     "fp8": 15,
-    "fp4": 9,
+    "unknown": 14,
+    "fp4": 11,
     "nvfp4": 3
    },
    "output_usd_per_m": {
-    "low": 2.2,
+    "low": 1.505,
     "median": 4.4,
     "high": 8.8
    }
@@ -25,12 +25,12 @@
    "rank": 2,
    "model": "deepseek/deepseek-v4.1-flash",
    "providers": 30,
-   "endpoints": 33,
+   "endpoints": 35,
    "quantisation": {
-    "fp8": 15,
-    "unknown": 13,
+    "fp8": 16,
+    "unknown": 15,
     "fp4": 3,
-    "fp32": 2
+    "mxfp4": 1
    },
    "output_usd_per_m": {
     "low": 0.18,
@@ -46,8 +46,8 @@
    "quantisation": {
     "fp8": 11,
     "fp4": 10,
-    "unknown": 10,
-    "nvfp4": 3
+    "unknown": 9,
+    "nvfp4": 4
    },
    "output_usd_per_m": {
     "low": 0.145,
@@ -59,15 +59,15 @@
    "rank": 4,
    "model": "z-ai/glm-5.2",
    "providers": 25,
-   "endpoints": 33,
+   "endpoints": 34,
    "quantisation": {
     "fp8": 17,
-    "unknown": 8,
-    "fp4": 7,
+    "fp4": 10,
+    "unknown": 6,
     "nvfp4": 1
    },
    "output_usd_per_m": {
-    "low": 1.8,
+    "low": 1.44,
     "median": 4.4,
     "high": 9.0
    }
@@ -78,9 +78,11 @@
    "providers": 24,
    "endpoints": 27,
    "quantisation": {
-    "fp8": 11,
-    "unknown": 10,
-    "fp4": 6
+    "fp8": 10,
+    "unknown": 9,
+    "fp4": 6,
+    "nvfp4": 1,
+    "fp32": 1
    },
    "output_usd_per_m": {
     "low": 0.18,
@@ -91,19 +93,19 @@
   {
    "rank": 6,
    "model": "openai/gpt-oss-120b",
-   "providers": 21,
+   "providers": 22,
    "endpoints": 24,
    "quantisation": {
     "unknown": 9,
-    "fp4": 6,
-    "bf16": 5,
+    "fp4": 7,
+    "bf16": 4,
     "fp8": 2,
     "int4": 1,
     "fp16": 1
    },
    "output_usd_per_m": {
     "low": 0.15,
-    "median": 0.55,
+    "median": 0.5,
     "high": 0.95
    }
   },
@@ -113,14 +115,15 @@
    "providers": 20,
    "endpoints": 22,
    "quantisation": {
-    "unknown": 11,
+    "unknown": 10,
     "fp8": 8,
-    "fp4": 3
+    "fp4": 3,
+    "mxfp4": 1
    },
    "output_usd_per_m": {
     "low": 0.99,
     "median": 3.96,
-    "high": 8.0
+    "high": 5.0
    }
   },
   {
@@ -129,15 +132,15 @@
    "providers": 20,
    "endpoints": 25,
    "quantisation": {
-    "unknown": 10,
     "fp4": 8,
-    "mxfp4": 5,
+    "unknown": 8,
+    "mxfp4": 7,
     "fp8": 2
    },
    "output_usd_per_m": {
     "low": 9.5,
     "median": 15.0,
-    "high": 24.0
+    "high": 28.0
    }
   },
   {
@@ -146,16 +149,16 @@
    "providers": 20,
    "endpoints": 20,
    "quantisation": {
-    "fp8": 9,
-    "unknown": 6,
+    "fp8": 10,
+    "unknown": 5,
     "fp4": 3,
     "bf16": 1,
     "fp16": 1
    },
    "output_usd_per_m": {
     "low": 0.5,
-    "median": 2.325,
-    "high": 3.2
+    "median": 2.425,
+    "high": 6.0
    }
   },
   {
@@ -183,8 +186,9 @@
    "endpoints": 16,
    "quantisation": {
     "fp8": 8,
-    "unknown": 5,
-    "fp4": 3
+    "unknown": 4,
+    "fp4": 3,
+    "mxfp4": 1
    },
    "output_usd_per_m": {
     "low": 0.1652,
@@ -195,16 +199,16 @@
   {
    "rank": 12,
    "model": "deepseek/deepseek-v4-pro",
-   "providers": 14,
-   "endpoints": 15,
+   "providers": 15,
+   "endpoints": 16,
    "quantisation": {
     "fp8": 9,
     "unknown": 5,
-    "fp4": 1
+    "fp4": 2
    },
    "output_usd_per_m": {
     "low": 1.9105,
-    "median": 3.12,
+    "median": 3.06,
     "high": 3.83
    }
   },
@@ -228,14 +232,14 @@
    "rank": 14,
    "model": "minimax/minimax-m3",
    "providers": 13,
-   "endpoints": 13,
+   "endpoints": 14,
    "quantisation": {
-    "fp8": 9,
+    "fp8": 10,
     "unknown": 3,
     "fp4": 1
    },
    "output_usd_per_m": {
-    "low": 0.96,
+    "low": 0.88,
     "median": 1.2,
     "high": 2.4
    }
@@ -275,15 +279,15 @@
    "rank": 17,
    "model": "google/gemma-4-31b-it",
    "providers": 12,
-   "endpoints": 13,
+   "endpoints": 15,
    "quantisation": {
     "fp4": 5,
+    "fp8": 5,
     "unknown": 3,
-    "fp8": 3,
     "bf16": 2
    },
    "output_usd_per_m": {
-    "low": 0.34,
+    "low": 0.32,
     "median": 0.4,
     "high": 1.15
    }
@@ -515,15 +519,15 @@
    "rank": 32,
    "model": "z-ai/glm-4.7",
    "providers": 6,
-   "endpoints": 6,
+   "endpoints": 7,
    "quantisation": {
-    "fp4": 4,
+    "fp4": 5,
     "fp8": 1,
     "unknown": 1
    },
    "output_usd_per_m": {
-    "low": 1.75,
-    "median": 2.09,
+    "low": 1.4,
+    "median": 1.98,
     "high": 2.5
    }
   },
