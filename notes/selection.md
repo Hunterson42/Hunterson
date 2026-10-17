@@ -2,7 +2,7 @@
 
 Working record for choosing and monitoring the reference checkpoint for each grade. Kept in the repository so that every selection decision has a dated, public trail. Nothing here is published; the methodology is the published document.
 
-Last updated: 2 October 2026.
+Last updated: 17 October 2026.
 
 ---
 
@@ -534,6 +534,22 @@ Files and versions before it is used as a reference identifier.
 - Watch: the head commit adds a chat template file with no change to weights. A template change is material under the methodology, so the hash to pin is the head, not the weights commit. An earlier commit, `dba1be0`, changed prompt encoding for tool namespaces
 - Paper: listed on Hugging Face as arXiv 2609.19969, "DeepSeek-V4.1-Flash: Pushing the Limits of KV Cache Compression". Not read
 - Correction: this entry previously said the model was first seen between 14 and 17 September. It is in the census from 11 September, the first census day, at 6 qualifying providers. The repository dates from about 10 September
+
+### 3.5 deepseek-ai/DeepSeek-V4.1-Flash-1017
+
+Placed on 17 October 2026, the day of release, as a Standard candidate under the watchlist rule in 1.7 (D3), and added to the probe as a third checkpoint so that its shadow windows build up from the day providers list it at an accepted precision. Collected from the Hugging Face model page, its `config.json`, the Hugging Face API and OpenRouter's listing.
+
+- OpenRouter id: `deepseek/deepseek-v4.1-flash-1017`. Listed on OpenRouter about 08:27 UTC on 17 October, after that day's census; first census day 18 October. OpenRouter's alias `deepseek-flash-latest` points to it
+- Commit hash: `1bae0e1088993b9b82de08f59de5be5a34e42170`, the head on 17 October, read through the Hugging Face API. Repository created 02:40 UTC, last modified 05:46 UTC. Confirm by hand from Files and versions before it is used as a reference identifier
+- Described by DeepSeek as "a minor update to DeepSeek-V4.1-Flash", with higher scores on every listed benchmark and shorter replies
+- Parameters: 763,205,315,794 in the Safetensors box, the same total as the reference. Active parameters are not stated on the card; the architecture is identical to the reference's, which states 8B during prefill and 16B during decode. **Standard** on either figure
+- Architecture, from `config.json`: `deepseek_v41`, 40 layers, hidden 5120, 384 routed experts, 6 per token, 1 shared, vision tower of 32 layers. The same as the reference
+- **Native precision: fp8 with fp4 experts,** as the reference: `quantization_config` gives quant_method "fp8", expert_dtype "fp4", weight_block_size 32 by 32, scale_fmt "ue8m0", activation_scheme "dynamic". Tensor types BF16, F32, F8_E4M3, I8
+- **Accepted tag: fp8, provisional,** on the same reasoning as the reference (3.4)
+- Prompt encoding: no Jinja chat template file. An `encoding/` folder holds a Python reference implementation with tests, and the card points production users to DeepSeek's own encoding library. A change to these files would be material under Rule 5, as a template change is
+- Licence: MIT
+- OpenRouter, 17 October: one endpoint, DeepSeek's own, precision "unknown", so **qualifying: 0**. Base price $0.15 input and $0.60 output per million, doubled on weekdays from 01:00 to 04:00 and 06:00 to 10:00 UTC. Reasoning optional, not mandatory, so eligible under rule 1.8 on that day's listing
+- Why it matters: if it holds more qualifying providers than the reference on any census day, the reference's 20-day run under 1.4 ends; if it leads for 20 consecutive census days, it becomes the reference on the twentieth day under 1.6
 
 ---
 

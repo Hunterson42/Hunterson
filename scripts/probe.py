@@ -76,10 +76,27 @@ def http_get_json(url):
         return json.load(resp)
 
 
-def fetch_listing(checkpoint):
+def fetch_listing(checkpoint, attempts=3, pause=5):
+    """The venue's endpoint listing for one checkpoint, tried up to three times.
+
+    A checkpoint whose listing cannot be read gets no targets that day, and the
+    reason is recorded in its listing file; the other checkpoints are still probed.
+    A missing listing (HTTP 404) is not retried."""
     fetched = utc_now()
-    body = http_get_json(f"{OPENROUTER}/models/{checkpoint}/endpoints")
-    return {"checkpoint": checkpoint, "fetched_utc": iso(fetched), "response": body}
+    error = None
+    for attempt in range(attempts):
+        try:
+            body = http_get_json(f"{OPENROUTER}/models/{checkpoint}/endpoints")
+            return {"checkpoint": checkpoint, "fetched_utc": iso(fetched), "response": body}
+        except urllib.error.HTTPError as err:
+            error = f"HTTP {err.code}"
+            if err.code == 404:
+                break
+        except Exception as err:  # network failure or unreadable reply
+            error = f"{type(err).__name__}: {err}"
+        if attempt < attempts - 1:
+            time.sleep(pause * (attempt + 1))
+    return {"checkpoint": checkpoint, "fetched_utc": iso(fetched), "response": None, "error": error}
 
 
 def per_token(value):
@@ -92,7 +109,7 @@ def per_token(value):
 def venue_targets(listing, accepted):
     """One target per provider: its lowest-priced endpoint at an accepted precision."""
     best = {}
-    endpoints = ((listing["response"].get("data") or {}).get("endpoints")) or []
+    endpoints = (((listing.get("response") or {}).get("data") or {}).get("endpoints")) or []
     for ep in endpoints:
         if (ep.get("quantization") or "unspecified") not in accepted:
             continue

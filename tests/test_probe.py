@@ -66,7 +66,10 @@ class ProbeTests(unittest.TestCase):
         """Distinct providers at fp8 in the saved census, per probed checkpoint."""
         n = 0
         for cp in load(os.path.join(ROOT, "panel.json"))["probe"]:
-            with open(os.path.join(CENSUS, "endpoints", cp.replace("/", "__") + ".json")) as f:
+            path = os.path.join(CENSUS, "endpoints", cp.replace("/", "__") + ".json")
+            if not os.path.exists(path):
+                continue          # not in this census day; the probe records it and moves on
+            with open(path) as f:
                 eps = json.load(f)["data"]["endpoints"]
             n += len({e["provider_name"] for e in eps if e.get("quantization") == "fp8"})
         return n
@@ -80,7 +83,7 @@ class ProbeTests(unittest.TestCase):
         n = self.expected_targets()
         self.assertEqual(len(manifest["targets"]), n)
         self.assertEqual(manifest["requests_made"], 3 * n)
-        self.assertEqual(len(os.listdir(os.path.join(out[0], "listing"))), 2)
+        self.assertEqual(len(os.listdir(os.path.join(out[0], "listing"))), len(load(os.path.join(ROOT, "panel.json"))["probe"]))
         recs = [load((p)) for p in glob.glob(os.path.join(out[0], "requests", "*.json"))]
         self.assertEqual(len(recs), 3 * n)
         good = [x for x in recs if not x["error"]]
@@ -126,6 +129,24 @@ class ProbeTests(unittest.TestCase):
         if broken:
             self.assertTrue(all(x["error"] == "error in stream" for x in broken))
         self.assertTrue(refused or broken, "census day has neither test tag at fp8")
+
+    def test_unlisted_checkpoint_is_recorded_not_fatal(self):
+        cands = os.path.join(self.dir, "candidates.json")
+        c = load(cands)
+        std = next(k for k in c["grades"] if k.startswith("Standard"))
+        c["grades"][std].append({"openrouter_id": "test/not-listed", "native_precision": "fp8"})
+        with open(cands, "w") as f:
+            json.dump(c, f)
+        probe = load(os.path.join(ROOT, "panel.json"))["probe"] + ["test/not-listed"]
+        r = self.run_probe("--rehearsal", panel_changes={"probe": probe})
+        self.assertEqual(r.returncode, 0, r.stderr)
+        out = glob.glob(os.path.join(self.dir, "data", "rehearsals", "*"))[0]
+        listing = load(os.path.join(out, "listing", "test_not-listed.json"))
+        self.assertIsNone(listing["response"])
+        self.assertEqual(listing["error"], "HTTP 404")
+        manifest = load(os.path.join(out, "manifest.json"))
+        self.assertFalse([t for t in manifest["targets"] if t.startswith("test_not-listed")])
+        self.assertTrue(manifest["targets"])      # the other checkpoints were still probed
 
     def test_daily_run_never_overwrites(self):
         changes = {"round_spacing_minutes": 0}
