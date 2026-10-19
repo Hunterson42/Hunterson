@@ -212,6 +212,32 @@ class ProbeTests(unittest.TestCase):
         self.assertFalse([b for b in mock_openrouter.SEEN if "provider" in b], "only the control group is tested")
         self.assertFalse(os.path.exists(os.path.join(self.dir, "data")))
 
+    def test_try_switches_finds_the_one_that_works(self):
+        panel = load(os.path.join(ROOT, "panel.json"))
+        novita = next(d for d in panel["direct"] if d["provider"] == "Novita")
+        mock_openrouter.THINK_MODEL = novita["models"][panel["probe"][0]]
+        mock_openrouter.THINK_UNLESS = {"thinking": {"type": "disabled"}}
+        try:
+            r = self.run_probe("--try-switches", "Novita")
+        finally:
+            mock_openrouter.THINK_MODEL = mock_openrouter.THINK_UNLESS = None
+        self.assertEqual(r.returncode, 0, r.stderr)
+        lines = [ln for ln in r.stdout.splitlines() if ln.startswith("Novita")]
+        sold = [cp for cp in panel["probe"] if cp in novita["models"]]
+        self.assertEqual(len(lines), 8 * len(sold))
+        first = [ln for ln in lines if novita["models"][panel["probe"][0]] in ln]
+        off = [ln for ln in first if "thinking no" in ln]
+        self.assertEqual(len(off), 1, r.stdout)
+        self.assertIn('{"thinking":{"type":"disabled"}}', off[0])
+        self.assertTrue(all(b["max_tokens"] == 60 for b in mock_openrouter.SEEN))
+        self.assertFalse(os.path.exists(os.path.join(self.dir, "data")))
+
+    def test_try_switches_needs_a_known_account(self):
+        r = self.run_probe("--try-switches", "Nobody")
+        self.assertEqual(r.returncode, 2)
+        self.assertIn("Name one or more control-group accounts", r.stdout)
+        self.assertFalse(mock_openrouter.SEEN)
+
     def test_offwindow_reading_has_its_own_folder(self):
         r = self.run_probe("--offwindow", "weekend", panel_changes={"round_spacing_minutes": 0})
         self.assertEqual(r.returncode, 0, r.stderr)

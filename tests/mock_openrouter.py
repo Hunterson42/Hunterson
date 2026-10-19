@@ -19,6 +19,7 @@ BREAK_TAG = "venice/fp8"
 SLOW_TAG = None
 SLOW_SECONDS = 6
 THINK_MODEL = None         # a direct model that sends its thinking as reasoning_content
+THINK_UNLESS = None        # ...unless the request carries all of these fields
 SEEN = []                  # every chat request body received
 
 
@@ -73,7 +74,8 @@ class Handler(BaseHTTPRequestHandler):
             except (BrokenPipeError, ConnectionResetError):
                 return
         provider = tag.split("/")[0]
-        if THINK_MODEL and body.get("model") == THINK_MODEL:
+        switched_off = THINK_UNLESS and all(body.get(k) == v for k, v in THINK_UNLESS.items())
+        if THINK_MODEL and body.get("model") == THINK_MODEL and not switched_off:
             send({"id": "gen-1", "choices": [{"index": 0, "delta": {"reasoning_content": "Let me think."},
                                               "finish_reason": None}]})
         words = ["ISLAND DUKE Prospero\n", "LAST SPEAKER Miranda\n"] + ["word "] * 60

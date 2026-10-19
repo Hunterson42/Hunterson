@@ -13,6 +13,11 @@ Usage:
                                            summary, writes nothing
     python3 scripts/probe.py --test-direct one request per control-group account per
                                            checkpoint, one line each, writes nothing
+    python3 scripts/probe.py --try-switches PROVIDER [PROVIDER ...]
+                                           for each named control-group account and
+                                           checkpoint, one short request with each
+                                           known way of switching thinking off, one
+                                           line each, writes nothing
     python3 scripts/probe.py --rehearsal   the whole daily run at once, without
                                            the waits between rounds, written to
                                            data/rehearsals/DATE-HHMM/
@@ -350,6 +355,57 @@ def summarise(record):
     return "\n".join(lines)
 
 
+# The ways providers are known to accept a switch for thinking, tried in turn by
+# --try-switches. The first is no switch at all, which is the default behaviour.
+THINKING_SWITCHES = [
+    {},
+    {"enable_thinking": False},
+    {"chat_template_kwargs": {"thinking": False}},
+    {"chat_template_kwargs": {"enable_thinking": False}},
+    {"chat_template_kwargs": {"thinking_mode": "chat"}},
+    {"thinking": {"type": "disabled"}},
+    {"reasoning_effort": "none"},
+    {"reasoning": {"enabled": False}},
+]
+
+
+def thought(record):
+    """True if the reply carried thinking, however the provider sent it."""
+    u = record.get("usage") or {}
+    return bool((u.get("completion_tokens_details") or {}).get("reasoning_tokens")
+                or any(c.get("reasoning") for c in record["chunks"])
+                or "<think>" in reply_text(record)[:200])
+
+
+def try_switches(panel, names, prompt_body, day, timeout, read_timeout):
+    accounts = [d for d in panel.get("direct", []) if d["provider"] in names]
+    missing = sorted(set(names) - {d["provider"] for d in accounts})
+    if missing or not names:
+        print("Name one or more control-group accounts exactly as in panel.json: "
+              + ", ".join(d["provider"] for d in panel.get("direct", [])))
+        return 2
+    for d in accounts:
+        for checkpoint in panel["probe"]:
+            if checkpoint not in d.get("models", {}):
+                continue
+            for switch in THINKING_SWITCHES:
+                t = direct_targets({"direct": [dict(d, extra=switch)]}, checkpoint)[0]
+                # 60 tokens is enough to see whether the reply starts with thinking or the answer.
+                rec = run_request(t, prompt_body, 0, day, 60, timeout, read_timeout)
+                label = json.dumps(switch, separators=(",", ":")) if switch else "no switch"
+                if rec["error"]:
+                    detail = rec.get("error_body")
+                    detail = detail if isinstance(detail, str) else json.dumps(detail or "")
+                    result = f"ERROR {rec['error']} {' '.join(detail.split())[:80]}"
+                elif thought(rec):
+                    result = "thinking YES"
+                else:
+                    lines = [ln.strip() for ln in reply_text(rec).splitlines() if ln.strip()]
+                    result = "thinking no: " + ((lines[0] if lines else "(empty)")[:24])
+                print(f"{d['provider']:<11} {t['model'][:34]:<34} {label:<48} {result}")
+    return 0
+
+
 def one_line(record):
     """One line per request, for --test-direct: enough to see that the model name,
     the key and the switch for thinking all work."""
@@ -361,8 +417,7 @@ def one_line(record):
         detail = detail if isinstance(detail, str) else json.dumps(detail or "")
         return f"{head} ERROR {record['error']} {' '.join(detail.split())[:160]}"
     lines = [ln.strip() for ln in reply_text(record).splitlines() if ln.strip()]
-    thinking = (u.get("completion_tokens_details") or {}).get("reasoning_tokens") or \
-        any(c.get("reasoning") for c in record["chunks"])
+    thinking = thought(record)
     usage = f"in {u.get('prompt_tokens')} out {u.get('completion_tokens')}" if u else "NO TOKEN COUNTS"
     return (f"{head} OK {usage}, thinking {'YES' if thinking else 'no'}, finish {record['finish_reason']}, "
             f"first token {record['first_token_s']} s, first line: {(lines[0] if lines else '(empty)')[:28]}")
@@ -370,6 +425,13 @@ def one_line(record):
 
 def main(argv):
     mode, offwindow_kind, direct_only = "daily", None, False
+    if "--try-switches" in argv:
+        names = argv[argv.index("--try-switches") + 1:]
+        panel = load_json("panel.json")
+        with open("prompt.txt") as f:
+            prompt_body = f.read()
+        return try_switches(panel, names, prompt_body, utc_now().strftime("%Y-%m-%d"),
+                            int(panel.get("timeout_seconds", 120)), int(panel.get("read_timeout_seconds", 60)))
     if "--test-direct" in argv:
         mode, direct_only = "test", True
     elif "--test" in argv:
