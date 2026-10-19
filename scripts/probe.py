@@ -1,5 +1,6 @@
 """
-Probe. Runs on the London server only, weekdays at 14:05 UTC.
+Probe. Runs on the London server only, weekdays at 14:05 UTC, started by
+scripts/runner.py.
 
 Buys the fixed test job from every provider serving each probed checkpoint at
 an accepted precision, through OpenRouter, pinned to one endpoint per request
@@ -13,6 +14,15 @@ Usage:
     python3 scripts/probe.py --rehearsal   the whole daily run at once, without
                                            the waits between rounds, written to
                                            data/rehearsals/DATE-HHMM/
+    python3 scripts/probe.py --offwindow weekend|random
+                                           the daily procedure at another time,
+                                           for research only (decision D28),
+                                           written to data/offwindow/DATE-HHMM/.
+                                           Never read by the assessor.
+
+Each request has a total time limit (timeout_seconds in panel.json), as well as
+a limit on any one wait for data (read_timeout_seconds), so a stalled or
+trickling reply cannot hold the run open.
 
 Reads panel.json, candidates.json and prompt.txt from the repository root, and
 API keys from the environment (OPENROUTER_API_KEY, plus one per direct
@@ -189,8 +199,13 @@ def build_request(t, prompt_body, nonce, max_tokens):
     return url, key, key_env, body
 
 
-def run_request(t, prompt_body, round_no, day, max_tokens, timeout):
-    """One streamed request. Returns a raw record; never raises."""
+def run_request(t, prompt_body, round_no, day, max_tokens, timeout, read_timeout=None):
+    """One streamed request. Returns a raw record; never raises.
+
+    timeout is the most the whole request may take, in seconds; read_timeout is
+    the most any one wait for data may take. A request that runs out of time is
+    stopped and recorded with the error "time limit", keeping what had arrived."""
+    read_timeout = min(timeout, read_timeout or timeout)
     nonce = f"PROBE {day} {target_id(t)} round {round_no} {uuid.uuid4().hex[:12]}"
     url, key, key_env, body = build_request(t, prompt_body, nonce, max_tokens)
     record = {
@@ -225,9 +240,12 @@ def run_request(t, prompt_body, round_no, day, max_tokens, timeout):
     )
     t0 = time.perf_counter()
     try:
-        with urllib.request.urlopen(req, timeout=timeout) as resp:
+        with urllib.request.urlopen(req, timeout=read_timeout) as resp:
             record["http_status"] = resp.status
             for raw in resp:
+                if time.perf_counter() - t0 > timeout:
+                    record["error"] = f"time limit: no complete reply within {timeout} seconds"
+                    break
                 line = raw.decode("utf-8", errors="replace").strip()
                 if not line.startswith("data:"):
                     continue  # blank lines and keep-alive comments
@@ -328,11 +346,18 @@ def summarise(record):
 
 
 def main(argv):
-    mode = "daily"
+    mode, offwindow_kind = "daily", None
     if "--test" in argv:
         mode = "test"
     elif "--rehearsal" in argv:
         mode = "rehearsal"
+    elif "--offwindow" in argv:
+        mode = "offwindow"
+        i = argv.index("--offwindow")
+        offwindow_kind = argv[i + 1] if i + 1 < len(argv) else None
+        if offwindow_kind not in ("weekend", "random"):
+            print("--offwindow needs a kind: weekend or random")
+            return 2
 
     panel = load_json("panel.json")
     candidates = load_json("candidates.json")
@@ -345,11 +370,16 @@ def main(argv):
     if mode == "daily" and (start.month, start.day) in EXCLUDED_DAYS:
         print(f"{day} is outside the delivery window by rule. No probe.")
         return 0
+    if mode == "daily" and start.weekday() >= 5 and not os.environ.get("PROBE_ANY_DAY"):
+        print(f"{day} is a weekend day, so there is no window. Use --offwindow weekend.")
+        return 0
 
     if mode == "daily":
         out_dir = os.path.join("data", "probes", day)
     elif mode == "rehearsal":
         out_dir = os.path.join("data", "rehearsals", start.strftime("%Y-%m-%d-%H%M"))
+    elif mode == "offwindow":
+        out_dir = os.path.join("data", "offwindow", start.strftime("%Y-%m-%d-%H%M"))
     else:
         out_dir = None
     if out_dir and os.path.exists(os.path.join(out_dir, "manifest.json")):
@@ -358,6 +388,7 @@ def main(argv):
 
     max_tokens = int(panel.get("max_output_tokens", 500))
     timeout = int(panel.get("timeout_seconds", 120))
+    read_timeout = int(panel.get("read_timeout_seconds", 60))
 
     # 1. Listing snapshot and the day's panel.
     listings, targets = {}, []
@@ -382,7 +413,7 @@ def main(argv):
             return 1
         print(f"Prompt sha256: {prompt_sha256}\n")
         for t in targets:
-            rec = run_request(t, prompt_body, 0, day, max_tokens, timeout)
+            rec = run_request(t, prompt_body, 0, day, max_tokens, timeout, read_timeout)
             print(summarise(rec) + "\n")
         return 0
 
@@ -400,7 +431,7 @@ def main(argv):
             with lock:
                 not_reached.append({"target": target_id(t), "round": r, "reason": "deadline"})
             return
-        rec = run_request(t, prompt_body, r, day, max_tokens, timeout)
+        rec = run_request(t, prompt_body, r, day, max_tokens, timeout, read_timeout)
         write_json(os.path.join(out_dir, "requests", f"{target_id(t)}__r{r}.json"), rec)
         with lock:
             done += 1
@@ -419,6 +450,7 @@ def main(argv):
     end = utc_now()
     manifest = {
         "mode": mode,
+        "offwindow_kind": offwindow_kind,
         "day": day,
         "started_utc": iso(start),
         "finished_utc": iso(end),
@@ -430,6 +462,8 @@ def main(argv):
         "accept_line_1": panel.get("accept_line_1"),
         "accept_line_2": panel.get("accept_line_2"),
         "rounds": rounds,
+        "timeout_seconds": timeout,
+        "read_timeout_seconds": read_timeout,
         "targets": [target_id(t) for t in targets],
         "requests_made": done,
         "requests_with_error": failed,

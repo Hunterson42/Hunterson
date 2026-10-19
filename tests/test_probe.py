@@ -58,7 +58,7 @@ class ProbeTests(unittest.TestCase):
             panel.update(panel_changes)
             with open(p, "w") as f:
                 json.dump(panel, f)
-        env = dict(os.environ, OPENROUTER_BASE=self.base, OPENROUTER_API_KEY=key)
+        env = dict(os.environ, OPENROUTER_BASE=self.base, OPENROUTER_API_KEY=key, PROBE_ANY_DAY="1")
         return subprocess.run([sys.executable, os.path.join(ROOT, "scripts", "probe.py"), *args],
                               cwd=self.dir, env=env, capture_output=True, text=True, timeout=120)
 
@@ -166,8 +166,37 @@ class ProbeTests(unittest.TestCase):
         self.assertEqual(r.returncode, 0, r.stderr)
         self.assertIn("input tokens:", r.stdout)
         self.assertIn("receipt / listed:", r.stdout)
-        self.assertEqual(r.stdout.count("via "), 2)
+        listed = [cp for cp in load(os.path.join(ROOT, "panel.json"))["probe"]
+                  if os.path.exists(os.path.join(CENSUS, "endpoints", cp.replace("/", "__") + ".json"))]
+        self.assertEqual(r.stdout.count("via "), len(listed))
         self.assertFalse(os.path.exists(os.path.join(self.dir, "data")))
+
+    def test_offwindow_reading_has_its_own_folder(self):
+        r = self.run_probe("--offwindow", "weekend", panel_changes={"round_spacing_minutes": 0})
+        self.assertEqual(r.returncode, 0, r.stderr)
+        out = glob.glob(os.path.join(self.dir, "data", "offwindow", "*"))
+        self.assertEqual(len(out), 1)
+        self.assertRegex(os.path.basename(out[0]), r"^\d{4}-\d{2}-\d{2}-\d{4}$")
+        manifest = load(os.path.join(out[0], "manifest.json"))
+        self.assertEqual((manifest["mode"], manifest["offwindow_kind"]), ("offwindow", "weekend"))
+        self.assertEqual(manifest["requests_made"], 3 * self.expected_targets())
+        self.assertFalse(os.path.exists(os.path.join(self.dir, "data", "probes")),
+                         "an off-window reading must never land among the windows")
+
+    def test_offwindow_needs_a_kind(self):
+        r = self.run_probe("--offwindow")
+        self.assertEqual(r.returncode, 2)
+        self.assertFalse(os.path.exists(os.path.join(self.dir, "data")))
+
+    def test_each_request_has_a_total_time_limit(self):
+        mock_openrouter.SLOW_TAG = "novita/fp8"
+        try:
+            r = self.run_probe("--test", panel_changes={"timeout_seconds": 2, "read_timeout_seconds": 1,
+                                                        "probe": load(os.path.join(ROOT, "panel.json"))["probe"][:1]})
+        finally:
+            mock_openrouter.SLOW_TAG = None
+        self.assertEqual(r.returncode, 0, r.stderr)
+        self.assertIn("ERROR: time limit: no complete reply within 2 seconds", r.stdout)
 
 
 if __name__ == "__main__":

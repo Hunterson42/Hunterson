@@ -81,6 +81,23 @@ class HashTests(unittest.TestCase):
         self.assertFalse(os.path.exists(os.path.join(self.dst, "data/census")))
         self.assertFalse(os.path.exists(os.path.join(self.dst, "data/probes")))
 
+    def test_offwindow_readings_are_fingerprinted_and_never_copied(self):
+        write(os.path.join(self.src, "data/offwindow/2026-10-24-1405/manifest.json"), "{}")
+        write(os.path.join(self.src, "data/offwindow/2026-10-24-1405/requests/a.json"), "{}")
+        write(os.path.join(self.src, "data/offwindow/2026-10-25-0917/requests/a.json"), "{}")   # unfinished
+        write(os.path.join(self.src, "data/assessments/2026-10-27/deepseek-v4.1-flash.json"), "{}")
+        write(os.path.join(self.src, "launch/publish.py"), "")
+        write(os.path.join(self.src, "server/crontab"), "")
+        write(os.path.join(self.src, "scripts/hashes.py"), open(os.path.join(ROOT, "scripts/hashes.py")).read())
+        for stray in ("data/offwindow/x/manifest.json", "data/assessments/x.json", "launch/x", "server/x"):
+            write(os.path.join(self.dst, stray), "{}")
+        subprocess.run(["bash", os.path.join(ROOT, "scripts/mirror.sh"), self.src, self.dst], check=True,
+                       capture_output=True)
+        out = os.path.join(self.dst, "data/hashes/offwindow")
+        self.assertEqual(os.listdir(out), ["2026-10-24-1405.sha256"])
+        for private in ("data/offwindow", "data/assessments", "launch", "server"):
+            self.assertFalse(os.path.exists(os.path.join(self.dst, private)), private + " must never be public")
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)

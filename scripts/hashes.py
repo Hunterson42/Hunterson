@@ -2,7 +2,8 @@
 Fingerprints of the raw files.
 
 The raw files are the census, the probe's listing snapshots and request
-records, and the rehearsals. They are OpenRouter's responses, so they are kept
+records, the rehearsals, and the readings taken outside the window for
+research (decision D28). They are OpenRouter's responses, so they are kept
 in the private repository and not published. This script writes one SHA-256
 manifest per day into the public record, so that anyone shown a raw file later
 can check that it existed on that day and has not changed since.
@@ -10,7 +11,8 @@ can check that it existed on that day and has not changed since.
 Usage, from anywhere:
     python3 scripts/hashes.py SOURCE_ROOT TARGET_ROOT
 
-SOURCE_ROOT is a checkout holding data/census, data/probes and data/rehearsals.
+SOURCE_ROOT is a checkout holding data/census, data/probes, data/rehearsals and
+data/offwindow.
 TARGET_ROOT is the checkout that receives data/hashes. They can be the same.
 
 Each manifest uses the format of `sha256sum`, with paths relative to the
@@ -22,7 +24,8 @@ publishes nothing, because a raw file has changed and that must never happen
 silently.
 
 A day is fingerprinted only once it is complete: a census day once its
-models.json exists, a probe day or rehearsal once its manifest.json exists.
+models.json exists, a probe day, rehearsal or off-window reading once its
+manifest.json exists.
 Uses only the Python standard library.
 """
 import hashlib
@@ -34,6 +37,7 @@ CLASSES = [
     ("census", "models.json"),
     ("probes", "manifest.json"),
     ("rehearsals", "manifest.json"),
+    ("offwindow", "manifest.json"),
 ]
 
 

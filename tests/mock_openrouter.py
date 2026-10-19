@@ -3,7 +3,9 @@ A stand-in for OpenRouter, for testing the probe without spending money.
 Serves the endpoint listing from a saved census day, and answers chat
 requests with a streamed reply in OpenRouter's format, including the final
 usage record with a cost. Two tags behave badly on purpose: one is refused
-with HTTP 404, one breaks with an error part way through the stream.
+with HTTP 404, one breaks with an error part way through the stream. A third,
+SLOW_TAG, is set by a test when it needs a reply that trickles: keep-alive lines
+for SLOW_SECONDS before any text.
 """
 import json
 import os
@@ -14,6 +16,8 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 CENSUS_DAY = None          # folder of saved endpoint listings
 REFUSE_TAG = "parasail/fp8"
 BREAK_TAG = "venice/fp8"
+SLOW_TAG = None
+SLOW_SECONDS = 6
 SEEN = []                  # every chat request body received
 
 
@@ -57,6 +61,16 @@ class Handler(BaseHTTPRequestHandler):
             self.wfile.flush()
 
         self.wfile.write(b": OPENROUTER PROCESSING\n\n")
+        if tag == SLOW_TAG:
+            import time
+            give_up = time.monotonic() + SLOW_SECONDS
+            try:
+                while time.monotonic() < give_up:
+                    self.wfile.write(b": OPENROUTER PROCESSING\n\n")
+                    self.wfile.flush()
+                    time.sleep(0.25)
+            except (BrokenPipeError, ConnectionResetError):
+                return
         provider = tag.split("/")[0]
         words = ["ISLAND DUKE Prospero\n", "LAST SPEAKER Miranda\n"] + ["word "] * 60
         for i, w in enumerate(words):

@@ -3,9 +3,15 @@ Census collector.
 Fetches the public OpenRouter model catalogue and, for each model, the list
 of provider endpoints (price, quantisation, context, uptime). Saves the raw
 JSON responses to a dated folder. Run once a day. No API key needed.
+
+The record of each day (meta.json) says what took it: on GitHub, the workflow
+event; on the London server, "server", set by scripts/runner.py through the
+CENSUS_TRIGGER setting; otherwise "manual". It also records the commit of the
+code that took it.
 """
 import json
 import os
+import subprocess
 import time
 import datetime
 import urllib.request
@@ -23,9 +29,14 @@ started = datetime.datetime.now(datetime.timezone.utc)
 meta = {
     "day": today,
     "started_utc": started.strftime("%Y-%m-%dT%H:%M:%SZ"),
-    "trigger": os.environ.get("GITHUB_EVENT_NAME", "manual"),
+    "trigger": os.environ.get("GITHUB_EVENT_NAME") or os.environ.get("CENSUS_TRIGGER") or "manual",
     "run_id": os.environ.get("GITHUB_RUN_ID"),
 }
+try:
+    meta["script_commit"] = subprocess.run(["git", "rev-parse", "HEAD"], capture_output=True, text=True,
+                                           timeout=10).stdout.strip() or None
+except Exception:
+    meta["script_commit"] = None
 
 
 def get_json(url):

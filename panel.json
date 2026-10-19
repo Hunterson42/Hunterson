@@ -8,6 +8,7 @@
   "max_minutes": 50,
   "concurrency": 4,
   "timeout_seconds": 120,
+  "read_timeout_seconds": 60,
   "test_provider": "Novita",
   "accept_line_1": "ISLAND DUKE Prospero",
   "accept_line_2": "LAST SPEAKER Sebastian",

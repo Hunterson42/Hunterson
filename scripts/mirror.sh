@@ -5,9 +5,10 @@
 #   bash scripts/mirror.sh PRIVATE_CHECKOUT PUBLIC_CHECKOUT
 #
 # Only the paths listed below are copied. The raw files (data/census,
-# data/probes, data/rehearsals) and the workflows (.github) are never copied:
-# the raw files are OpenRouter's material, and a workflow in the public
-# repository would start collecting there again.
+# data/probes, data/rehearsals, data/offwindow) and the workflows (.github) are
+# never copied: the raw files are OpenRouter's material, and a workflow in the
+# public repository would start collecting there again. The assessments
+# (data/assessments) and the launch site (launch/) stay private until go-live.
 set -euo pipefail
 
 SRC="$1"
@@ -37,6 +38,7 @@ for d in "${DIRS[@]}"; do
 done
 
 # Defensive: the public repository must never hold workflows or raw files.
-rm -rf "${DST:?}/.github" "${DST:?}/data/census" "${DST:?}/data/probes" "${DST:?}/data/rehearsals"
+rm -rf "${DST:?}/.github" "${DST:?}/data/census" "${DST:?}/data/probes" "${DST:?}/data/rehearsals" \
+       "${DST:?}/data/offwindow" "${DST:?}/data/assessments" "${DST:?}/launch" "${DST:?}/server"
 
 python3 "$SRC/scripts/hashes.py" "$SRC" "$DST"
