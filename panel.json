@@ -35,11 +35,14 @@
         "deepseek/deepseek-v4-flash-0731": "deepseek/deepseek-v4-flash-0731"
       },
       "extra": {
-        "enable_thinking": false
+        "thinking": {
+          "type": "disabled"
+        }
       },
       "sources": [
         "https://blogs.novita.ai/deepseek-v4-1-flash-on-novita-ai/",
-        "https://docs.novita.ai/api-reference/model-apis-llm-create-chat-completion"
+        "https://docs.novita.ai/api-reference/model-apis-llm-create-chat-completion",
+        "Switch for thinking found with probe.py --try-switches on the server, 19 October 2026"
       ]
     },
     {
@@ -51,12 +54,13 @@
         "deepseek/deepseek-v4-flash-0731": "deepseek-ai/DeepSeek-V4-Flash-0731"
       },
       "extra": {
-        "chat_template_kwargs": {
-          "thinking": false
+        "thinking": {
+          "type": "disabled"
         }
       },
       "sources": [
-        "https://docs.gmicloud.ai/inference-engine/api-reference/llm-api-reference"
+        "https://docs.gmicloud.ai/inference-engine/api-reference/llm-api-reference",
+        "Switch for thinking found with probe.py --try-switches on the server, 19 October 2026"
       ]
     },
     {
