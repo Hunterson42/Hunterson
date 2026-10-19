@@ -7,11 +7,17 @@ history, then the stickiness streaks, then the watchlist.
 Config lives in candidates.json at the repository root. Re-run any time; it
 rebuilds the whole history from the saved census, so a fix in the config is
 picked up retrospectively.
+
+Providers in one group in affiliations.json count once, on the days the group
+applies (Rule 10, decision D29). A group never applies before its "from" day,
+so recording one changes no day already counted.
 """
 import json
 import os
 import glob
 import datetime
+
+import affiliations
 
 CONFIG = "candidates.json"
 OUT = os.path.join("data", "track.md")
@@ -24,9 +30,14 @@ def load_config():
         return json.load(f)
 
 
+GROUPS = affiliations.load()
+
+
 def qualifying_count(census_dir, openrouter_id, native_precision):
-    """Distinct providers serving this model at an accepted precision, on one day.
+    """Distinct providers serving this model at an accepted precision, on one day,
+    with the members of a provider group counted once (Rule 10).
     native_precision may be a single string or a list of acceptable tags."""
+    mapping = affiliations.group_of(GROUPS, os.path.basename(os.path.normpath(census_dir)))
     accepted = native_precision if isinstance(native_precision, list) else [native_precision]
     path = os.path.join(census_dir, "endpoints", openrouter_id.replace("/", "__") + ".json")
     if not os.path.exists(path):
@@ -41,7 +52,7 @@ def qualifying_count(census_dir, openrouter_id, native_precision):
         return None, None
     all_providers, native_providers = set(), set()
     for ep in endpoints:
-        name = ep.get("provider_name", "unknown")
+        name = affiliations.canonical(ep.get("provider_name", "unknown"), mapping)
         all_providers.add(name)
         if (ep.get("quantization") or "unspecified") in accepted:
             native_providers.add(name)

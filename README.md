@@ -25,11 +25,12 @@ Everything else is kept here and updated automatically from the private reposito
 | `data/rank/` | A daily ranking of the most widely served models |
 | `data/site/` | Small data files the site reads |
 | `candidates.json` | The grades, the candidate models, their accepted precision tags, and which is the reference |
+| `affiliations.json` | The register of provider groups: providers that resell one source or share an owner count as one. Each group with its public evidence and the day it applies from |
 | `notes/selection.md` | Every rule and decision, dated, with the reasons |
-| `panel.json` | Settings for the probe |
+| `panel.json` | Settings for the probe, and the assessment's limits |
 | `prompt.txt` | The frozen test piece |
-| `scripts/` | The census, ranking, tracker, probe, fingerprints and mirror. Python standard library only |
-| `tests/` | Tests for the probe against a mock of OpenRouter. They need the raw census, so they run in the private repository |
+| `scripts/` | The census, ranking, tracker, probe, assessor, fingerprints and mirror. Python standard library only |
+| `tests/` | Tests for the probe against a mock of OpenRouter, which need the raw census and so run in the private repository, and for the assessor, on made-up windows |
 | `docs/` | The site |
 
 ## Licence

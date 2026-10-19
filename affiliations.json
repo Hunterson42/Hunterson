@@ -1,0 +1,13 @@
+{
+  "about": "Provider groups under Rule 10 (decision D29). Providers that resell inference served by another listed provider or by a common network, or that are under common control, count as one provider: once in the qualifying count, once in the contributor count, and once in the price, where the group gives the observation of its member with the lowest output price paid among those that pass every test. Each group is recorded on public evidence and applies from the census day after it is recorded, never backwards. Renting GPUs from the same cloud, or running the same serving software, does not make providers a group.",
+  "format": {
+    "name": "A name for the group, such as the network's",
+    "members": "Provider names exactly as the venue's listing spells them (provider_name), at least two",
+    "basis": "resale of one source, or common control",
+    "evidence": "Public links: the provider's or network's own pages, documentation or terms, or a public record of ownership",
+    "recorded": "YYYY-MM-DD, the day the group was written here",
+    "from": "YYYY-MM-DD, the first census day it applies to; later than recorded",
+    "until": "YYYY-MM-DD, the first day it no longer applies, or null"
+  },
+  "groups": []
+}
