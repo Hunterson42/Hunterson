@@ -11,6 +11,8 @@ Usage:
     python3 scripts/probe.py               daily run, writes data/probes/DATE/
     python3 scripts/probe.py --test        one request per checkpoint, prints a
                                            summary, writes nothing
+    python3 scripts/probe.py --test-direct one request per control-group account per
+                                           checkpoint, one line each, writes nothing
     python3 scripts/probe.py --rehearsal   the whole daily run at once, without
                                            the waits between rounds, written to
                                            data/rehearsals/DATE-HHMM/
@@ -274,8 +276,11 @@ def run_request(t, prompt_body, round_no, day, max_tokens, timeout, read_timeout
                         chunk["text"] = delta["content"]
                         if record["first_token_s"] is None:
                             record["first_token_s"] = round(elapsed, 4)
-                    if delta.get("reasoning"):
-                        chunk["reasoning"] = delta["reasoning"]
+                    # The venue calls thinking text "reasoning"; providers bought direct
+                    # usually call it "reasoning_content". Either way it is recorded.
+                    thinking = delta.get("reasoning") or delta.get("reasoning_content")
+                    if thinking:
+                        chunk["reasoning"] = thinking
                     if len(chunk) > 1:
                         record["chunks"].append(chunk)
     except urllib.error.HTTPError as e:
@@ -345,9 +350,29 @@ def summarise(record):
     return "\n".join(lines)
 
 
+def one_line(record):
+    """One line per request, for --test-direct: enough to see that the model name,
+    the key and the switch for thinking all work."""
+    t = record["target"]
+    u = record.get("usage") or {}
+    head = f"{t['provider']:<11} {t.get('model') or t['checkpoint']:<36}"
+    if record["error"]:
+        detail = record.get("error_body")
+        detail = detail if isinstance(detail, str) else json.dumps(detail or "")
+        return f"{head} ERROR {record['error']} {' '.join(detail.split())[:160]}"
+    lines = [ln.strip() for ln in reply_text(record).splitlines() if ln.strip()]
+    thinking = (u.get("completion_tokens_details") or {}).get("reasoning_tokens") or \
+        any(c.get("reasoning") for c in record["chunks"])
+    usage = f"in {u.get('prompt_tokens')} out {u.get('completion_tokens')}" if u else "NO TOKEN COUNTS"
+    return (f"{head} OK {usage}, thinking {'YES' if thinking else 'no'}, finish {record['finish_reason']}, "
+            f"first token {record['first_token_s']} s, first line: {(lines[0] if lines else '(empty)')[:28]}")
+
+
 def main(argv):
-    mode, offwindow_kind = "daily", None
-    if "--test" in argv:
+    mode, offwindow_kind, direct_only = "daily", None, False
+    if "--test-direct" in argv:
+        mode, direct_only = "test", True
+    elif "--test" in argv:
         mode = "test"
     elif "--rehearsal" in argv:
         mode = "rehearsal"
@@ -398,7 +423,9 @@ def main(argv):
         listing["accepted_precisions"] = accepted
         listings[checkpoint] = listing
         found = venue_targets(listing, accepted)
-        if mode == "test":
+        if mode == "test" and direct_only:
+            targets += direct_targets(panel, checkpoint)
+        elif mode == "test":
             wanted = panel.get("test_provider")
             pick = [t for t in found if t["provider"] == wanted] or found[:1]
             targets += pick
@@ -409,12 +436,13 @@ def main(argv):
 
     if mode == "test":
         if not targets:
-            print("No provider found at an accepted precision. Check panel.json and candidates.json.")
+            print("No control-group account in panel.json." if direct_only else
+                  "No provider found at an accepted precision. Check panel.json and candidates.json.")
             return 1
         print(f"Prompt sha256: {prompt_sha256}\n")
         for t in targets:
             rec = run_request(t, prompt_body, 0, day, max_tokens, timeout, read_timeout)
-            print(summarise(rec) + "\n")
+            print(one_line(rec) if direct_only else summarise(rec) + "\n")
         return 0
 
     # 2. Rounds.

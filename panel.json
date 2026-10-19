@@ -25,5 +25,75 @@
   "test_provider": "Novita",
   "accept_line_1": "ISLAND DUKE Prospero",
   "accept_line_2": "LAST SPEAKER Sebastian",
-  "direct": []
+  "direct": [
+    {
+      "provider": "Novita",
+      "base_url": "https://api.novita.ai/v3/openai",
+      "key_env": "NOVITA_API_KEY",
+      "models": {
+        "deepseek/deepseek-v4.1-flash": "deepseek/deepseek-v4.1-flash",
+        "deepseek/deepseek-v4-flash-0731": "deepseek/deepseek-v4-flash-0731"
+      },
+      "extra": {
+        "enable_thinking": false
+      },
+      "sources": [
+        "https://blogs.novita.ai/deepseek-v4-1-flash-on-novita-ai/",
+        "https://docs.novita.ai/api-reference/model-apis-llm-create-chat-completion"
+      ]
+    },
+    {
+      "provider": "GMICloud",
+      "base_url": "https://api.gmi-serving.com/v1",
+      "key_env": "GMICLOUD_API_KEY",
+      "models": {
+        "deepseek/deepseek-v4.1-flash": "deepseek-ai/DeepSeek-V4.1-Flash",
+        "deepseek/deepseek-v4-flash-0731": "deepseek-ai/DeepSeek-V4-Flash-0731"
+      },
+      "extra": {
+        "chat_template_kwargs": {
+          "thinking": false
+        }
+      },
+      "sources": [
+        "https://docs.gmicloud.ai/inference-engine/api-reference/llm-api-reference"
+      ]
+    },
+    {
+      "provider": "SiliconFlow",
+      "base_url": "https://api.siliconflow.com/v1",
+      "key_env": "SILICONFLOW_API_KEY",
+      "models": {
+        "deepseek/deepseek-v4.1-flash": "deepseek-ai/DeepSeek-V4.1-Flash",
+        "deepseek/deepseek-v4-flash-0731": "deepseek-ai/DeepSeek-V4-Flash-0731"
+      },
+      "extra": {
+        "enable_thinking": false
+      },
+      "sources": [
+        "https://www.siliconflow.com/models/deepseek-v4-1-flash",
+        "https://www.siliconflow.com/models/deepseek-v4-flash-0731",
+        "https://docs.siliconflow.com/en/api-reference/chat-completions/chat-completions"
+      ]
+    },
+    {
+      "provider": "DeepInfra",
+      "base_url": "https://api.deepinfra.com/v1/openai",
+      "key_env": "DEEPINFRA_API_KEY",
+      "models": {
+        "deepseek/deepseek-v4.1-flash": "deepseek-ai/DeepSeek-V4.1-Flash",
+        "deepseek/deepseek-v4-flash-0731": "deepseek-ai/DeepSeek-V4-Flash-0731",
+        "deepseek/deepseek-v4.1-flash-1017": "deepseek-ai/DeepSeek-V4.1-Flash-1017"
+      },
+      "extra": {
+        "reasoning_effort": "none"
+      },
+      "sources": [
+        "https://deepinfra.com/deepseek-ai/DeepSeek-V4.1-Flash/api",
+        "https://deepinfra.com/deepseek-ai/DeepSeek-V4-Flash-0731/api",
+        "https://deepinfra.com/deepseek-ai/DeepSeek-V4.1-Flash-1017/api",
+        "https://docs.deepinfra.com/chat/reasoning"
+      ]
+    }
+  ]
 }

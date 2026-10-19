@@ -41,8 +41,14 @@ class ProbeTests(unittest.TestCase):
 
     def setUp(self):
         self.dir = tempfile.mkdtemp()
-        for name in ("candidates.json", "panel.json"):
-            shutil.copy(os.path.join(ROOT, name), self.dir)
+        shutil.copy(os.path.join(ROOT, "candidates.json"), self.dir)
+        # The control group's accounts are pointed at the mock too, so no test reaches a real provider.
+        panel = load(os.path.join(ROOT, "panel.json"))
+        for d in panel.get("direct", []):
+            d["base_url"] = self.base
+        with open(os.path.join(self.dir, "panel.json"), "w") as f:
+            json.dump(panel, f)
+        self.key_names = [d["key_env"] for d in panel.get("direct", [])]
         with open(os.path.join(self.dir, "prompt.txt"), "w") as f:
             f.write("INSTRUCTIONS\n\nACT I. SCENE II.\nThe island.\n")
         mock_openrouter.SEEN.clear()
@@ -59,13 +65,17 @@ class ProbeTests(unittest.TestCase):
             with open(p, "w") as f:
                 json.dump(panel, f)
         env = dict(os.environ, OPENROUTER_BASE=self.base, OPENROUTER_API_KEY=key, PROBE_ANY_DAY="1")
+        env.update({name: key for name in self.key_names})
         return subprocess.run([sys.executable, os.path.join(ROOT, "scripts", "probe.py"), *args],
                               cwd=self.dir, env=env, capture_output=True, text=True, timeout=120)
 
     def expected_targets(self):
-        """Distinct providers at fp8 in the saved census, per probed checkpoint."""
+        """Distinct providers at fp8 in the saved census, per probed checkpoint, plus
+        each control-group account that sells that checkpoint."""
         n = 0
-        for cp in load(os.path.join(ROOT, "panel.json"))["probe"]:
+        panel = load(os.path.join(ROOT, "panel.json"))
+        for cp in panel["probe"]:
+            n += sum(1 for d in panel.get("direct", []) if cp in d.get("models", {}))
             path = os.path.join(CENSUS, "endpoints", cp.replace("/", "__") + ".json")
             if not os.path.exists(path):
                 continue          # not in this census day; the probe records it and moves on
@@ -98,11 +108,21 @@ class ProbeTests(unittest.TestCase):
         self.run_probe("--rehearsal")
         self.assertTrue(mock_openrouter.SEEN)
         nonces = set()
+        accounts = load(os.path.join(ROOT, "panel.json")).get("direct", [])
         for body in mock_openrouter.SEEN:
+            self.assertEqual(body["max_tokens"], 500)
+            if "provider" not in body:
+                # Bought direct: the provider's own model name and its own switch for thinking.
+                sellers = [d for d in accounts if body["model"] in d["models"].values()]
+                self.assertTrue(sellers, body["model"])
+                self.assertTrue(any(all(body.get(k) == v for k, v in d["extra"].items()) for d in sellers),
+                                "a direct request must carry its account's switch for thinking")
+                self.assertEqual(body["stream_options"], {"include_usage": True})
+                nonces.add(body["messages"][0]["content"].splitlines()[0])
+                continue
             self.assertEqual(len(body["provider"]["only"]), 1)
             self.assertFalse(body["provider"]["allow_fallbacks"])
             self.assertEqual(body["reasoning"], {"enabled": False})
-            self.assertEqual(body["max_tokens"], 500)
             first_line = body["messages"][0]["content"].splitlines()[0]
             self.assertTrue(first_line.startswith("PROBE "))
             nonces.add(first_line)
@@ -110,7 +130,7 @@ class ProbeTests(unittest.TestCase):
 
     def test_one_endpoint_per_provider_lowest_price(self):
         self.run_probe("--rehearsal")
-        tags = {b["provider"]["only"][0] for b in mock_openrouter.SEEN}
+        tags = {b["provider"]["only"][0] for b in mock_openrouter.SEEN if "provider" in b}
         first = load(os.path.join(ROOT, "panel.json"))["probe"][0]
         with open(os.path.join(CENSUS, "endpoints", first.replace("/", "__") + ".json")) as f:
             eps = json.load(f)["data"]["endpoints"]
@@ -159,7 +179,9 @@ class ProbeTests(unittest.TestCase):
         r = self.run_probe("--rehearsal", key="")
         self.assertEqual(r.returncode, 0, r.stderr)
         out = glob.glob(os.path.join(self.dir, "data", "rehearsals", "*", "requests", "*.json"))
-        self.assertTrue(all(load((p))["error"] == "missing key OPENROUTER_API_KEY" for p in out))
+        errors = {load(p)["target"]["route"]: load(p)["error"] for p in out}
+        self.assertEqual(errors["openrouter"], "missing key OPENROUTER_API_KEY")
+        self.assertTrue(all(load(p)["error"].startswith("missing key ") for p in out))
 
     def test_test_mode_prints_and_writes_nothing(self):
         r = self.run_probe("--test")
@@ -169,6 +191,25 @@ class ProbeTests(unittest.TestCase):
         listed = [cp for cp in load(os.path.join(ROOT, "panel.json"))["probe"]
                   if os.path.exists(os.path.join(CENSUS, "endpoints", cp.replace("/", "__") + ".json"))]
         self.assertEqual(r.stdout.count("via "), len(listed))
+        self.assertFalse(os.path.exists(os.path.join(self.dir, "data")))
+
+    def test_test_direct_gives_one_line_per_account(self):
+        panel = load(os.path.join(ROOT, "panel.json"))
+        novita = next(d for d in panel["direct"] if d["provider"] == "Novita")
+        mock_openrouter.THINK_MODEL = novita["models"][panel["probe"][0]]     # a name only Novita uses
+        try:
+            r = self.run_probe("--test-direct")
+        finally:
+            mock_openrouter.THINK_MODEL = None
+        self.assertEqual(r.returncode, 0, r.stderr)
+        lines = [ln for ln in r.stdout.splitlines() if " OK " in ln or " ERROR " in ln]
+        expected = sum(len([cp for cp in d["models"] if cp in panel["probe"]]) for d in panel["direct"])
+        self.assertEqual(len(lines), expected)
+        self.assertTrue(all(" OK in " in ln for ln in lines), r.stdout)
+        thinking = [ln for ln in lines if "thinking YES" in ln]
+        self.assertEqual(len(thinking), 1, "thinking sent as reasoning_content must be caught")
+        self.assertTrue(thinking[0].startswith("Novita"))
+        self.assertFalse([b for b in mock_openrouter.SEEN if "provider" in b], "only the control group is tested")
         self.assertFalse(os.path.exists(os.path.join(self.dir, "data")))
 
     def test_offwindow_reading_has_its_own_folder(self):

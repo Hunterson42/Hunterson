@@ -358,6 +358,25 @@ class AssessTests(unittest.TestCase):
             row = next(line for line in f if line.startswith("| lab/model"))
         self.assertIn("**3** (3) | **2** (2)", row)
 
+    def test_control_group_is_reported_separately(self):
+        provs = {n: spec(str(o), str(i)) for n, (o, i) in GOOD.items()}
+        self.history(8, provs)
+        day = self.days[8]
+        make_window(self.root, day, provs)
+        for name, s in (("Good1", spec()), ("Thinks", spec(reasoning_text=True))):
+            for rnd in (1, 2, 3):
+                rec = request(day, name, rnd, s)
+                rec["target"] = {"route": "direct", "checkpoint": CP, "provider": name, "model": "lab/Model"}
+                rec["usage"].pop("cost_details", None)
+                write(os.path.join(self.root, "data", "probes", day, "requests", f"direct-{name}__r{rnd}.json"), rec)
+        self.run_all(day)
+        r = self.result(day)
+        self.assertEqual(r["price"]["output"], "0.6500", "the control group never enters the price")
+        self.assertEqual(r["contributors"], 6)
+        control = {c["provider"]: c for c in r["control"]}
+        self.assertEqual(control["Good1"]["result"], "passed")
+        self.assertEqual(control["Thinks"]["reason"], "Clean: reasoning text in the reply")
+
     # Writing ---------------------------------------------------------------
 
     def test_written_once_and_today_waits(self):
