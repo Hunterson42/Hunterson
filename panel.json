@@ -5,7 +5,7 @@
   "assessment": {
     "first_window": "2026-10-15",
     "methodology_version": "0.9",
-    "max_first_token_seconds": 2.0,
+    "max_first_token_seconds": 3.0,
     "min_output_tokens_per_second": 30,
     "reliability_windows": 10,
     "reliability_needed": 8,

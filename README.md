@@ -6,7 +6,7 @@ A daily price assessment for delivered open-weight AI inference: what a defined 
 
 ## Where it stands
 
-The census has run every day since 11 September 2026. It records which providers serve which open-weight models, at what declared precision and listed price, from OpenRouter's public listings. The probe that buys the daily test job runs on weekdays from 15 October 2026, in a shadow period. No price is being assessed yet; the first published assessment follows the shadow period and a published methodology.
+The census has run every day since 11 September 2026. It records which providers serve which open-weight models, at what declared precision and listed price, from OpenRouter's public listings. The probe that buys the daily test job runs on weekdays from 15 October 2026, in a shadow period. No price is published yet; the first published assessment follows the shadow period. The methodology, version 0.9, is in [`METHODOLOGY.md`](METHODOLOGY.md) and open for comment.
 
 ## Raw files and fingerprints
 
@@ -26,6 +26,7 @@ Everything else is kept here and updated automatically from the private reposito
 | `data/site/` | Small data files the site reads |
 | `candidates.json` | The grades, the candidate models, their accepted precision tags, and which is the reference |
 | `affiliations.json` | The register of provider groups: providers that resell one source or share an owner count as one. Each group with its public evidence and the day it applies from |
+| `METHODOLOGY.md` | How the number is produced, step by step. Version 0.9, open for comment |
 | `notes/selection.md` | Every rule and decision, dated, with the reasons |
 | `panel.json` | Settings for the probe, and the assessment's limits |
 | `prompt.txt` | The frozen test piece |

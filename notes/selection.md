@@ -2,7 +2,7 @@
 
 Working record for choosing and monitoring the reference checkpoint for each grade. Kept in the repository so that every selection decision has a dated, public trail. Nothing here is published; the methodology is the published document.
 
-Last updated: 17 October 2026.
+Last updated: 20 October 2026.
 
 ---
 
@@ -292,6 +292,118 @@ measured 7,613 input tokens on DeepSeek V4.1-Flash. The acceptance strings are
 `ISLAND DUKE Prospero` and `LAST SPEAKER Sebastian`, compared without regard
 to letter case, because the play prints names in capitals.
 
+### 1.10 Decisions of 15 and 16 October
+
+Recorded 20 October 2026, with the methodology pull request. Taken on 15 and
+16 October and kept until now in the roadmap and the methodology checklist.
+
+**Methodology, 15 October.**
+
+- **D9. Correctness.** Every completed request must give both acceptance
+  strings as its first two lines and stop at the 500-token limit. Two of three
+  is not enough
+- **D10. Blended price.** The blend, 16 input to 1 output, of the two
+  interquartile means, not the mean of each provider's blend
+- **D11. Window.** Every scheduled weekday is a window. A day with no probe
+  counts as a failure for every provider and breaks the run of five
+- **D12. Rounding.** Computed from unrounded per-token prices; published in
+  US dollars per million to four decimal places, halves rounded up
+- **D13. The five.** Counted in contributors, both for not publishing a day
+  and for withdrawing a grade after 20 assessment days below five. Amends the
+  maintenance floor in rule 1.4, which counted qualifying providers
+- **D14. Emergency clause kept.** If the old reference has fewer than five
+  contributors on five assessment days in a row during a parallel period, the
+  period ends on its tenth assessment day, or at once if that has passed
+- **D15. Producer.** "Malcolm Hunter (a pen name), trading as Hunterson"
+- **D16. "Every other candidate"** in D3 means every other eligible candidate
+
+**Response to the venue, 15 October.**
+
+- **D17. Raw responses not published.** The census, the probe's listing
+  snapshots and test records, and the rehearsals are kept privately. One
+  SHA-256 manifest per raw day is published, written once
+- **D18. Public history cleaned** by renaming the repository to
+  `Hunterson-raw`, making it private, and creating the public `Hunterson` from
+  a filtered copy of the history
+- **D19. Price on receipts.** Each contributor's price is the receipt's cost of
+  input, and of output, divided by the tokens counted. The listing is the check
+- **D20. Written request** to the venue's sales team, narrow: the daily reading
+  of the public listings, and derived figures with attribution. No raw
+  republication
+- **D21. Launch condition restated.** Launch does not wait on written
+  permission from the venue; the risk is accepted knowingly and the
+  methodology states the position as it stands
+
+**Operations and publication, 16 October.**
+
+- **D22. The census is taken by the London server at 06:15 UTC,** with
+  GitHub's workflow as the backup from 06:41
+- **D23. Only the mirror writes to the public repository**
+- **D24. Domain `hunterson.org`;** contact `malcolm@hunterson.org`
+- **D25. The price pages' design:** the output price as the headline, change
+  shown without colour, a permanent page for each day, each provider's price
+  shown, the shadow period shown and labelled
+- **D26. Assessments stay private until the first publication**
+- **D27. The grade is in every address from the first day,**
+  `hunterson.org/GRADE/YYYY-MM-DD/`, and the downloadable data carries a grade
+  column
+- **D28. Readings outside the window, for research only.** The same test at
+  weekends and at a random hour each day, kept privately in
+  `data/offwindow/`, fingerprinted, and never part of the assessment, the
+  reliability test or the run of five
+
+### 1.11 Count independent sources, not names
+
+Recorded 19 October 2026, decision D29.
+
+**Rule.** Providers that resell inference served by another listed provider or
+by a common network, or that are under common control, form a group. A group
+counts as one provider in the qualifying count, and so in the choice of
+reference and the launch threshold, and once in the contributor count for the
+floor. In the price it gives one observation: that of the member with the
+lowest output price paid, with its input price, among the members that pass
+every test. Providers that rent GPUs from the same cloud, or run the same
+serving software, are not a group.
+
+**How a group is recorded.** On public evidence only, in `affiliations.json`,
+with the evidence and the day it applies from, which is later than the day it
+is recorded. Never applied backwards. Built into `scripts/assess.py` and
+`scripts/track.py` on 19 October; the register is empty.
+
+**Why now.** Written before any case has arisen, so that it is in methodology
+1.0. A compute network planning to list on the gateways through several brokers
+in the first quarter of 2027 would otherwise add several observations from one
+source. Illustrative figures: ten independent providers at $0.85 and four
+resellers of one network at $0.40 give $0.7938 counted by name and $0.8500
+counted by source.
+
+### 1.12 Speed limits, from windows 1 to 4
+
+Recorded 20 October 2026, with the methodology pull request.
+
+**Rule.** A provider passes the speed test if the median first-token time of
+its completed requests is within 3 seconds and their median speed, from the
+first token, is at least 30 output tokens per second. Replaces the provisional
+2 seconds.
+
+**Evidence.** In windows 1 to 4, several DeepSeek V4 Flash 0731 providers sat
+between 2 and 3 seconds to the first token, and which of them fell over the
+line changed from day to day. Unofficial figures, reliability set aside:
+
+| Window | 0731 at 2 seconds | 0731 at 3 seconds |
+|---|---|---|
+| 15 October | 8 contributors, $0.4163 | 9, $0.4650 |
+| 16 October | 6, $0.2510 | 9, $0.4168 |
+| 19 October | 4, no price | 6, $0.4040 |
+| 20 October | 5, $0.5959 | 9, $0.4948 |
+
+At 3 seconds the figure stayed between $0.40 and $0.49 with a price every day;
+at 2 seconds it ran from $0.25 to $0.60 and once had none. The limit changed
+neither DeepSeek V4.1-Flash nor V4.1-Flash-1017 in any window. Providers
+genuinely slow, at 3.5 to 25 seconds, are excluded either way. The speed floor
+of 30 tokens a second excluded Morph once (27, on 19 October) and Mancer 2 on
+0731 at 23 to 25; it is unchanged.
+
 ---
 
 ## 2. Daily tracking
@@ -518,6 +630,15 @@ Card collected on 2 October 2026 from the Hugging Face repository page, its
 `config.json` and its commit history. Confirm the commit hash by hand from
 Files and versions before it is used as a reference identifier.
 
+**Reading, 15 October 2026.** The commit hash pinned for the reference is
+`5254448103b6254fc646dacbca1cbbf20e9216c1`, the head on 15 October, confirmed
+by hand. The four commits after `2cba9e4`, all of 12 October, read one by one:
+`8b3cec7` and `4dd75a8` change only the maker's example inference code
+(`inference/model.py`, `inference/requirements.txt`); `4dd75a8` also adds
+Python cache files, which `12b5c3a` deletes; `5254448` adds a `.gitignore`.
+None touches the weights, `config.json`, the tokenizer files or the chat
+template. Immaterial under the methodology's rule on example code.
+
 - OpenRouter id: `deepseek/deepseek-v4.1-flash`
 - Commit hash: `2cba9e42aa026125f3ed06c6d98c1db82f7ca027`, the head on 2 October, "Adding chat template (#68)", shown as one day old
 - Commit history: 12 commits. Weights uploaded about 10 September at `678ae2a`. `config.json` unchanged since `517ef62` of the same date
@@ -662,8 +783,8 @@ The ambiguity of bare `fp4` is a live problem for gpt-oss, whose native format i
 
 ## 8. Open items
 
-1. Confirm the DeepSeek V4.1-Flash commit hash by hand (section 3.4). The fp4
-   question is settled by D5 (rule 1.7)
+1. Settled 15 October: the DeepSeek V4.1-Flash commit hash, `5254448`
+   (section 3.4). The fp4 question is settled by D5 (rule 1.7)
 2. Settled 14 October: the larger active figure governs (D5, rule 1.7)
 3. Settled 14 October: the amended launch threshold (D3, rule 1.7)
 4. Resolve whether the Qwen 27B models are dense; if so, record the soft-edge
@@ -675,4 +796,36 @@ The ambiguity of bare `fp4` is a live problem for gpt-oss, whose native format i
 8. Check the Minimax M3 card; 8 fp8 providers and never examined
 9. Add to the methodology: the once-per-day census rule (1.5), the launch
    threshold and maintenance floor (1.4), and reference selection before first
-   publication (1.6)
+   publication (1.6); done in methodology 0.9, 20 October
+10. Before methodology 1.0: whether a provider's lower-priority tier, such as
+    DeepInfra's "flex", is the same product; whether the venue request should
+    also carry the model maker's own switch for thinking; whether the test piece
+    needs protecting against caching that ignores the unique first line; and the
+    promised cryptographic timestamp
+
+---
+
+## 9. GPU-hour futures
+
+Read 20 October 2026 (roadmap step 24), from CME's notice SER 9785 of
+11 August 2026, the exchange's filing with the CFTC (rulebook chapters 1045
+and 1047), and CME's settlements page.
+
+- **Contracts.** Silicon Data H100 Rental Index Futures (CME Globex code GPU1)
+  and Silicon Data B200 Rental Index Futures (GPU2), listed by NYMEX, trading
+  since 5 October 2026, monthly contracts listed 36 months ahead
+- **Underlying.** Silicon Data's daily on-demand rental index for each chip
+- **Unit.** 730 GPU-hours per contract; quoted in US dollars per GPU-hour;
+  minimum price step $0.01, which is $7.30 per contract
+- **Settlement.** Cash, against the arithmetic average of the daily index over
+  every business day of the contract month. Trading ends on the month's last
+  business day
+- **Settlements, H100, trade date 19 October 2026** (CME, last updated
+  19 October, 23:55 Central time): November 2026 $2.810, December 2026 $2.760,
+  January 2027 $2.730, February 2027 $2.740, March 2027 $2.750 per GPU-hour.
+  Estimated volume 0; prior day open interest 0. The October 2026 contract was
+  not shown
+- **Reading.** Two weeks after launch nobody had traded the contracts; the
+  settlement prices followed the index. The curve slopes down into January,
+  which bears on break-even throughput in the derived series: a lower rental
+  rate lowers it even if the token price does not move
