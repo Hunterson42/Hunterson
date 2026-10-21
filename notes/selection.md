@@ -438,6 +438,38 @@ fingerprint.
 prove existence from then, not from the day of their records. The moment is
 recorded in `data/hashes/stamping-began.txt`.
 
+### 1.14 The figures are published under the Hunterson Data Licence
+
+Recorded 21 October 2026 (decision D32), with the licence pull request, before
+any figure was published.
+
+**Rule.** The figures are free to view, copy, quote and chart, and free to use
+in research, teaching, journalism and any organisation's own analysis, with
+credit. Using them to set an amount paid under a contract, value or settle a
+financial instrument, or measure a fund or make up an index needs a free
+registration, effective when the email is sent. Distributing them as a data
+service, or joining their history to another series, needs an agreement. A use
+registered before any fee is announced stays free for as long as it lasts; any
+fee for new uses is announced twelve months ahead and is the same for everyone
+in a class; the free uses never narrow for published figures. The methodology,
+the census tracker and the written material stay under CC BY 4.0; the
+fingerprints and timestamp proofs are in the public domain. Full terms in
+`LICENCE-DATA.md`.
+
+**Evidence.** IOSCO's principles for price reporting agencies require a
+methodology that explains how assessments are made, audit trails, conflicts
+policies and complaints procedures; none requires free commercial reuse. Under
+CC BY 4.0 "for any purpose", anyone could have settled contracts on the
+figures, built them into another index or redistributed and continued the
+history without anyone knowing, and a figure once released under CC BY stays
+there. The registration is what tells users of every methodology change,
+rollover and correction, which the principles expect anyway, and the first
+registration marks the first contractual citation.
+
+**Limits.** It rests on contract more than on property rights, and is enforced
+in practice through the compliance habits of the institutions that make
+benchmark uses. A solicitor reads it before the first registration.
+
 ---
 
 ## 2. Daily tracking

@@ -50,6 +50,7 @@ openssl ts -reply -in data/hashes/probes/2026-10-20.sha256.tsr -text
 | `candidates.json` | The grades, the candidate models, their accepted precision tags, and which is the reference |
 | `affiliations.json` | The register of provider groups: providers that resell one source or share an owner count as one. Each group with its public evidence and the day it applies from |
 | `METHODOLOGY.md` | How the number is produced, step by step. Version 0.9, open for comment |
+| `LICENCE-DATA.md` | The Hunterson Data Licence: the terms on which the figures may be used |
 | `notes/selection.md` | Every rule and decision, dated, with the reasons |
 | `panel.json` | Settings for the probe, and the assessment's limits |
 | `prompt.txt` | The frozen test piece |
@@ -59,4 +60,6 @@ openssl ts -reply -in data/hashes/probes/2026-10-20.sha256.tsr -text
 
 ## Licence
 
-The derived data and the written material in this repository are licensed under Creative Commons Attribution 4.0 International. OpenRouter's raw responses are not in this repository and are not licensed by it. See `LICENSE.md`. The site includes Chart.js, under the MIT licence, and the IBM Plex Mono font, under the SIL Open Font License; their licences are in `docs/vendor/`.
+**The figures,** meaning the price assessments, their history and any series calculated from them, are under the Hunterson Data Licence, [`LICENCE-DATA.md`](LICENCE-DATA.md), also at https://hunterson.org/licence/. They are free to view, copy, quote and use with credit. Using them to settle a contract, value a financial instrument, measure a fund or make up an index needs a free registration, so that everyone relying on them is told directly when the rules change. Distributing them as a data service needs an agreement.
+
+**The fingerprints and timestamp proofs** are in the public domain, under CC0 1.0. **The derived census data and the written material** in this repository are licensed under Creative Commons Attribution 4.0 International. OpenRouter's raw responses are not in this repository and are not licensed by it. See `LICENSE.md`. The site includes Chart.js, under the MIT licence, and the IBM Plex Mono font, under the SIL Open Font License; their licences are in `docs/vendor/`.

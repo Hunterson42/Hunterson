@@ -2,7 +2,7 @@
 
 ## Methodology
 
-Version 0.9, draft for comment, October 2026. Amended October 2026: sections 8 and 10.
+Version 0.9, draft for comment, October 2026. Amended October 2026: sections 8, 10 and 13.
 
 This document explains, in plain language, exactly how the Hunterson Standard Inference number is produced each weekday. Anyone with the data we publish and this document should be able to reproduce the number exactly, to the published precision. If they cannot, the document is wrong and we will fix it.
 
@@ -380,13 +380,19 @@ A change of reference model follows section 4.5 and is not a change to these rul
 
 ## 13. Using the numbers
 
-The published prices, the history, and the daily tables are released under the Creative Commons Attribution 4.0 licence. Anyone may use, copy, quote, or build on them, for any purpose, provided they credit Hunterson.
+The figures are free to view, copy, quote and chart, and free to use in research, teaching, journalism and any organisation's own analysis, with credit to Hunterson.
 
-The fingerprints are released under the same licence.
+Using a figure to set an amount paid under a contract, to value or settle a financial instrument, or to measure a fund or make up an index needs a registration. Registration is free, takes effect when the email is sent, and means the user is told directly of every change to these rules, every change of reference with its conversion ratio, every correction, and every day with no price. A use registered before any fee is announced stays free for as long as it lasts.
+
+Distributing the figures as a data service, or joining their history to another series, needs an agreement.
+
+The full terms are the Hunterson Data Licence, at https://hunterson.org/licence/ and in `LICENCE-DATA.md` in the public repository.
+
+The fingerprints and timestamp proofs are dedicated to the public domain under CC0 1.0, so that anyone may keep copies anywhere.
 
 The raw records, meaning the census, the listing snapshots, and the test records, include the venue's own responses. They remain OpenRouter's material, under its terms. They are kept privately, and are neither published nor licensed by us.
 
-This document is released under the same Creative Commons licence.
+This document is released under the Creative Commons Attribution 4.0 licence.
 
 ## 14. Who produces this, and what they own
 
@@ -448,6 +454,7 @@ It is not a price for output produced in Europe. See section 1.
 |---|---|---|
 | 0.9 | October 2026 | Draft published for comment |
 | 0.9, amended | October 2026 | Sections 8 and 10: timestamps built, settling the square bracket in section 10 |
+| 0.9, amended | October 2026 | Section 13: the figures under the Hunterson Data Licence in place of Creative Commons Attribution 4.0, before any figure was published |
 
 ---
 

@@ -112,6 +112,18 @@ class HashTests(unittest.TestCase):
         with open(fp) as f:
             self.assertEqual(f.read(), before)
 
+    def test_mirror_copies_the_licence_and_never_the_register(self):
+        write(os.path.join(self.src, "LICENCE-DATA.md"), "# Hunterson Data Licence")
+        write(os.path.join(self.src, "docs/licence/index.html"), "<h1>Hunterson Data Licence</h1>")
+        write(os.path.join(self.src, "register/uses.json"), '{"uses": []}')
+        write(os.path.join(self.src, "scripts/hashes.py"), open(os.path.join(ROOT, "scripts/hashes.py")).read())
+        write(os.path.join(self.dst, "register/stray.json"), "{}")
+        subprocess.run(["bash", os.path.join(ROOT, "scripts/mirror.sh"), self.src, self.dst], check=True,
+                       capture_output=True)
+        self.assertTrue(os.path.exists(os.path.join(self.dst, "LICENCE-DATA.md")))
+        self.assertTrue(os.path.exists(os.path.join(self.dst, "docs/licence/index.html")))
+        self.assertFalse(os.path.exists(os.path.join(self.dst, "register")), "the register must never be public")
+
     def test_offwindow_readings_are_fingerprinted_and_never_copied(self):
         write(os.path.join(self.src, "data/offwindow/2026-10-24-1405/manifest.json"), "{}")
         write(os.path.join(self.src, "data/offwindow/2026-10-24-1405/requests/a.json"), "{}")
