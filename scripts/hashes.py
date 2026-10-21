@@ -1,5 +1,5 @@
 """
-Fingerprints of the raw files.
+Fingerprints of the raw files and of the assessments.
 
 The raw files are the census, the probe's listing snapshots and request
 records, the rehearsals, and the readings taken outside the window for
@@ -26,6 +26,13 @@ silently.
 A day is fingerprinted only once it is complete: a census day once its
 models.json exists, a probe day, rehearsal or off-window reading once its
 manifest.json exists.
+
+The assessments in data/assessments are fingerprinted one file at a time, into
+data/hashes/assessments/DATE/SLUG.sha256 (decision D33). The assessor writes
+each checkpoint's file once, but can add a file to an earlier day, for example
+when a checkpoint is placed after its windows ran; one fingerprint per file
+means such an addition is a new fingerprint, never a changed one. The
+assessments stay private until go-live; only their fingerprints are public.
 Uses only the Python standard library.
 """
 import hashlib
@@ -62,8 +69,42 @@ def manifest_for(source_root, day_dir):
     return "\n".join(lines) + "\n"
 
 
+def write_once(out, text, label, counts):
+    """Write a fingerprint file once; a different existing one is a problem."""
+    if os.path.exists(out):
+        with open(out) as f:
+            if f.read() == text:
+                counts["unchanged"] += 1
+                return
+        counts["problems"].append(f"{label}: the files no longer match the published fingerprints")
+        return
+    os.makedirs(os.path.dirname(out), exist_ok=True)
+    with open(out, "w") as f:
+        f.write(text)
+    counts["written"] += 1
+
+
+def assessments(source_root, target_root, counts):
+    """One fingerprint per assessment file (decision D33)."""
+    base = os.path.join(source_root, "data", "assessments")
+    if not os.path.isdir(base):
+        return
+    out_base = os.path.join(target_root, "data", "hashes", "assessments")
+    for day in sorted(os.listdir(base)):
+        day_dir = os.path.join(base, day)
+        if not os.path.isdir(day_dir):
+            continue
+        for name in sorted(os.listdir(day_dir)):
+            full = os.path.join(day_dir, name)
+            if not name.endswith(".json") or not os.path.isfile(full):
+                continue
+            text = f"{sha256(full)}  data/assessments/{day}/{name}\n"
+            out = os.path.join(out_base, day, name[:-len(".json")] + ".sha256")
+            write_once(out, text, f"assessments/{day}/{name}", counts)
+
+
 def run(source_root, target_root):
-    written, unchanged, problems = 0, 0, []
+    counts = {"written": 0, "unchanged": 0, "problems": []}
     for folder, marker in CLASSES:
         base = os.path.join(source_root, "data", folder)
         if not os.path.isdir(base):
@@ -75,18 +116,11 @@ def run(source_root, target_root):
                 continue
             text = manifest_for(source_root, day_dir)
             out = os.path.join(out_base, day + ".sha256")
-            if os.path.exists(out):
-                with open(out) as f:
-                    if f.read() == text:
-                        unchanged += 1
-                        continue
-                problems.append(f"{folder}/{day}: the files no longer match the published fingerprints")
-                continue
-            os.makedirs(out_base, exist_ok=True)
-            with open(out, "w") as f:
-                f.write(text)
-            written += 1
-    print(f"Fingerprints: {written} written, {unchanged} unchanged, {len(problems)} problems.")
+            write_once(out, text, f"{folder}/{day}", counts)
+    assessments(source_root, target_root, counts)
+    problems = counts["problems"]
+    print(f"Fingerprints: {counts['written']} written, {counts['unchanged']} unchanged, "
+          f"{len(problems)} problems.")
     for p in problems:
         print("PROBLEM: " + p)
     return 1 if problems else 0

@@ -2,7 +2,7 @@
 
 ## Methodology
 
-Version 0.9, draft for comment, October 2026.
+Version 0.9, draft for comment, October 2026. Amended October 2026: sections 8 and 10.
 
 This document explains, in plain language, exactly how the Hunterson Standard Inference number is produced each weekday. Anyone with the data we publish and this document should be able to reproduce the number exactly, to the published precision. If they cannot, the document is wrong and we will fix it.
 
@@ -314,6 +314,16 @@ This is the number working as intended, not an error. A price for a product that
 2. **Derived.** The tracking and ranking pages. Rebuilt from the collected records whenever needed, with their history kept.
 3. **Published.** Each day's assessment. Written once and never recalculated, even if a later method would give a different figure. Mistakes are corrected under section 11.
 
+**Timestamps.** When a fingerprint file is written, it is sent at once to two independent timestamping services: OpenTimestamps, which records it in the Bitcoin blockchain within a few hours, and FreeTSA, a timestamp authority that signs it within seconds under the international standard RFC 3161. Only the fingerprint is sent, never the records. Both proofs are published beside the fingerprint. Together they show that the records existed, unchanged, no later than the time stamped, without anyone having to trust us or the place the files are kept.
+
+Each day's assessment is fingerprinted and stamped in the same way when it is made, which is before it is published, with one fingerprint for each file. Until the first publication only the fingerprints and their proofs are published, so that anyone can check, once the shadow period's assessments are released, that none was changed.
+
+A proof that cannot be obtained is requested again on the next run, and its absence is recorded. It never delays publication.
+
+Fingerprints already published when stamping began were stamped then, and prove existence from that moment, not from the day of their records. The moment is recorded in `data/hashes/stamping-began.txt`.
+
+How to check a fingerprint and its proofs is set out in the repository's README.
+
 We never use another price assessment as an input.
 
 ## 9. When we do not publish
@@ -336,8 +346,8 @@ Every assessment day by 16:00 UTC, at a web address containing the grade and the
 - the same three with discounts removed;
 - the number of contributors, and the number of providers tested;
 - a table of every provider tested, showing its prices paid, its listed discount, its measured speed and first-token time, and whether it was included or excluded, and why;
-- the fingerprints of the day's raw records;
-- [a cryptographic timestamp proving the day's file existed on that date: to be settled before 1.0;]
+- the fingerprints of the day's raw records and of the day's assessment;
+- the two timestamp proofs for each of those fingerprints (section 8);
 - the version of this document in force that day.
 
 Before the first publication, nothing is published: the shadow period's assessments are kept privately (section 4.6).
@@ -437,6 +447,7 @@ It is not a price for output produced in Europe. See section 1.
 | Version | Date | Change |
 |---|---|---|
 | 0.9 | October 2026 | Draft published for comment |
+| 0.9, amended | October 2026 | Sections 8 and 10: timestamps built, settling the square bracket in section 10 |
 
 ---
 

@@ -404,6 +404,40 @@ genuinely slow, at 3.5 to 25 seconds, are excluded either way. The speed floor
 of 30 tokens a second excluded Morph once (27, on 19 October) and Mancer 2 on
 0731 at 23 to 25; it is unchanged.
 
+### 1.13 Every fingerprint is timestamped by two independent services
+
+Recorded 21 October 2026 (decision D33), with the timestamp pull request.
+
+**Rule.** When a fingerprint file is written, its hash is sent at once to
+OpenTimestamps, which anchors it in the Bitcoin blockchain within a few hours,
+and to FreeTSA, which signs it within seconds under RFC 3161. Both proofs are
+published beside the fingerprint and kept in both repositories. Each
+assessment is fingerprinted, one fingerprint per file, and stamped when the
+assessor commits it, which is before publication. A proof is written once; an
+OpenTimestamps proof is completed once, when its Bitcoin block confirms, and is
+otherwise never changed. A request that fails is retried on the next run and
+recorded; it never stops the mirror or a publication. Only hashes leave the
+machine.
+
+**Evidence.** A fingerprint proves content, not date: git records whatever
+time a commit states. The public repository was deleted and recreated on
+16 October, so nothing in it independently shows when a fingerprint first
+appeared, and until this rule the fingerprints existed only there. Methodology
+0.9 promised a cryptographic timestamp in square brackets. Two services,
+because each covers the other's weakness: the authority signs at once but
+rests on trusting its key; the Bitcoin anchor needs no trust in anyone but
+takes hours.
+
+**Why one fingerprint per assessment file.** The assessor writes each
+checkpoint's file once, but can add a file to an earlier day, for example when
+a checkpoint is placed after its windows ran. One fingerprint per day would
+then change, and stop the mirror; one per file makes the addition a new
+fingerprint.
+
+**Limit.** Fingerprints written before the first run were stamped on it, and
+prove existence from then, not from the day of their records. The moment is
+recorded in `data/hashes/stamping-began.txt`.
+
 ---
 
 ## 2. Daily tracking
@@ -800,8 +834,8 @@ The ambiguity of bare `fp4` is a live problem for gpt-oss, whose native format i
 10. Before methodology 1.0: whether a provider's lower-priority tier, such as
     DeepInfra's "flex", is the same product; whether the venue request should
     also carry the model maker's own switch for thinking; whether the test piece
-    needs protecting against caching that ignores the unique first line; and the
-    promised cryptographic timestamp
+    needs protecting against caching that ignores the unique first line. The
+    promised cryptographic timestamp was built on 21 October (rule 1.13)
 
 ---
 

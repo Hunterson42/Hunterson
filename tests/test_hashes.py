@@ -81,6 +81,37 @@ class HashTests(unittest.TestCase):
         self.assertFalse(os.path.exists(os.path.join(self.dst, "data/census")))
         self.assertFalse(os.path.exists(os.path.join(self.dst, "data/probes")))
 
+    def test_each_assessment_file_gets_its_own_fingerprint(self):
+        write(os.path.join(self.src, "data/assessments/2026-10-27/deepseek-v4.1-flash.json"), '{"a": 1}')
+        write(os.path.join(self.src, "data/assessments/2026-10-27/deepseek-v4.1-flash.json.tmp"), "partial")
+        self.assertEqual(hashes.run(self.src, self.dst), 0)
+        out = os.path.join(self.dst, "data/hashes/assessments/2026-10-27")
+        self.assertEqual(os.listdir(out), ["deepseek-v4.1-flash.sha256"])
+        result = subprocess.run(["sha256sum", "-c", os.path.join(out, "deepseek-v4.1-flash.sha256")],
+                                cwd=self.src, capture_output=True, text=True)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
+    def test_an_assessment_added_to_an_earlier_day_is_a_new_fingerprint(self):
+        write(os.path.join(self.src, "data/assessments/2026-10-27/deepseek-v4.1-flash.json"), '{"a": 1}')
+        hashes.run(self.src, self.dst)
+        write(os.path.join(self.src, "data/assessments/2026-10-27/deepseek-v4.1-flash-1017.json"), '{"b": 2}')
+        self.assertEqual(hashes.run(self.src, self.dst), 0)
+        out = os.path.join(self.dst, "data/hashes/assessments/2026-10-27")
+        self.assertEqual(sorted(os.listdir(out)),
+                         ["deepseek-v4.1-flash-1017.sha256", "deepseek-v4.1-flash.sha256"])
+
+    def test_a_changed_assessment_is_an_error_and_its_fingerprint_is_kept(self):
+        path = os.path.join(self.src, "data/assessments/2026-10-27/deepseek-v4.1-flash.json")
+        write(path, '{"a": 1}')
+        hashes.run(self.src, self.dst)
+        fp = os.path.join(self.dst, "data/hashes/assessments/2026-10-27/deepseek-v4.1-flash.sha256")
+        with open(fp) as f:
+            before = f.read()
+        write(path, '{"a": 2}')
+        self.assertEqual(hashes.run(self.src, self.dst), 1)
+        with open(fp) as f:
+            self.assertEqual(f.read(), before)
+
     def test_offwindow_readings_are_fingerprinted_and_never_copied(self):
         write(os.path.join(self.src, "data/offwindow/2026-10-24-1405/manifest.json"), "{}")
         write(os.path.join(self.src, "data/offwindow/2026-10-24-1405/requests/a.json"), "{}")

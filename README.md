@@ -12,15 +12,38 @@ The census has run every day since 11 September 2026. It records which providers
 
 The raw files, meaning the census, the probe's listing snapshots and test records, and the rehearsals, are OpenRouter's responses. They are kept in a private repository and are not published here.
 
-Each day's raw files are fingerprinted with SHA-256, and the fingerprints are published in `data/hashes/`, one file per day, in the format of `sha256sum`. A fingerprint file is written once. Anyone later shown a raw file can check, with `sha256sum -c` from the repository root, that it existed on that day and has not changed since.
+Each day's raw files are fingerprinted with SHA-256, and the fingerprints are published in `data/hashes/`, one file per day, in the format of `sha256sum`. A fingerprint file is written once. Anyone later shown a raw file can check, with `sha256sum -c` from the repository root, that it has not changed since its fingerprint was published.
+
+Each assessment is fingerprinted the same way when it is made, one fingerprint per file, in `data/hashes/assessments/`. The assessments themselves stay private until the first publication.
+
+**Timestamps.** Each fingerprint file is timestamped, when it is written, by two independent services: OpenTimestamps, which anchors it in the Bitcoin blockchain within a few hours, and FreeTSA, a timestamp authority that signs it within seconds under RFC 3161. The two proofs lie beside it, as `NAME.sha256.ots` and `NAME.sha256.tsr`. Only the fingerprint is sent to either service, never the records. FreeTSA's certificates are kept in `data/stamps/certs/`. Fingerprints already published when stamping began were stamped then; the moment is recorded in `data/hashes/stamping-began.txt`, and their proofs show existence from it.
 
 Everything else is kept here and updated automatically from the private repository.
+
+## How to check a fingerprint and its timestamps
+
+**First, check a record against its fingerprint.** From the repository's root, `sha256sum -c data/hashes/probes/2026-10-20.sha256` checks every file the fingerprint lists. It needs the records themselves, which are private; anyone later shown a record can run it.
+
+**Then, when the fingerprint existed: OpenTimestamps.** Download the fingerprint file and its `.ots` proof. Open https://opentimestamps.org in any browser and drop both files on the page. It names the Bitcoin block that holds the stamp, and that block's time. A proof less than a few hours old shows as pending. With a Bitcoin node, `ots verify NAME.sha256.ots` gives the same answer.
+
+**And the signed time: RFC 3161.** With OpenSSL, from the repository's root:
+
+```
+openssl ts -verify -data data/hashes/probes/2026-10-20.sha256 -in data/hashes/probes/2026-10-20.sha256.tsr -CAfile data/stamps/certs/cacert.pem -untrusted data/stamps/certs/tsa.crt
+```
+
+It prints `Verification: OK`. To see the time it records:
+
+```
+openssl ts -reply -in data/hashes/probes/2026-10-20.sha256.tsr -text
+```
 
 ## What is here
 
 | Path | What it is |
 |---|---|
-| `data/hashes/` | The fingerprints of the raw files, one file per day, written once |
+| `data/hashes/` | The fingerprints of the raw files, one file per day, and of each assessment, one per file; each written once, with its two timestamp proofs beside it |
+| `data/stamps/certs/` | FreeTSA's certificates, kept so that a proof can be checked even if the service goes |
 | `data/track.md` | The current tracking page: qualifying providers per candidate per day, the challenger streaks, and the watchlist |
 | `data/rank/` | A daily ranking of the most widely served models |
 | `data/site/` | Small data files the site reads |
@@ -30,7 +53,7 @@ Everything else is kept here and updated automatically from the private reposito
 | `notes/selection.md` | Every rule and decision, dated, with the reasons |
 | `panel.json` | Settings for the probe, and the assessment's limits |
 | `prompt.txt` | The frozen test piece |
-| `scripts/` | The census, ranking, tracker, probe, assessor, fingerprints and mirror. Python standard library only |
+| `scripts/` | The census, ranking, tracker, probe, assessor, fingerprints, timestamps and mirror. Python standard library only, except that the timestamps also use the OpenTimestamps client and OpenSSL |
 | `tests/` | Tests for the probe against a mock of OpenRouter, which need the raw census and so run in the private repository, and for the assessor, on made-up windows |
 | `docs/` | The site |
 

@@ -1,0 +1,4 @@
+Timestamping began at 2026-10-21 11:42 UTC (decision D33).
+Each fingerprint written before then was stamped at that moment, and its proofs show that
+it existed from then, not from the day of its records. Each fingerprint written since was
+stamped when it was written.
