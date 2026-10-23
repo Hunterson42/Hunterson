@@ -509,6 +509,52 @@ notice. Changing the test piece now was rejected: it would need a new frozen
 hash and a rehearsal before window 9, would break comparison with windows 1 to
 8, and would not help if the cause is a quirk of billing.
 
+### 1.16 GPU-hour prices, collected for the derived series (D36)
+
+Recorded 23 October 2026. Never an input to the assessment.
+
+**The rule.** From the first window after this rule is merged, the London
+server reads the GPU-hour prices of a small panel of GPU clouds twice a day:
+after the census (the "morning" reading, about 06:20 UTC) and after the window
+(the "window" reading, about 14:40 UTC, so that the price beside each day's
+assessment was read in the same hour). Each reading goes to
+`data/gpu/DATE-HHMM/`, written once, kept privately and fingerprinted like the
+census. The sources are in `gpu_sources.json`. A source is read only through
+its provider's own customer API, with the project's own key, and only once its
+terms have been read and it has been enabled by pull request. Collection starts
+before the derived series is published because a history of GPU-hour prices
+from the first day of the assessment cannot be collected later.
+
+**What it is not.** It is not a GPU price index and is never published as one:
+Silicon Data's indices settle CME's compute futures, and Ornn's are to settle
+ICE's. It is a panel of list prices, shown as list prices. It does not replace
+the rule that Hunterson never derives its own assessment from another
+assessor's number: the derived series uses these primary prices, and cites the
+exchange-settled indices only in commentary.
+
+**The sources on 23 October.** Novita and DeepInfra, both in the reference's
+panel, so that each one's own GPU-hour price can be set beside its own token
+price. Novita's reply gives on-demand, spot and prepaid prices and a stock
+level; DeepInfra's gives a price per GPU configuration and whether it is
+available. RunPod and Lambda are listed but not enabled: each needs an account
+opened with the project mailbox and its terms read first.
+
+**How it will be used, from January 2027.**
+
+- **Break-even jobs per GPU-hour:** a GPU-hour price divided by what one test
+  job earns, input and output together. On window 6's receipts, $0.2168 a
+  million input tokens and $0.8569 a million output, one job earned $0.002079,
+  79 per cent of it from input. Dividing by the output price alone, as first
+  planned, would overstate what a GPU must produce almost fivefold. Shown as a
+  range, from spot to on-demand prices, never as one number
+- **Achievable jobs per GPU-hour:** from a serving benchmark of the reference
+  at the methodology's speed floor; the source is not yet chosen
+- **Break-even load factor:** the first divided by the second, the share of the
+  hour a GPU must be busy to pay its rent. It replaces "implied margin", which
+  assumes a GPU is never idle
+- **The spot discount:** spot against on-demand, and the stock levels at the
+  two readings, as evidence of idle capacity
+
 ---
 
 ## 2. Daily tracking

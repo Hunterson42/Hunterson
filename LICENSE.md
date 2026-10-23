@@ -8,7 +8,7 @@
 
 Suggested attribution: "Source: Hunterson Standard Inference, Europe, https://hunterson.org/, CC BY 4.0."
 
-**Not covered.** The raw files, meaning the census, the probe's listing snapshots and test records, and the rehearsals, are responses from OpenRouter's API. They are OpenRouter's material, governed by OpenRouter's terms of service. They are kept privately, are not published in the public repository, and are not licensed by this repository. Only their fingerprints are published.
+**Not covered.** The raw files, meaning the census, the probe's listing snapshots and test records, and the rehearsals, are responses from OpenRouter's API. They are OpenRouter's material, governed by OpenRouter's terms of service. They are kept privately, are not published in the public repository, and are not licensed by this repository. Only their fingerprints are published. The same holds for the GPU-hour price readings, `data/gpu/`, which are responses from GPU clouds' customer APIs, governed by each provider's terms.
 
 Third-party components keep their own licences: Chart.js (MIT) and IBM Plex Mono (SIL Open Font License 1.1), in `docs/vendor/`.
 

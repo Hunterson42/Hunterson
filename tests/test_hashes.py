@@ -142,5 +142,22 @@ class HashTests(unittest.TestCase):
             self.assertFalse(os.path.exists(os.path.join(self.dst, private)), private + " must never be public")
 
 
+    def test_gpu_readings_are_fingerprinted_and_never_copied(self):
+        write(os.path.join(self.src, "data/gpu/2026-10-24-0620/manifest.json"), "{}")
+        write(os.path.join(self.src, "data/gpu/2026-10-24-0620/novita-instances.json"), "{}")
+        write(os.path.join(self.src, "data/gpu/.partial-abc/manifest.json"), "{}")     # still being assembled
+        write(os.path.join(self.src, "gpu_sources.json"), '{"sources": []}')
+        write(os.path.join(self.src, "scripts/hashes.py"), open(os.path.join(ROOT, "scripts/hashes.py")).read())
+        write(os.path.join(self.dst, "data/gpu/stray/manifest.json"), "{}")
+        subprocess.run(["bash", os.path.join(ROOT, "scripts/mirror.sh"), self.src, self.dst], check=True,
+                       capture_output=True)
+        self.assertEqual(os.listdir(os.path.join(self.dst, "data/hashes/gpu")), ["2026-10-24-0620.sha256"])
+        self.assertFalse(os.path.exists(os.path.join(self.dst, "data/gpu")), "GPU replies must never be public")
+        self.assertTrue(os.path.exists(os.path.join(self.dst, "gpu_sources.json")))
+        manifest = os.path.join(self.dst, "data/hashes/gpu/2026-10-24-0620.sha256")
+        result = subprocess.run(["sha256sum", "-c", manifest], cwd=self.src, capture_output=True, text=True)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

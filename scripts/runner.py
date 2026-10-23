@@ -14,6 +14,10 @@ place and no job can be stopped by another's failure, or by GitHub's.
                                         procedure once a day, at an hour chosen
                                         at random each day, for research only
                                         (D28); every other hour it does nothing
+    python3 scripts/runner.py gpu       a reading of GPU-hour prices by hand,
+                                        pushed to Hunterson-raw (D36). The
+                                        census and window jobs each take one
+                                        a day themselves, after their own work
     python3 scripts/runner.py check     checks the set-up and says what it
                                         finds, including that the server may
                                         push to Hunterson-raw; changes nothing
@@ -36,6 +40,11 @@ What it guarantees.
 - Readings outside the window go to data/offwindow/DATE-HHMM/, which the
   assessor never reads. The random hour is never 13:00 or 14:00 UTC, so a
   reading cannot overlap the window.
+- GPU-hour prices (scripts/gpuprices.py, decision D36) are read after the
+  census, as the "morning" reading, and after the window's files are pushed,
+  as the "window" reading, into data/gpu/DATE-HHMM/, and pushed separately.
+  They come last on purpose: whatever happens to them, the census, its alarm
+  and the window are already done, and their exit codes are unchanged.
 
 Files on the server, under /root unless RUNNER_HOME says otherwise:
 
@@ -67,6 +76,7 @@ PY = sys.executable or "python3"
 
 PROBE_LIMIT = 58 * 60          # seconds; the probe itself stops starting requests at 50 minutes
 CENSUS_LIMIT = 40 * 60
+GPU_LIMIT = 10 * 60
 STEP_LIMIT = 10 * 60
 PUSH_ATTEMPTS = 4
 RANDOM_EXCLUDED_HOURS = (13, 14)   # never overlap the 14:00 to 15:00 window
@@ -228,7 +238,44 @@ def ping(url, what):
 
 # Jobs ---------------------------------------------------------------------
 
+def gpu_folders():
+    base = os.path.join(REPO, "data", "gpu")
+    return {n for n in os.listdir(base) if not n.startswith(".")} if os.path.isdir(base) else set()
+
+
+def job_gpu(keys, slot="manual"):
+    """A reading of GPU-hour prices (D36), pushed on its own."""
+    before = gpu_folders()
+    env = dict(os.environ)
+    env.update(keys)
+    env["GPU_TRIGGER"] = "server"
+    code = run([PY, "scripts/gpuprices.py", "--slot", slot], GPU_LIMIT, env)
+    new = sorted(gpu_folders() - before)
+    if not new:
+        if code != 0:
+            log("GPU prices: no reading written")
+        return 0 if code == 0 else 1
+    ok = commit_push([os.path.join("data", "gpu", n) for n in new],
+                     f"GPU prices {', '.join(new)}, {slot} (server)")
+    return 0 if ok and code == 0 else 1
+
+
+def gpu_after(keys, slot):
+    """Takes the slot's GPU price reading after another job's work is done.
+    Never raises, and never changes that job's exit code."""
+    try:
+        job_gpu(keys, slot)
+    except Exception as e:
+        log(f"GPU prices FAILED: {type(e).__name__}: {e}")
+
+
 def job_census(keys):
+    code = census_only(keys)
+    gpu_after(keys, "morning")
+    return code
+
+
+def census_only(keys):
     day = utc_now().strftime("%Y-%m-%d")
     folder = os.path.join("data", "census", day)
     marker = os.path.join(REPO, folder, "models.json")
@@ -293,6 +340,7 @@ def job_window(keys):
     if not os.path.exists(os.path.join(REPO, folder, "manifest.json")):
         log("the probe did not finish (no manifest); pushing what it wrote")
     ok = commit_push([folder], f"Probes {day} (server)")
+    gpu_after(keys, "window")
     return 0 if ok and code == 0 else 1
 
 
@@ -406,11 +454,19 @@ def job_check(keys):
     state = read_state(os.path.join(STATE, "random-hour.json"))
     print("Random hour: " + ("chosen for " + state["date"] + (", done" if state.get("done") else ", not yet run")
                              if state else "not yet chosen"))
+    try:
+        with open(os.path.join(REPO, "gpu_sources.json")) as f:
+            sources = json.load(f)["sources"]
+        print("GPU prices (D36): " + "; ".join(
+            f"{s['provider']} " + ("enabled" if s.get("enabled") else "not enabled") +
+            (", key set" if keys.get(s.get("key_env")) else ", no key") for s in sources))
+    except (OSError, ValueError, KeyError):
+        print("GPU prices (D36): gpu_sources.json not found")
     return 0
 
 
 JOBS = {"census": job_census, "window": job_window, "weekend": job_weekend,
-        "random": job_random, "check": job_check}
+        "random": job_random, "gpu": job_gpu, "check": job_check}
 
 
 def main(argv):

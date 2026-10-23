@@ -51,6 +51,26 @@ with open(os.path.join(out, "meta.json"), "w") as f:
     json.dump({"trigger": os.environ.get("GITHUB_EVENT_NAME") or os.environ.get("CENSUS_TRIGGER") or "manual"}, f)
 '''
 
+STUB_GPU = r'''
+import datetime as dt, json, os, sys
+now = dt.datetime.fromisoformat(os.environ["RUNNER_NOW"])
+if os.environ.get("STUB_GPU_CRASH"):
+    print("stub gpu broke")
+    sys.exit(1)
+slot = sys.argv[sys.argv.index("--slot") + 1]
+base = os.path.join("data", "gpu")
+day = now.strftime("%Y-%m-%d")
+for name in (os.listdir(base) if os.path.isdir(base) else []):
+    if name.startswith(day) and json.load(open(os.path.join(base, name, "manifest.json")))["slot"] == slot != "manual":
+        print("already taken")
+        sys.exit(0)
+out = os.path.join(base, now.strftime("%Y-%m-%d-%H%M"))
+os.makedirs(out, exist_ok=True)
+with open(os.path.join(out, "manifest.json"), "w") as f:
+    json.dump({"slot": slot, "trigger": os.environ.get("GPU_TRIGGER"),
+               "key_seen": bool(os.environ.get("NOVITA_API_KEY"))}, f)
+'''
+
 STUB_TRACK = r'''
 import os
 os.makedirs(os.path.join("data", "site"), exist_ok=True)
@@ -107,7 +127,8 @@ class RunnerTests(unittest.TestCase):
         os.makedirs(os.path.join(self.repo, "scripts"))
         shutil.copy(os.path.join(ROOT, "scripts", "runner.py"), os.path.join(self.repo, "scripts"))
         for name, text in (("probe.py", STUB_PROBE), ("census.py", STUB_CENSUS),
-                           ("rank.py", "print('ranked')\n"), ("track.py", STUB_TRACK)):
+                           ("rank.py", "print('ranked')\n"), ("track.py", STUB_TRACK),
+                           ("gpuprices.py", STUB_GPU)):
             with open(os.path.join(self.repo, "scripts", name), "w") as f:
                 f.write(text)
         git(self.repo, "add", "-A")
@@ -115,7 +136,8 @@ class RunnerTests(unittest.TestCase):
         git(self.repo, "push", "-q", "origin", "HEAD:main")
         git(self.repo, "branch", "-q", "--set-upstream-to=origin/main")
         with open(os.path.join(self.home, "keys.env"), "w") as f:
-            f.write("# keys\nOPENROUTER_API_KEY=test-key\nexport HEALTHCHECK_CENSUS='%s'\n" % self.ping_url)
+            f.write("# keys\nOPENROUTER_API_KEY=test-key\nexport HEALTHCHECK_CENSUS='%s'\n"
+                    "NOVITA_API_KEY=novita-test-key\n" % self.ping_url)
 
     def tearDown(self):
         shutil.rmtree(self.tmp)
@@ -228,6 +250,49 @@ class RunnerTests(unittest.TestCase):
         late = runner.choose_random(dt.datetime(2026, 10, 20, 17, 30), rng)
         self.assertGreaterEqual(late["hour"], 17)
         self.assertEqual(runner.choose_random(dt.datetime(2026, 10, 20, 23, 30), rng)["hour"], 23)
+
+    def test_census_is_followed_by_the_morning_gpu_reading(self):
+        r = self.run_job("census", "2026-10-20T06:15:00")
+        self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+        log = self.remote_log().splitlines()
+        self.assertIn("GPU prices 2026-10-20-0615, morning (server)", log)
+        self.assertLess(log.index("GPU prices 2026-10-20-0615, morning (server)"),
+                        log.index("Census 2026-10-20 (server)"), "the census is pushed first")
+        m = json.loads(git(self.remote, "show", "main:data/gpu/2026-10-20-0615/manifest.json"))
+        self.assertEqual((m["slot"], m["trigger"], m["key_seen"]), ("morning", "server", True))
+        self.assertEqual(Pings.count, 1)
+        again = self.run_job("census", "2026-10-20T09:00:00")
+        self.assertEqual(again.returncode, 0)
+        self.assertEqual(self.remote_log().count("GPU prices"), 1, "one morning reading a day")
+
+    def test_a_gpu_failure_changes_nothing_for_the_census(self):
+        r = self.run_job("census", "2026-10-20T06:15:00", STUB_GPU_CRASH="1")
+        self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+        self.assertIn("Census 2026-10-20 (server)", self.remote_log())
+        self.assertNotIn("GPU prices", self.remote_log())
+        self.assertIn("GPU prices: no reading written", r.stdout)
+        self.assertEqual(Pings.count, 1)
+
+    def test_a_failed_census_still_takes_the_gpu_reading(self):
+        r = self.run_job("census", "2026-10-20T06:15:00", STUB_CENSUS_CRASH="1")
+        self.assertEqual(r.returncode, 1)
+        self.assertIn("GPU prices 2026-10-20-0615, morning (server)", self.remote_log())
+        self.assertEqual(Pings.count, 0)
+
+    def test_window_is_followed_by_the_window_gpu_reading(self):
+        r = self.run_job("window", "2026-10-20T14:05:00")
+        self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+        log = self.remote_log().splitlines()
+        self.assertLess(log.index("GPU prices 2026-10-20-1405, window (server)"),
+                        log.index("Probes 2026-10-20 (server)"), "the probe's files are pushed first")
+        crash = self.run_job("window", "2026-10-21T14:05:00", STUB_GPU_CRASH="1")
+        self.assertEqual(crash.returncode, 0, "a GPU failure never fails the window")
+        self.assertIn("Probes 2026-10-21 (server)", self.remote_log())
+
+    def test_gpu_reading_by_hand(self):
+        r = self.run_job("gpu", "2026-10-20T11:30:00")
+        self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+        self.assertIn("GPU prices 2026-10-20-1130, manual (server)", self.remote_log())
 
     def test_keys_file_is_read_without_quotes_or_export(self):
         keys = runner.read_keys(os.path.join(self.home, "keys.env"))

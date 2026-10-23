@@ -1,0 +1,71 @@
+{
+  "about": "GPU-hour prices for the derived series (decision D36, rule 1.16). Each source is a GPU cloud's own customer API, read with the project's own key at most twice a day: after the census and after the window. The responses are kept privately in data/gpu/ and fingerprinted; only figures derived from them are published. Never an input to the assessment, and never published as a GPU price index. A source runs only when it is enabled here and its key is in /root/keys.env; otherwise it is recorded as skipped. A source is enabled only after its terms have been read, by pull request.",
+  "gpus_of_interest": ["H100", "H200", "B200"],
+  "sources": [
+    {
+      "id": "novita",
+      "provider": "Novita",
+      "in_panel": true,
+      "enabled": true,
+      "parser": "novita",
+      "key_env": "NOVITA_API_KEY",
+      "requests": [
+        {"name": "instances", "url": "https://api.novita.ai/gpus/v2/products?type=gpu&category=instance", "paginate": "cursor"}
+      ],
+      "terms": {
+        "read": "2026-10-23",
+        "basis": "Novita's documented customer API for listing GPU products, with on-demand, spot and prepaid prices and stock level, read with the account's own key. Its terms (updated 5 August 2026) forbid automated scraping of the Site, section 3(5), and commercial use of Site content without permission, section 2; neither addresses its API. The responses are kept private; only derived figures are published, as with the census (D17).",
+        "docs": "https://docs.novita.ai/api-reference/gpus-v2-list-products"
+      }
+    },
+    {
+      "id": "deepinfra",
+      "provider": "DeepInfra",
+      "in_panel": true,
+      "enabled": true,
+      "parser": "deepinfra",
+      "key_env": "DEEPINFRA_API_KEY",
+      "requests": [
+        {"name": "gpu-availability", "url": "https://api.deepinfra.com/v1/containers/gpu_availability"}
+      ],
+      "terms": {
+        "read": "2026-10-23",
+        "basis": "DeepInfra's documented customer API for GPU rental availability and price per hour, read with the account's own key. Its terms (15 October 2026) list pricing as confidential information, section 17(a), except information generally available to the public, section 17(c); its GPU prices are on its public pricing page. Section 7(a) forbids distributing its content, so the responses are kept private and only derived figures are published.",
+        "docs": "https://docs.deepinfra.com/api-reference/gpu-rentals/rent-gpu-availability"
+      }
+    },
+    {
+      "id": "runpod",
+      "provider": "RunPod",
+      "in_panel": false,
+      "enabled": false,
+      "parser": "runpod",
+      "key_env": "RUNPOD_API_KEY",
+      "requests": [
+        {"name": "secure", "url": "https://api.runpod.io/v2/catalog/gpus?include=AVAILABILITY&product=POD&cloud=SECURE"},
+        {"name": "community", "url": "https://api.runpod.io/v2/catalog/gpus?include=AVAILABILITY&product=POD&cloud=COMMUNITY"}
+      ],
+      "terms": {
+        "read": null,
+        "basis": "Not yet read. Optional: a marketplace with secure and community prices and stock by data centre. Needs a RunPod account opened with the project mailbox, its terms read, and this source enabled by pull request.",
+        "docs": "https://docs.runpod.io/api-reference-v2/catalog/list-gpu-types"
+      }
+    },
+    {
+      "id": "lambda",
+      "provider": "Lambda",
+      "in_panel": false,
+      "enabled": false,
+      "parser": "lambda",
+      "key_env": "LAMBDA_API_KEY",
+      "requests": [
+        {"name": "instance-types", "url": "https://cloud.lambda.ai/api/v1/instance-types"}
+      ],
+      "terms": {
+        "read": null,
+        "basis": "Not yet read. Optional: a large neocloud's list prices and the regions with capacity. Needs a Lambda account opened with the project mailbox, its terms read, the address confirmed with --test, and this source enabled by pull request.",
+        "docs": "https://docs.lambda.ai/api/cloud"
+      }
+    }
+  ]
+}

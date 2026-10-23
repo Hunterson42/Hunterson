@@ -10,7 +10,7 @@ The census has run every day since 11 September 2026. It records which providers
 
 ## Raw files and fingerprints
 
-The raw files, meaning the census, the probe's listing snapshots and test records, and the rehearsals, are OpenRouter's responses. They are kept in a private repository and are not published here.
+The raw files, meaning the census, the probe's listing snapshots and test records, and the rehearsals, are OpenRouter's responses. They are kept in a private repository and are not published here. The same holds for the GPU-hour price readings taken twice a day since October 2026 for the derived series, which are GPU clouds' responses; their sources are listed in `gpu_sources.json`.
 
 Each day's raw files are fingerprinted with SHA-256, and the fingerprints are published in `data/hashes/`, one file per day, in the format of `sha256sum`. A fingerprint file is written once. Anyone later shown a raw file can check, with `sha256sum -c` from the repository root, that it has not changed since its fingerprint was published.
 
@@ -49,6 +49,7 @@ openssl ts -reply -in data/hashes/probes/2026-10-20.sha256.tsr -text
 | `data/site/` | Small data files the site reads |
 | `candidates.json` | The grades, the candidate models, their accepted precision tags, and which is the reference |
 | `affiliations.json` | The register of provider groups: providers that resell one source or share an owner count as one. Each group with its public evidence and the day it applies from |
+| `gpu_sources.json` | The GPU clouds whose GPU-hour prices are read for the derived series, and why each may be read. Never an input to the assessment |
 | `METHODOLOGY.md` | How the number is produced, step by step. Version 0.9, open for comment |
 | `LICENCE-DATA.md` | The Hunterson Data Licence: the terms on which the figures may be used |
 | `notes/selection.md` | Every rule and decision, dated, with the reasons |
