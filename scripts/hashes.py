@@ -3,9 +3,9 @@ Fingerprints of the raw files and of the assessments.
 
 The raw files are the census, the probe's listing snapshots and request
 records, the rehearsals, the readings taken outside the window for research
-(decision D28), and the GPU-hour price readings (decision D36). They are
-OpenRouter's and the GPU clouds' responses, so they are kept in the private
-repository and not published. This script writes one SHA-256
+(decision D28), the GPU-hour price readings (decision D36) and OpenRouter's
+market data (decision D38). They are OpenRouter's and the GPU clouds'
+responses, so they are kept in the private repository and not published. This script writes one SHA-256
 manifest per day into the public record, so that anyone shown a raw file later
 can check that it existed on that day and has not changed since.
 
@@ -13,7 +13,7 @@ Usage, from anywhere:
     python3 scripts/hashes.py SOURCE_ROOT TARGET_ROOT
 
 SOURCE_ROOT is a checkout holding data/census, data/probes, data/rehearsals,
-data/offwindow and data/gpu.
+data/offwindow, data/gpu and data/market.
 TARGET_ROOT is the checkout that receives data/hashes. They can be the same.
 
 Each manifest uses the format of `sha256sum`, with paths relative to the
@@ -25,9 +25,9 @@ publishes nothing, because a raw file has changed and that must never happen
 silently.
 
 A day is fingerprinted only once it is complete: a census day once its
-models.json exists, a probe day, rehearsal, off-window reading or GPU price
-reading once its manifest.json exists. Hidden folders, such as a GPU price
-reading still being assembled, are never fingerprinted.
+models.json exists, a probe day, rehearsal, off-window reading, GPU price
+reading or market data reading once its manifest.json exists. Hidden folders,
+such as a reading still being assembled, are never fingerprinted.
 
 The assessments in data/assessments are fingerprinted one file at a time, into
 data/hashes/assessments/DATE/SLUG.sha256 (decision D33). The assessor writes
@@ -48,6 +48,7 @@ CLASSES = [
     ("rehearsals", "manifest.json"),
     ("offwindow", "manifest.json"),
     ("gpu", "manifest.json"),          # GPU-hour price readings, from October 2026 (D36)
+    ("market", "manifest.json"),       # OpenRouter's market data, from October 2026 (D38)
 ]
 
 

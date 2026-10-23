@@ -564,6 +564,73 @@ problem, in case a provider's scale changes.
 - **The spot discount:** spot against on-demand, and the stock levels at the
   two readings, as evidence of idle capacity
 
+### 1.17 Market data from OpenRouter's Data API (D38)
+
+Recorded 23 October 2026. Never an input to the assessment.
+
+**The rule.** Once a day, after the census and its GPU reading, the London
+server reads OpenRouter's published Data API with the project's own key, into
+`data/market/DATE-HHMM/`, written once, kept privately and fingerprinted like
+the census. What is read is in `market_sources.json`:
+
+- **Every day:** tokens bought each day by model (the top 50 and one row for
+  the rest); the same for requests that call tools; the same for each length
+  of request, from 1,000 to 10 million tokens; and the share of traffic by
+  task over the trailing seven days. The daily rankings cover the last four
+  completed days, so readings overlap, a missed day is filled by the next, and
+  any figure OpenRouter restates is caught
+- **In the first reading of each week:** the top 200 apps by tokens over the
+  previous week, and the top 100 in each of fifteen subcategories, which says
+  which apps are agents; the median cost of an agent session, by harness,
+  model and number of turns, every page; and the benchmark scores the API
+  serves
+- **Once:** the history the API still serves, from 1 January 2025: the daily
+  rankings by calendar year and the app rankings by calendar month
+
+**Why now.** Three of the datasets are served only as they stand: the task
+shares over the trailing week, the session costs and the benchmark scores. A
+reading not taken is lost. The rankings are served back to 1 January 2025
+today; the backfill keeps a copy under the licence in case that changes.
+
+**The licence.** OpenRouter's documentation, read on 23 October 2026, states
+that the data is licensed under CC BY 4.0, may be copied, redistributed and
+built on, including commercially, with attribution, is intended for analysis,
+reporting and visualisation, and is not intended to be re-served as a
+competing free API. It is read through the API OpenRouter publishes for it, so
+this is not the scripted reading of its listings for which written permission
+was requested (D20). The responses are still kept privately,
+as the census is (D17), and any figure derived from them is published with
+"Source: OpenRouter (openrouter.ai/rankings), as of {as_of}. Licensed under CC
+BY 4.0.", with the as_of date the response gives. The benchmark scores are
+Artificial Analysis's, Design Arena's and OpenRouter's own, and are cited to
+each source as the response names it.
+
+**Limits.** 30 requests a minute per key and 500 a day per account. A daily
+reading makes 8 requests and the first of the week up to about 37; the
+backfill about 370, once. Requests are spaced 2.5 seconds apart, and a reading
+stops early if five requests in a row are refused.
+
+**What it is not.** OpenRouter is one venue, and its customers lean towards
+developers and coding agents, so its shares describe its own customers, not
+the whole market, and are labelled so wherever they are used. Token counts use
+each provider's own tokenizer, so they are not exactly comparable across
+models.
+
+**How it will be used.**
+
+- **Volume beside price:** which models are bought, not only offered, and how
+  much; an early sign of a challenger to the reference
+- **The agent share:** tokens in requests that call tools, and in agent apps,
+  as a share of all tokens
+- **How typical the test job is:** the test job is about 8,000 tokens; the
+  rankings by length of request show what share of the market's tokens sit in
+  requests of that size
+- **The cost of agent work:** the median cost of an agent session, set against
+  the benchmark scores, for commentary on what a unit of agent work costs
+- **Capability at a change of reference:** the benchmark scores of the old and
+  new reference on the day, so the published conversion ratio can be read
+  beside the difference in capability
+
 ---
 
 ## 2. Daily tracking

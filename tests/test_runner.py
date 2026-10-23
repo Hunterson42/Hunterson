@@ -71,6 +71,26 @@ with open(os.path.join(out, "manifest.json"), "w") as f:
                "key_seen": bool(os.environ.get("NOVITA_API_KEY"))}, f)
 '''
 
+STUB_MARKET = r'''
+import datetime as dt, json, os, sys
+now = dt.datetime.fromisoformat(os.environ["RUNNER_NOW"])
+if os.environ.get("STUB_MARKET_CRASH"):
+    print("stub market broke")
+    raise RuntimeError("stub market broke")
+slot = "backfill" if "--backfill" in sys.argv else sys.argv[sys.argv.index("--slot") + 1]
+base = os.path.join("data", "market")
+day = now.strftime("%Y-%m-%d")
+for name in (os.listdir(base) if os.path.isdir(base) else []):
+    if name.startswith(day) and json.load(open(os.path.join(base, name, "manifest.json")))["slot"] == slot == "morning":
+        print("already taken")
+        sys.exit(0)
+out = os.path.join(base, now.strftime("%Y-%m-%d-%H%M"))
+os.makedirs(out, exist_ok=True)
+with open(os.path.join(out, "manifest.json"), "w") as f:
+    json.dump({"slot": slot, "trigger": os.environ.get("MARKET_TRIGGER"),
+               "key_seen": bool(os.environ.get("OPENROUTER_API_KEY"))}, f)
+'''
+
 STUB_TRACK = r'''
 import os
 os.makedirs(os.path.join("data", "site"), exist_ok=True)
@@ -128,7 +148,7 @@ class RunnerTests(unittest.TestCase):
         shutil.copy(os.path.join(ROOT, "scripts", "runner.py"), os.path.join(self.repo, "scripts"))
         for name, text in (("probe.py", STUB_PROBE), ("census.py", STUB_CENSUS),
                            ("rank.py", "print('ranked')\n"), ("track.py", STUB_TRACK),
-                           ("gpuprices.py", STUB_GPU)):
+                           ("gpuprices.py", STUB_GPU), ("marketdata.py", STUB_MARKET)):
             with open(os.path.join(self.repo, "scripts", name), "w") as f:
                 f.write(text)
         git(self.repo, "add", "-A")
@@ -294,6 +314,43 @@ class RunnerTests(unittest.TestCase):
         self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
         self.assertIn("GPU prices 2026-10-20-1130, manual (server)", self.remote_log())
 
+    def test_census_is_followed_by_the_gpu_reading_then_the_market_data(self):
+        r = self.run_job("census", "2026-10-20T06:15:00")
+        self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+        log = self.remote_log().splitlines()
+        self.assertEqual(log[:3], ["Market data 2026-10-20-0615, morning (server)",
+                                   "GPU prices 2026-10-20-0615, morning (server)",
+                                   "Census 2026-10-20 (server)"], "the census first, then GPU prices, then market data")
+        m = json.loads(git(self.remote, "show", "main:data/market/2026-10-20-0615/manifest.json"))
+        self.assertEqual((m["slot"], m["trigger"], m["key_seen"]), ("morning", "server", True))
+        again = self.run_job("census", "2026-10-20T09:00:00")
+        self.assertEqual(again.returncode, 0)
+        self.assertEqual(self.remote_log().count("Market data"), 1, "one morning reading a day")
+
+    def test_a_market_data_failure_changes_nothing_for_the_census(self):
+        r = self.run_job("census", "2026-10-20T06:15:00", STUB_MARKET_CRASH="1")
+        self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+        self.assertIn("Census 2026-10-20 (server)", self.remote_log())
+        self.assertIn("GPU prices 2026-10-20-0615, morning (server)", self.remote_log())
+        self.assertNotIn("Market data", self.remote_log())
+        self.assertIn("market data: no reading written", r.stdout)
+        self.assertEqual(Pings.count, 1)
+
+    def test_the_window_takes_no_market_data(self):
+        r = self.run_job("window", "2026-10-20T14:05:00")
+        self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+        self.assertNotIn("Market data", self.remote_log())
+
+    def test_market_data_by_hand_and_the_backfill(self):
+        r = self.run_job("market", "2026-10-20T11:30:00")
+        self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+        self.assertIn("Market data 2026-10-20-1130, manual (server)", self.remote_log())
+        b = self.run_job("market-backfill", "2026-10-20T19:00:00")
+        self.assertEqual(b.returncode, 0, b.stdout + b.stderr)
+        self.assertIn("Market data 2026-10-20-1900, backfill (server)", self.remote_log())
+        m = json.loads(git(self.remote, "show", "main:data/market/2026-10-20-1900/manifest.json"))
+        self.assertEqual(m["slot"], "backfill")
+
     def test_keys_file_is_read_without_quotes_or_export(self):
         keys = runner.read_keys(os.path.join(self.home, "keys.env"))
         self.assertEqual(keys["OPENROUTER_API_KEY"], "test-key")
@@ -308,6 +365,7 @@ class RunnerTests(unittest.TestCase):
         self.assertIn("Permission to push: yes", r.stdout)
         self.assertIn("Commits here not yet pushed: 0", r.stdout)
         self.assertNotIn("test-key", r.stdout)
+        self.assertIn("Market data (D38): market_sources.json not found", r.stdout)
         self.assertEqual(git(self.repo, "status", "--porcelain"), before)
 
 

@@ -1,0 +1,89 @@
+{
+  "about": "Market data for the derived series and for commentary (decision D38, rule 1.17): how many tokens are bought, of which models, through which apps, for which tasks, at what cost per agent session, and at what benchmark scores. Read once a day, after the census, through OpenRouter's published Data API with the project's own key. The responses are kept privately in data/market/ and fingerprinted; only figures derived from them are published, with OpenRouter's citation. Never an input to the assessment. A source runs only when it is enabled here and its key is in /root/keys.env.",
+  "data_start": "2025-01-01",
+  "sources": [
+    {
+      "id": "openrouter",
+      "provider": "OpenRouter",
+      "enabled": true,
+      "key_env": "OPENROUTER_API_KEY",
+      "base_url": "https://openrouter.ai/api/v1",
+      "pace_seconds": 2.5,
+      "datasets": [
+        {
+          "name": "rankings",
+          "path": "/datasets/rankings-daily",
+          "every": "day",
+          "dates": "recent",
+          "backfill": "years",
+          "why": "Tokens bought each day, by model: the top 50 models and one row for all others. The quantity beside the price."
+        },
+        {
+          "name": "rankings-tool-calling",
+          "path": "/datasets/rankings-daily",
+          "params": {"modality": "tool_calling"},
+          "every": "day",
+          "dates": "recent",
+          "backfill": "years",
+          "why": "Tokens in requests that called tools, by model: the share of the market doing agent work."
+        },
+        {
+          "name": "rankings-context",
+          "path": "/datasets/rankings-daily",
+          "each": {"context_bucket": ["1K", "10K", "100K", "1M", "10M"]},
+          "every": "day",
+          "dates": "recent",
+          "backfill": "years",
+          "why": "Tokens by length of request. Agents carry long contexts; the test job is about 8,000 tokens, so this shows how typical it is."
+        },
+        {
+          "name": "tasks",
+          "path": "/classifications/task",
+          "params": {"window": "7d"},
+          "every": "day",
+          "why": "Share of traffic by task over the trailing seven days. Only the current window is served, so a day not read is lost."
+        },
+        {
+          "name": "apps",
+          "path": "/datasets/app-rankings",
+          "params": {"sort": "popular", "limit": 100},
+          "pages": {"offset_step": 100, "max_offset": 100},
+          "every": "week",
+          "dates": "last-week",
+          "backfill": "months",
+          "why": "The top 200 apps by tokens over the previous week."
+        },
+        {
+          "name": "apps",
+          "path": "/datasets/app-rankings",
+          "params": {"sort": "popular", "limit": 100},
+          "each": {"subcategory": ["cli-agent", "ide-extension", "cloud-agent", "programming-app", "native-app-builder", "personal-agent", "general-chat", "writing-assistant", "creative-writing", "roleplay", "game", "image-gen", "video-gen", "audio-gen", "legal"]},
+          "every": "week",
+          "dates": "last-week",
+          "backfill": "months",
+          "why": "The top 100 apps in each subcategory over the previous week, which says which apps are agents."
+        },
+        {
+          "name": "session-cost",
+          "path": "/datasets/session-cost",
+          "params": {"limit": 500},
+          "pages": {"offset_step": 500, "max_offset": 5000},
+          "every": "week",
+          "why": "Median cost of one agent session, by harness, model and number of turns. A weekly snapshot only, so a week not read is lost."
+        },
+        {
+          "name": "benchmarks",
+          "path": "/benchmarks",
+          "every": "week",
+          "why": "Benchmark scores from Artificial Analysis, Design Arena and OpenRouter, beside each model's price. Current scores only, so a week not read is lost. Used to adjust a change of reference for capability."
+        }
+      ],
+      "terms": {
+        "read": "2026-10-23",
+        "basis": "OpenRouter's published Data API, read with the project's own key. Its page states that the data is licensed under CC BY 4.0, so it may be copied, redistributed and built on, including commercially, with attribution to OpenRouter; that it is intended for analysis, reporting and visualisation; and that it is not intended to be re-served as a competing free API. Limits: 30 requests a minute per key and 500 a day per account. The responses are kept private, as the census is (D17); derived figures are published with OpenRouter's citation, its as_of date and 'Licensed under CC BY 4.0.'. The benchmark scores are Artificial Analysis's, Design Arena's and OpenRouter's, each cited to its source as the response names it.",
+        "docs": "https://openrouter.ai/docs/cookbook/administration/data-api",
+        "citation": "Source: OpenRouter (openrouter.ai/rankings), as of {as_of}. Licensed under CC BY 4.0."
+      }
+    }
+  ]
+}

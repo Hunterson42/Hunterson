@@ -18,6 +18,13 @@ place and no job can be stopped by another's failure, or by GitHub's.
                                         pushed to Hunterson-raw (D36). The
                                         census and window jobs each take one
                                         a day themselves, after their own work
+    python3 scripts/runner.py market    a reading of OpenRouter's market data
+                                        by hand, pushed (D38). The census job
+                                        takes one a day itself, last of all
+    python3 scripts/runner.py market-backfill
+                                        once only: the market data history the
+                                        Data API still serves, from 1 January
+                                        2025, pushed. Takes about 20 minutes
     python3 scripts/runner.py check     checks the set-up and says what it
                                         finds, including that the server may
                                         push to Hunterson-raw; changes nothing
@@ -45,6 +52,10 @@ What it guarantees.
   as the "window" reading, into data/gpu/DATE-HHMM/, and pushed separately.
   They come last on purpose: whatever happens to them, the census, its alarm
   and the window are already done, and their exit codes are unchanged.
+- OpenRouter's market data (scripts/marketdata.py, decision D38) is read once
+  a day after the census and its GPU reading, into data/market/DATE-HHMM/,
+  and pushed separately, on the same terms: it never changes the census job's
+  exit code.
 
 Files on the server, under /root unless RUNNER_HOME says otherwise:
 
@@ -77,6 +88,8 @@ PY = sys.executable or "python3"
 PROBE_LIMIT = 58 * 60          # seconds; the probe itself stops starting requests at 50 minutes
 CENSUS_LIMIT = 40 * 60
 GPU_LIMIT = 10 * 60
+MARKET_LIMIT = 15 * 60
+BACKFILL_LIMIT = 45 * 60
 STEP_LIMIT = 10 * 60
 PUSH_ATTEMPTS = 4
 RANDOM_EXCLUDED_HOURS = (13, 14)   # never overlap the 14:00 to 15:00 window
@@ -269,9 +282,47 @@ def gpu_after(keys, slot):
         log(f"GPU prices FAILED: {type(e).__name__}: {e}")
 
 
+def market_folders():
+    base = os.path.join(REPO, "data", "market")
+    return {n for n in os.listdir(base) if not n.startswith(".")} if os.path.isdir(base) else set()
+
+
+def job_market(keys, slot="manual", backfill=False):
+    """A reading of OpenRouter's market data (D38), pushed on its own."""
+    before = market_folders()
+    env = dict(os.environ)
+    env.update(keys)
+    env["MARKET_TRIGGER"] = "server"
+    args = ["--backfill"] if backfill else ["--slot", slot]
+    code = run([PY, "scripts/marketdata.py"] + args, BACKFILL_LIMIT if backfill else MARKET_LIMIT, env)
+    new = sorted(market_folders() - before)
+    if not new:
+        if code != 0:
+            log("market data: no reading written")
+        return 0 if code == 0 else 1
+    label = "backfill" if backfill else slot
+    ok = commit_push([os.path.join("data", "market", n) for n in new],
+                     f"Market data {', '.join(new)}, {label} (server)")
+    return 0 if ok and code == 0 else 1
+
+
+def job_market_backfill(keys):
+    return job_market(keys, backfill=True)
+
+
+def market_after(keys):
+    """Takes the day's market data reading after the census and its GPU
+    reading. Never raises, and never changes the census job's exit code."""
+    try:
+        job_market(keys, "morning")
+    except Exception as e:
+        log(f"market data FAILED: {type(e).__name__}: {e}")
+
+
 def job_census(keys):
     code = census_only(keys)
     gpu_after(keys, "morning")
+    market_after(keys)
     return code
 
 
@@ -462,11 +513,22 @@ def job_check(keys):
             (", key set" if keys.get(s.get("key_env")) else ", no key") for s in sources))
     except (OSError, ValueError, KeyError):
         print("GPU prices (D36): gpu_sources.json not found")
+    try:
+        with open(os.path.join(REPO, "market_sources.json")) as f:
+            sources = json.load(f)["sources"]
+        latest = max(market_folders(), default=None)
+        print("Market data (D38): " + "; ".join(
+            f"{s['provider']} " + ("enabled" if s.get("enabled") else "not enabled") +
+            (", key set" if keys.get(s.get("key_env")) else ", no key") for s in sources) +
+            f"; latest reading {latest or 'none yet'}")
+    except (OSError, ValueError, KeyError):
+        print("Market data (D38): market_sources.json not found")
     return 0
 
 
 JOBS = {"census": job_census, "window": job_window, "weekend": job_weekend,
-        "random": job_random, "gpu": job_gpu, "check": job_check}
+        "random": job_random, "gpu": job_gpu, "market": job_market,
+        "market-backfill": job_market_backfill, "check": job_check}
 
 
 def main(argv):

@@ -158,6 +158,22 @@ class HashTests(unittest.TestCase):
         result = subprocess.run(["sha256sum", "-c", manifest], cwd=self.src, capture_output=True, text=True)
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 
+    def test_market_data_readings_are_fingerprinted_and_never_copied(self):
+        write(os.path.join(self.src, "data/market/2026-10-24-0621/manifest.json"), "{}")
+        write(os.path.join(self.src, "data/market/2026-10-24-0621/rankings.json"), "{}")
+        write(os.path.join(self.src, "data/market/.partial-abc/manifest.json"), "{}")     # still being assembled
+        write(os.path.join(self.src, "market_sources.json"), '{"sources": []}')
+        write(os.path.join(self.src, "scripts/hashes.py"), open(os.path.join(ROOT, "scripts/hashes.py")).read())
+        write(os.path.join(self.dst, "data/market/stray/manifest.json"), "{}")
+        subprocess.run(["bash", os.path.join(ROOT, "scripts/mirror.sh"), self.src, self.dst], check=True,
+                       capture_output=True)
+        self.assertEqual(os.listdir(os.path.join(self.dst, "data/hashes/market")), ["2026-10-24-0621.sha256"])
+        self.assertFalse(os.path.exists(os.path.join(self.dst, "data/market")), "market replies stay private")
+        self.assertTrue(os.path.exists(os.path.join(self.dst, "market_sources.json")))
+        manifest = os.path.join(self.dst, "data/hashes/market/2026-10-24-0621.sha256")
+        result = subprocess.run(["sha256sum", "-c", manifest], cwd=self.src, capture_output=True, text=True)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
