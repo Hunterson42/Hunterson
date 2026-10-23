@@ -23,19 +23,32 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 KEYS = {"NOVITA_API_KEY": "nov-secret-123", "DEEPINFRA_API_KEY": "di-secret-456",
         "RUNPOD_API_KEY": "rp-secret-789", "LAMBDA_API_KEY": "lam-secret-000"}
 
+# In the form Novita's reply actually took on 23 October 2026, read on the
+# server: prices in hundred-thousandths of a dollar, "precision" 10, an empty
+# unit, and prepaid prices per month for one to twelve months.
+def novita_prepaid(spec, by_months):
+    return [{"spec_id": f"monthly-gpu_instance-{spec}", "duration_months": m, "final_price": v, "base_price": v}
+            for m, v in by_months]
+
+
 NOVITA_PAGE_1 = {"data": [{
-    "id": "p-h100", "name": "1x H100 SXM 80GB", "type": "gpu", "category": "instance",
-    "resource_spec": {"gpu": {"spec_id": "h100", "name": "NVIDIA H100 SXM 80GB", "memory_gb": 80,
-                              "min": 1, "max": 8, "available": 3, "max_available": 8},
+    "id": "p-h100", "name": "H100 SXM 80GB", "type": "gpu", "category": "instance", "region_ids": ["eu-is-1"],
+    "resource_spec": {"gpu": {"spec_id": "h100", "name": "H100 SXM 80GB", "memory_gb": 80,
+                              "min": 1, "max": 8, "available": 0, "max_available": 0},
                       "cpu": 16, "memory_gb": 128},
-    "pricing": {"precision": 5, "postpaid": {"base_price": 339000, "final_price": 339000, "unit": "per_hour"},
-                "spot": {"base_price": 170000, "final_price": 170000, "unit": "per_hour"}, "prepaid": []},
-    "inventory_state": "normal", "deployable": True}], "next_cursor": "page-2"}
+    "pricing": {"precision": 10, "postpaid": {"base_price": 339000, "final_price": 339000, "unit": ""},
+                "spot": {"base_price": 170000, "final_price": 170000, "unit": ""},
+                "prepaid": novita_prepaid("H100-80GB", [(1, 228057000), (6, 213803000), (12, 201227000)]),
+                "storage_price_per_gb": 500},
+    "billing_methods": ["postpaid", "spot", "prepaid"], "inventory_state": "normal", "deployable": False,
+    "activity": {"is_activity_product": False, "active": False, "purchasable": True}}],
+    "next_cursor": "page-2", "has_more": True, "total": 2}
 NOVITA_PAGE_2 = {"data": [{
-    "id": "p-4090", "name": "1x RTX 4090 24GB",
-    "resource_spec": {"gpu": {"name": "NVIDIA GeForce RTX 4090", "memory_gb": 24, "min": 1, "max": 8}},
-    "pricing": {"precision": 5, "postpaid": {"final_price": 35000, "unit": "per_hour"}, "spot": None},
-    "inventory_state": "high"}], "next_cursor": ""}
+    "id": "p-5090", "name": "RTX 5090 32GB",
+    "resource_spec": {"gpu": {"name": "RTX 5090 32GB", "memory_gb": 32, "min": 1, "max": 8}},
+    "pricing": {"precision": 10, "postpaid": {"base_price": 73000, "final_price": 73000, "unit": ""},
+                "spot": {"base_price": 36500, "final_price": 36500, "unit": ""}, "prepaid": []},
+    "inventory_state": "none"}], "next_cursor": "", "has_more": False, "total": 2}
 DEEPINFRA = {"gpus": [{"gpu_config": "8xH100-80GB", "usd_per_hour": 19.92, "available": True},
                       {"gpu_config": "B200-180GB", "usd_per_hour": 4.49, "available": False}]}
 RUNPOD = {"gpus": [{"id": "NVIDIA H200", "name": "H200 SXM", "memory": 141,
@@ -201,7 +214,8 @@ class GpuPriceTests(unittest.TestCase):
         self.assertFalse(os.path.exists(self.gpu_dir()))
         self.assertIn("RunPod secure (not enabled)", r.stdout)
         self.assertIn("H200   on demand    $3.59", r.stdout)
-        self.assertIn("H100   on demand    $3.39  spot    $1.70  stock normal", r.stdout)
+        self.assertIn("H100   on demand    $3.39  spot    $1.70  12 months $2.76  stock normal", r.stdout)
+        self.assertNotIn("PROBLEM", r.stdout)
         self.assertIn("H100   on demand    $2.49", r.stdout)
         self.assertIn("shape: {data: [1 x {", r.stdout)
         for key in KEYS.values():
@@ -230,12 +244,34 @@ class GpuPriceTests(unittest.TestCase):
         self.run_gpu("--slot", "morning")
         r = self.run_gpu("--report", "2026-10-24-0620")
         self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
-        self.assertIn("H100     Novita          $3.39    $1.70  normal", r.stdout)
-        self.assertIn("H100     DeepInfra       $2.49        -  available", r.stdout)
-        self.assertIn("B200     DeepInfra       $4.49        -  not available", r.stdout)
-        self.assertNotIn("RTX 4090", r.stdout)
+        def line(gpu, provider, on_demand, spot, term, stock):
+            return f"{gpu:8} {provider:10} {on_demand:>10} {spot:>8} {term:>10}  {stock:18}"
+        self.assertIn(line("H100", "Novita", "$3.39", "$1.70", "$2.76", "normal"), r.stdout)
+        self.assertIn(line("H100", "DeepInfra", "$2.49", "-", "-", "available"), r.stdout)
+        self.assertIn(line("B200", "DeepInfra", "$4.49", "-", "-", "not available"), r.stdout)
+        self.assertNotIn("RTX 5090", r.stdout)
         everything = self.run_gpu("--report", "2026-10-24-0620", "--all")
-        self.assertIn("RTX 4090 Novita          $0.35", everything.stdout)
+        self.assertIn(line("RTX 5090", "Novita", "$0.73", "$0.36", "-", "none"), everything.stdout)
+
+    def test_novita_prices_are_read_in_hundred_thousandths_of_a_dollar(self):
+        sys.path.insert(0, os.path.join(ROOT, "scripts"))
+        import gpuprices
+        row = gpuprices.parse_novita(NOVITA_PAGE_1, "instances")[0]
+        self.assertAlmostEqual(row["on_demand"], 3.39)
+        self.assertAlmostEqual(row["spot"], 1.70)
+        self.assertAlmostEqual(row["term_1m"], 2280.57 / 730)
+        self.assertAlmostEqual(row["term_12m"], 2012.27 / 730)
+        self.assertIsNone(gpuprices.implausible(row))
+
+    def test_a_misread_scale_is_reported(self):
+        self.run_gpu("--slot", "morning")
+        changed = json.loads(json.dumps(NOVITA_PAGE_1))
+        changed["data"][0]["pricing"]["postpaid"]["final_price"] = 3.39      # as if sent in dollars
+        with open(self.gpu_dir("2026-10-24-0620", "novita-instances.json"), "w") as f:
+            json.dump(changed, f)
+        r = self.run_gpu("--report", "2026-10-24-0620")
+        self.assertEqual(r.returncode, 1)
+        self.assertIn("PROBLEM: novita-instances.json: H100 SXM 80GB: on demand of $0.000034", r.stdout)
 
     def test_a_reply_in_a_changed_format_is_reported_not_fatal(self):
         self.run_gpu("--slot", "morning")

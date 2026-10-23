@@ -539,6 +539,15 @@ level; DeepInfra's gives a price per GPU configuration and whether it is
 available. RunPod and Lambda are listed but not enabled: each needs an account
 opened with the project mailbox and its terms read first.
 
+Novita states its prices in hundred-thousandths of a dollar. Its H100 SXM
+read 339000 on demand and 170000 spot on 23 October, which are $3.39 and $1.70
+an hour, the prices on its public page that day. The reply's "precision"
+field, 10, is not the number of decimal places, as the documentation says, and
+is not used. Its prepaid prices are per month, read as hourly rates at 730
+hours a month, the count CME's compute futures use: $2.76 an hour for twelve
+months that day. Any price outside $0.02 to $100 a GPU-hour is reported as a
+problem, in case a provider's scale changes.
+
 **How it will be used, from January 2027.**
 
 - **Break-even jobs per GPU-hour:** a GPU-hour price divided by what one test

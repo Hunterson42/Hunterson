@@ -368,7 +368,10 @@ def describe_for_test(source, request, entry, folder):
             continue
         for r in rows[:12]:
             print(f"  {family(r['name']):6} on demand {money(r['on_demand']):>8}  spot {money(r['spot']):>8}  "
-                  f"stock {r['availability'] or '-'}  ({r['name']}, {r['gpus']} GPU, unit {r.get('unit')})")
+                  + (f"12 months {money(r['term_12m'])}  " if r.get("term_12m") else "")
+                  + f"stock {r['availability'] or '-'}  ({r['name']}, {r['gpus']} GPU, unit {r.get('unit')})")
+            if implausible(r):
+                print("  PROBLEM: " + implausible(r))
         if parser and not rows:
             print("  no H100, H200 or B200 prices found in this reply")
 
@@ -390,6 +393,15 @@ def num(value):
         return None
 
 
+# Novita states its prices in hundred-thousandths of a dollar: its H100 SXM's
+# 339000 on demand and 170000 spot are $3.39 and $1.70 an hour, the prices on
+# its public page on 23 October 2026. The reply's "precision" field, 10, is not
+# the number of decimal places the documentation says, so it is not used; a
+# price outside PLAUSIBLE is reported as a problem, in case the scale changes.
+NOVITA_DIVISOR = 100_000
+HOURS_PER_MONTH = 730          # the hours in a month, as CME's compute futures count them
+
+
 def parse_novita(obj, request):
     rows = []
     for p in (obj or {}).get("data") or []:
@@ -397,18 +409,20 @@ def parse_novita(obj, request):
         if not gpu:
             continue
         pricing = p.get("pricing") or {}
-        precision = pricing.get("precision")
-        scale = 10 ** precision if isinstance(precision, int) and 0 <= precision <= 12 else 1
 
         def price(kind):
-            leg = pricing.get(kind) or {}
-            v = num(leg.get("final_price"))
-            return (v / scale if v is not None else None), leg.get("unit")
-        on_demand, unit = price("postpaid")
-        spot, _ = price("spot")
-        rows.append({"name": gpu.get("name") or p.get("name"), "gpus": 1, "on_demand": on_demand, "spot": spot,
-                     "availability": p.get("inventory_state"), "unit": unit,
-                     "note": "price taken as per GPU-hour"})
+            v = num((pricing.get(kind) or {}).get("final_price"))
+            return v / NOVITA_DIVISOR if v is not None else None
+        terms = {}
+        for t in pricing.get("prepaid") or []:
+            months, v = t.get("duration_months"), num(t.get("final_price"))
+            if isinstance(months, int) and v is not None:
+                terms[months] = v / NOVITA_DIVISOR / HOURS_PER_MONTH     # a monthly price, as an hourly rate
+        rows.append({"name": gpu.get("name") or p.get("name"), "gpus": 1,
+                     "on_demand": price("postpaid"), "spot": price("spot"),
+                     "term_1m": terms.get(1), "term_12m": terms.get(12),
+                     "availability": p.get("inventory_state"), "unit": "per_hour",
+                     "note": "per GPU-hour; prepaid months at 730 hours"})
     return rows
 
 
@@ -471,9 +485,26 @@ def rows_from_reading(folder):
                 for r in parser(obj, e["request"]):
                     r.update({"provider": e["provider"], "source": e["source"], "family": family(r["name"])})
                     rows.append(r)
+                    odd = implausible(r)
+                    if odd:
+                        problems.append(f"{p['file']}: {r['name']}: {odd}")
             except Exception as ex:            # a changed format is reported, never fatal
                 problems.append(f"{p['file']}: {type(ex).__name__}: {ex}")
     return rows, problems
+
+
+PLAUSIBLE = (0.02, 100.0)      # US dollars per GPU-hour; anything outside means a misread scale
+
+
+def implausible(row):
+    """A price no GPU rents for means the reply's scale was misread: Novita's
+    "precision" field once turned $3.39 into $0.00."""
+    for field in ("on_demand", "spot", "term_1m", "term_12m"):
+        v = row.get(field)
+        if isinstance(v, (int, float)) and not PLAUSIBLE[0] <= v <= PLAUSIBLE[1]:
+            return f"{field.replace('_', ' ')} of ${v:.6f} per GPU-hour is outside ${PLAUSIBLE[0]} to " \
+                   f"${PLAUSIBLE[1]:.0f}; the reply's format may have changed"
+    return None
 
 
 def money(v):
@@ -490,10 +521,11 @@ def report(folder, show_all=False):
     rows.sort(key=lambda r: (r["family"] or "~", r["provider"], r["on_demand"] or 0))
     print(f"GPU prices in {os.path.basename(folder.rstrip('/'))}, US dollars per GPU-hour"
           + ("" if show_all else f", {', '.join(sorted(interest))} only"))
-    print(f"{'GPU':8} {'Provider':10} {'On demand':>10} {'Spot':>8}  {'Stock':18} As listed")
+    print(f"{'GPU':8} {'Provider':10} {'On demand':>10} {'Spot':>8} {'12 months':>10}  {'Stock':18} As listed")
     for r in rows:
-        print(f"{(r['family'] or '?'):8} {r['provider']:10} {money(r['on_demand']):>10} {money(r['spot']):>8}  "
-              f"{str(r['availability'] or '-'):18} {r['name']}" + (f" ({r['note']})" if r.get("note") else ""))
+        print(f"{(r['family'] or '?'):8} {r['provider']:10} {money(r['on_demand']):>10} {money(r['spot']):>8} "
+              f"{money(r.get('term_12m')):>10}  {str(r['availability'] or '-'):18} {r['name']}"
+              + (f" ({r['note']})" if r.get("note") else ""))
     if not rows:
         print("  none")
     for p in problems:
