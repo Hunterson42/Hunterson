@@ -2,7 +2,7 @@
 
 ## Methodology
 
-Version 0.9, draft for comment, October 2026. Amended October 2026: sections 8, 10 and 13.
+Version 0.9, draft for comment, October 2026. Amended October 2026: sections 5, 6, 7, 8, 10 and 13.
 
 This document explains, in plain language, exactly how the Hunterson Standard Inference number is produced each weekday. Anyone with the data we publish and this document should be able to reproduce the number exactly, to the published precision. If they cannot, the document is wrong and we will fix it.
 
@@ -168,7 +168,9 @@ DeepSeek V4.1-Flash became the reference before any figure was published, when t
 
 Each assessment day's panel is read from the venue's listing, saved at the start of the window. A provider is in the panel if it has at least one endpoint for the reference checkpoint at an accepted precision.
 
-Each provider gives one observation: its endpoint with the lowest listed output price at an accepted precision. [Some providers list a lower-priority tier of the same model, such as a "flex" tier, more cheaply. Whether such a tier is the same product, or is excluded in favour of the provider's standard tier, will be settled before 1.0.]
+Each provider gives one observation: its endpoint of standard priority with the lowest listed output price at an accepted precision.
+
+**Service classes.** Some providers sell the same model, at the same precision, in more than one service class: a cheaper tier that gives way to other traffic and may be queued or refused when the provider is busy, such as a "flex" tier, and a dearer tier that is served first. Such a tier is a different product from the one assessed, and is not observed, in the same way that an assessment of firm supply does not average in interruptible prices. The provider is observed through its standard endpoint; a provider that lists only such tiers at an accepted precision gives no observation that day. Each tier that is not observed is listed in `panel.json`, under `service_tiers`, with the provider's own description of it and the date from which it applies. The first is DeepInfra's: its flex tier is billed at 0.8 times its standard price and, when the model is busy, waits up to ten minutes for capacity; its priority tier is billed at 1.5 times and served first.
 
 Nobody is invited and nobody can opt out. A provider that appears on the venue at an accepted precision joins the panel that day.
 
@@ -204,7 +206,7 @@ The request is a fixed passage of about 7,600 tokens, Act 1 Scene 2 and the open
 
 The prompt file is published, and its SHA-256 hash is `140afc12e0c154fd2cb843197da5d3bc673c9e1cea6e0585236b2f41a2a8b24a`. It never changes. A day on which a different prompt was sent is not an assessment day.
 
-Only the first line differs between requests. It is a unique code, so that no provider can serve a stored copy. Any reply reporting stored (cached) input tokens is excluded. Some providers have been seen to report most of the prompt as cached even so, and to charge less for it; their replies are excluded, and the count is recorded. [Whether the test piece needs further protection against such caching will be settled before 1.0.]
+Only the first line differs between requests. It is a unique code, so that no provider can serve a stored copy. Any reply reporting stored (cached) input tokens is excluded. Some providers have been seen to report most of the prompt as cached even so, and to charge less for it; their replies are excluded, and the number excluded for this reason is recorded each day. If cached replies exclude more than a quarter of any probed panel in five windows in a row, a new test piece, with unique text throughout, will be proposed under section 12. Changing the test piece before it is needed was considered and rejected: the cause of the caching is not confirmed, and a new test piece would break comparison with the days before it.
 
 We record everything, and keep it privately:
 
@@ -232,7 +234,7 @@ A request is **completed** when it returns a reply with the provider's count of 
 
 For each provider in the panel, the tests below are applied in this order. The first test it fails is recorded as the reason, and the provider is excluded for the day.
 
-1. **Listed.** It is at an accepted precision in the listing saved at the start of the window.
+1. **Listed.** It is at an accepted precision in the listing saved at the start of the window, and was bought through an endpoint of standard priority (section 5).
 2. **Reliable.** It completed at least one request in at least 8 of the previous 10 windows. A window in which the test did not run, or did not finish, counts as a failure for every provider.
 3. **Complete.** At least two of its three requests today completed.
 4. **Correct.** Every completed request gave both correct answers as its first two lines, ignoring letter case, and was stopped by the 500-token limit.
@@ -454,6 +456,7 @@ It is not a price for output produced in Europe. See section 1.
 |---|---|---|
 | 0.9 | October 2026 | Draft published for comment |
 | 0.9, amended | October 2026 | Sections 8 and 10: timestamps built, settling the square bracket in section 10 |
+| 0.9, amended | October 2026 | Sections 5 and 7: tiers sold for lower or higher priority are not observed, settling the square bracket in section 5. Section 6: cached replies stay excluded, with a trigger for a new test piece, settling its square bracket |
 | 0.9, amended | October 2026 | Section 13: the figures under the Hunterson Data Licence in place of Creative Commons Attribution 4.0, before any figure was published |
 
 ---

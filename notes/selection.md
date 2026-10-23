@@ -470,6 +470,45 @@ registration marks the first contractual citation.
 in practice through the compliance habits of the institutions that make
 benchmark uses. A solicitor reads it before the first registration.
 
+### 1.15 Service classes, and caching (D34, D35)
+
+Recorded 22 October 2026, before methodology 1.0 is fixed and before window 9,
+the first that can produce a figure, so that the run of five shadow figures is
+made under one procedure.
+
+**D34. Tiers sold for lower or higher priority are not observed.** DeepInfra
+sells the reference three ways on the venue, all at fp8: `deepinfra/fp8/flex`
+at $0.112 input and $0.336 output per million, `deepinfra/fp8` at $0.14 and
+$0.42, and `deepinfra/fp8/priority` at $0.21 and $0.63. Its own pages say the
+flex tier is billed at 0.8 times the standard price, gives way to standard
+traffic, and when the model is busy waits up to ten minutes for capacity, then
+runs or is refused; the priority tier is billed at 1.5 times and served first.
+From window 4 the probe bought flex, as the lowest-priced endpoint. Through the
+venue, flex took 1.98, 4.35 and 1.39 seconds to its first token in windows 4 to
+6, and 21.5 seconds on 1017 in window 5; on 21 October DeepInfra bought direct,
+at its standard tier, took 0.99 seconds. The standard tier is not immune: it
+took 4.71 seconds in window 3. On the days flex passed every test it was among
+the cheapest contributors and the interquartile mean dropped it, so the price
+was unchanged by it; its effect was on the count. Each provider's observation
+is now its lowest-priced endpoint of standard priority. The tiers are listed in
+`panel.json` under `service_tiers`, with the provider's description and the
+first window each applies to, 23 October 2026; the probe leaves them out when
+choosing, and the assessor's Listed test excludes anything bought on one from
+that date. Earlier windows are unchanged.
+
+**D35. Cached replies stay excluded.** In window 4 SiliconFlow, bought both
+through the venue and direct, and StreamLake reported 7,168 of about 7,613 input
+tokens as cached on some requests, and were charged about 73 per cent less; in
+window 5 StreamLake did so on one request, and in window 6 nobody did. The
+unique first line means a cache keyed on the start of the prompt cannot match,
+so the cause is unconfirmed. Excluding such replies, as the methodology already
+did, is kept, and the number excluded for it is recorded each day. If cached
+replies exclude more than a quarter of any probed panel in five windows in a
+row, a new test piece with unique text throughout is proposed with 30 days'
+notice. Changing the test piece now was rejected: it would need a new frozen
+hash and a rehearsal before window 9, would break comparison with windows 1 to
+8, and would not help if the cause is a quirk of billing.
+
 ---
 
 ## 2. Daily tracking

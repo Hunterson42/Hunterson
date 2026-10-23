@@ -15,6 +15,27 @@
     "minimum_contributors": 5,
     "blend_input_weight": 16
   },
+  "service_tiers": {
+    "rule": "D34. An endpoint sold at a discount in return for lower priority, or at a premium for higher priority, is a different service class and is not observed. Each provider's observation is its lowest-priced endpoint of standard priority.",
+    "not_observed": [
+      {
+        "provider": "DeepInfra",
+        "tag_ends_with": "/flex",
+        "class": "lower-priority",
+        "from": "2026-10-23",
+        "description": "Billed at 0.8 times the standard price. Yields to standard traffic: when the model is busy a request waits up to ten minutes for capacity, then runs or is refused.",
+        "evidence": "https://deepinfra.com/blog/flex-service-tier"
+      },
+      {
+        "provider": "DeepInfra",
+        "tag_ends_with": "/priority",
+        "class": "higher-priority",
+        "from": "2026-10-23",
+        "description": "Billed at 1.5 times the standard price. Served first, and kept admitted when standard traffic is refused.",
+        "evidence": "https://deepinfra.com/blog/priority-service-tier"
+      }
+    ]
+  },
   "max_output_tokens": 500,
   "rounds": 3,
   "round_spacing_minutes": 15,

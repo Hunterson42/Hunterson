@@ -59,7 +59,8 @@ def request(day, provider, rnd, s):
     fails = s.get("fail_rounds", ())
     start = f"{day}T14:{5 + 15 * (rnd - 1):02d}:04.000000Z"
     rec = {
-        "target": {"route": "openrouter", "checkpoint": CP, "provider": provider, "tag": provider.lower() + "/fp8",
+        "target": {"route": "openrouter", "checkpoint": CP, "provider": provider,
+                   "tag": s.get("tag") or provider.lower() + "/fp8",
                    "quantization": "fp8",
                    "listed": {"prompt": str(pin), "completion": str(pout), "discount": s["discount"],
                               "overrides": s["overrides"]}},
@@ -85,13 +86,17 @@ def request(day, provider, rnd, s):
     return rec
 
 
-def make_window(root, day, providers, finished=True, prompt=assess.FROZEN_PROMPT_SHA256, folder=None):
+def make_window(root, day, providers, finished=True, prompt=assess.FROZEN_PROMPT_SHA256, folder=None,
+                listed_only=None):
+    """listed_only: endpoints in the listing that were not bought, name -> spec."""
     folder = folder or os.path.join(root, "data", "probes", day)
     endpoints = []
-    for name, s in providers.items():
-        endpoints.append({"provider_name": name, "tag": name.lower() + "/fp8", "quantization": "fp8",
+    for name, s in list(providers.items()) + list((listed_only or {}).items()):
+        endpoints.append({"provider_name": name, "tag": s.get("tag") or name.lower() + "/fp8", "quantization": "fp8",
                           "pricing": {"prompt": str(per_token(s["in"])), "completion": str(per_token(s["out"])),
                                       "discount": s["discount"], "overrides": s["overrides"]}})
+        if name not in providers:
+            continue
         for rnd in (1, 2, 3):
             write(os.path.join(folder, "requests", f"{name}__r{rnd}.json"), request(day, name, rnd, s))
     write(os.path.join(folder, "listing", assess.file_slug(CP) + ".json"),
@@ -194,6 +199,30 @@ class AssessTests(unittest.TestCase):
         self.assertEqual(reasons["Overcharged"], "Receipt: charged 5.0 per cent above the listed price")
         self.assertEqual(reasons["No split"], "Receipt: the receipt does not split the cost of input and output")
         self.assertEqual(self.result(self.days[8])["contributors"], 6)
+
+    def test_a_tier_that_is_not_observed_is_excluded_from_its_date(self):
+        provs = {n: spec(str(o), str(i)) for n, (o, i) in GOOD.items()}
+        provs["Cheap"] = spec("0.20", "0.05", tag="cheap/fp8/flex")
+        only = {"FlexOnly": spec("0.25", "0.06", tag="flexonly/fp8/flex")}
+        self.set_panel(service_tiers={"not_observed": [
+            {"provider": p, "tag_ends_with": "/flex", "class": "lower-priority", "from": self.days[8]}
+            for p in ("Cheap", "FlexOnly")]})
+        for day in self.days[:9]:
+            make_window(self.root, day, provs, listed_only=only)
+        self.run_all(self.days[8])
+        before = {p["provider"]: p for p in self.result(self.days[7])["providers"]}
+        after = {p["provider"]: p for p in self.result(self.days[8])["providers"]}
+        # Before its date the tier is observed as before: Listed passes.
+        self.assertTrue(before["Cheap"]["tests"]["Listed"])
+        # From its date, what was bought on it is excluded, and the reason says why.
+        self.assertFalse(after["Cheap"]["tests"]["Listed"])
+        self.assertEqual(after["Cheap"]["reason"],
+                         "Listed: bought cheap/fp8/flex, a lower-priority tier, which is not observed (D34)")
+        self.assertEqual(after["FlexOnly"]["reason"],
+                         "Listed: only a lower-priority tier at an accepted precision, which is not observed (D34)")
+        self.assertEqual(self.result(self.days[8])["contributors"], 6)
+        # The figure is the six good providers' alone.
+        self.assertEqual(self.result(self.days[8])["price"]["output"], "0.6500")
 
     def test_first_failure_is_the_reason(self):
         provs = {n: spec(str(o), str(i)) for n, (o, i) in GOOD.items()}

@@ -33,7 +33,8 @@ trickling reply cannot hold the run open.
 
 Reads panel.json, candidates.json and prompt.txt from the repository root, and
 API keys from the environment (OPENROUTER_API_KEY, plus one per direct
-account). Uses only the Python standard library.
+account). Uses only the Python standard library, and scripts/service_tiers.py
+for the service classes that are not observed (decision D34).
 """
 import concurrent.futures
 import datetime
@@ -48,6 +49,8 @@ import time
 import urllib.error
 import urllib.request
 import uuid
+
+import service_tiers
 
 OPENROUTER = os.environ.get("OPENROUTER_BASE", "https://openrouter.ai/api/v1").rstrip("/")
 USER_AGENT = "hunterson-probe/1.0"
@@ -123,8 +126,10 @@ def per_token(value):
         return None
 
 
-def venue_targets(listing, accepted):
-    """One target per provider: its lowest-priced endpoint at an accepted precision."""
+def venue_targets(listing, accepted, tiers=None, day=""):
+    """One target per provider: its lowest-priced endpoint at an accepted precision,
+    leaving out any tier in panel.json's "service_tiers" that is not observed on
+    `day` (decision D34)."""
     best = {}
     endpoints = (((listing.get("response") or {}).get("data") or {}).get("endpoints")) or []
     for ep in endpoints:
@@ -135,6 +140,8 @@ def venue_targets(listing, accepted):
         if out_price is None or not ep.get("tag"):
             continue
         name = ep.get("provider_name", "unknown")
+        if service_tiers.not_observed(tiers, name, ep["tag"], day):
+            continue
         if name not in best or out_price < best[name][0]:
             best[name] = (out_price, ep)
     targets = []
@@ -484,7 +491,7 @@ def main(argv):
         listing = fetch_listing(checkpoint)
         listing["accepted_precisions"] = accepted
         listings[checkpoint] = listing
-        found = venue_targets(listing, accepted)
+        found = venue_targets(listing, accepted, panel.get("service_tiers"), day)
         if mode == "test" and direct_only:
             targets += direct_targets(panel, checkpoint)
         elif mode == "test":

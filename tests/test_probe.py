@@ -255,6 +255,44 @@ class ProbeTests(unittest.TestCase):
         self.assertEqual(r.returncode, 2)
         self.assertFalse(os.path.exists(os.path.join(self.dir, "data")))
 
+    def deepinfra_tags(self):
+        """DeepInfra's endpoint tags at fp8 on the probed checkpoints in the saved census."""
+        tags = set()
+        for cp in load(os.path.join(ROOT, "panel.json"))["probe"]:
+            path = os.path.join(CENSUS, "endpoints", cp.replace("/", "__") + ".json")
+            if os.path.exists(path):
+                tags |= {e["tag"] for e in load(path)["data"]["endpoints"]
+                         if e.get("provider_name") == "DeepInfra" and e.get("quantization") == "fp8"}
+        return tags
+
+    TIERS = [("/flex", "lower-priority"), ("/priority", "higher-priority")]
+
+    def bought(self):
+        return [b["provider"]["only"][0] for b in mock_openrouter.SEEN if "provider" in b]
+
+    def test_tiers_not_observed_are_not_bought(self):
+        if not any(t.endswith("/flex") for t in self.deepinfra_tags()):
+            self.skipTest("no flex tier in the saved census")
+        tiers = {"not_observed": [{"provider": "DeepInfra", "tag_ends_with": end, "class": c, "from": "2026-01-01"}
+                                  for end, c in self.TIERS]}
+        r = self.run_probe("--rehearsal", panel_changes={"service_tiers": tiers})
+        self.assertEqual(r.returncode, 0, r.stderr)
+        deepinfra = [t for t in self.bought() if t.startswith("deepinfra/")]
+        self.assertTrue(deepinfra)
+        self.assertFalse([t for t in deepinfra if t.endswith(("/flex", "/priority"))], deepinfra)
+        manifest = load(glob.glob(os.path.join(self.dir, "data", "rehearsals", "*", "manifest.json"))[0])
+        self.assertEqual(manifest["requests_made"], 3 * self.expected_targets(),
+                         "a provider with a standard endpoint is still probed, through it")
+
+    def test_a_tier_is_bought_until_its_date(self):
+        if not any(t.endswith("/flex") for t in self.deepinfra_tags()):
+            self.skipTest("no flex tier in the saved census")
+        tiers = {"not_observed": [{"provider": "DeepInfra", "tag_ends_with": end, "class": c, "from": "2099-01-01"}
+                                  for end, c in self.TIERS]}
+        r = self.run_probe("--rehearsal", panel_changes={"service_tiers": tiers})
+        self.assertEqual(r.returncode, 0, r.stderr)
+        self.assertTrue([t for t in self.bought() if t.endswith("/flex")], "the cheapest tier, as before its date")
+
     def test_each_request_has_a_total_time_limit(self):
         mock_openrouter.SLOW_TAG = "novita/fp8"
         try:

@@ -7,7 +7,8 @@ For each probed checkpoint, each provider in the window's listing at an
 accepted precision is tested in this order, and the first test it fails is the
 reason it is excluded:
 
-    1. Listed       at an accepted precision in the listing saved in the window
+    1. Listed       at an accepted precision in the listing saved in the window,
+                    bought through an endpoint of standard priority (D34)
     2. Reliable     a completed request in at least 8 of the previous 10 windows;
                     a window with no finished probe counts against everyone
     3. Complete     at least 2 of its 3 requests completed, meaning a reply came
@@ -60,6 +61,7 @@ from decimal import Decimal, ROUND_HALF_UP
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import affiliations  # noqa: E402
+import service_tiers  # noqa: E402
 
 FROZEN_PROMPT_SHA256 = "140afc12e0c154fd2cb843197da5d3bc673c9e1cea6e0585236b2f41a2a8b24a"   # Rule 9
 EXCLUDED_DAYS = {(12, 25), (1, 1)}
@@ -296,9 +298,19 @@ def test_provider(cp, provider, recs, ctx):
         measured["discount"] = str(listed["discount"])
     checks = []
 
-    # 1. Listed.
-    checks.append(("Listed", provider in ctx["listed_tags"],
-                   "Listed: not at an accepted precision in the window's listing"))
+    # 1. Listed, in the standard service class (decision D34).
+    bought = recs[0]["target"].get("tag") if recs else None
+    tier = service_tiers.not_observed(ctx.get("tiers"), provider, bought, ctx.get("tier_day"))
+    if tier:
+        checks.append(("Listed", False, f"Listed: bought {bought}, a {tier.get('class', 'non-standard')} "
+                                        "tier, which is not observed (D34)"))
+    elif provider in (ctx.get("tier_only") or {}):
+        only = ctx["tier_only"][provider]
+        checks.append(("Listed", False, f"Listed: only a {only.get('class', 'non-standard')} tier at an "
+                                        "accepted precision, which is not observed (D34)"))
+    else:
+        checks.append(("Listed", provider in ctx["listed_tags"],
+                       "Listed: not at an accepted precision in the window's listing"))
 
     # 2. Reliable.
     if ctx["previous"] is None:
@@ -420,17 +432,24 @@ def assess_checkpoint(cp, info, win, day, ctx_base, groups, ignore_reliability=F
     listing = win.listing(cp) or {}
     endpoints = (((listing.get("response") or {}).get("data") or {}).get("endpoints")) or []
     accepted = listing.get("accepted_precisions") or info["accepted"]
-    listed_tags, listed_prices = {}, {}
+    listed_tags, listed_prices, tier_only = {}, {}, {}
     for ep in endpoints:
         if (ep.get("quantization") or "unspecified") not in accepted:
             continue
         name = ep.get("provider_name", "unknown")
+        tier = service_tiers.not_observed(ctx_base.get("tiers"), name, ep.get("tag"), ctx_base.get("tier_day"))
+        if tier:
+            # D34: a tier that is not observed; the provider is observed through
+            # its standard endpoint, if it lists one.
+            tier_only.setdefault(name, tier)
+            continue
         price = dec((ep.get("pricing") or {}).get("completion"))
         if name not in listed_tags or (price is not None and price < dec(listed_prices[name].get("completion") or 9)):
             listed_tags[name] = ep.get("tag")
             listed_prices[name] = ep.get("pricing") or {}
+    tier_only = {k: v for k, v in tier_only.items() if k not in listed_tags}
     venue = {k[2]: v for k, v in win.records.items() if k[0] == cp and k[1] == "openrouter"}
-    panel = sorted(set(listed_tags) | set(venue), key=str.lower)
+    panel = sorted(set(listed_tags) | set(venue) | set(tier_only), key=str.lower)
 
     previous = None
     if not ignore_reliability and ctx_base.get("window_day"):
@@ -439,7 +458,8 @@ def assess_checkpoint(cp, info, win, day, ctx_base, groups, ignore_reliability=F
 
     per_provider_tokens = [median([r["usage"]["prompt_tokens"] for r in recs if completed(r)])
                            for recs in venue.values() if any(completed(r) for r in recs)]
-    ctx = dict(ctx_base, listed_tags=listed_tags, listed_prices=listed_prices, previous=previous,
+    ctx = dict(ctx_base, listed_tags=listed_tags, listed_prices=listed_prices, tier_only=tier_only,
+               previous=previous,
                input_median=median(per_provider_tokens))
 
     results = []
@@ -530,7 +550,9 @@ def control_results(cp, win, ctx_base):
 def context(root, panel, day, win, first, max_first_token=None):
     s = settings(panel)
     man = win.manifest or {}
+    tier_day = day.isoformat() if day else (man.get("day") or (man.get("started_utc") or "")[:10])
     return {"root": root, "settings": s, "first": first, "window_day": day,
+            "tiers": panel.get("service_tiers"), "tier_day": tier_day,
             "rounds": int(man.get("rounds") or panel.get("rounds", 3)),
             "accept": (man.get("accept_line_1") or panel["accept_line_1"],
                        man.get("accept_line_2") or panel["accept_line_2"]),
