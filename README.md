@@ -32,7 +32,7 @@ Everything else is kept here and updated automatically from the private reposito
 openssl ts -verify -data data/hashes/probes/2026-10-20.sha256 -in data/hashes/probes/2026-10-20.sha256.tsr -CAfile data/stamps/certs/cacert.pem -untrusted data/stamps/certs/tsa.crt
 ```
 
-It prints `Verification: OK`. To see the time it records:
+It prints `Verification: OK`. OpenSSL may also warn that `tsa.crt` is not a CA certificate. That is expected: it is FreeTSA's signing certificate, passed with `-untrusted`, not the authority that vouches for it, which is `cacert.pem`. To see the time it records:
 
 ```
 openssl ts -reply -in data/hashes/probes/2026-10-20.sha256.tsr -text

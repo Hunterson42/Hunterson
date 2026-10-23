@@ -18,6 +18,15 @@ Usage:
                                            checkpoint, one short request with each
                                            known way of switching thinking off, one
                                            line each, writes nothing
+    python3 scripts/probe.py --try-venue-switch [PROVIDER ...]
+                                           for every endpoint at an accepted
+                                           precision on each probed checkpoint,
+                                           through the venue and pinned as in the
+                                           daily run, one short request as sent
+                                           today and one that also carries
+                                           DeepSeek's own switch for thinking; one
+                                           line each, writes nothing. Naming
+                                           providers limits it to them
     python3 scripts/probe.py --rehearsal   the whole daily run at once, without
                                            the waits between rounds, written to
                                            data/rehearsals/DATE-HHMM/
@@ -200,6 +209,8 @@ def build_request(t, prompt_body, nonce, max_tokens):
         body["provider"] = {"only": [t["tag"]], "allow_fallbacks": False}
         body["reasoning"] = {"enabled": False}
         body["transforms"] = []
+        # Only --try-venue-switch sets this; the daily run sends nothing extra.
+        body.update(t.get("extra") or {})
         url = f"{OPENROUTER}/chat/completions"
         key = os.environ.get("OPENROUTER_API_KEY")
         key_env = "OPENROUTER_API_KEY"
@@ -413,6 +424,108 @@ def try_switches(panel, names, prompt_body, day, timeout, read_timeout):
     return 0
 
 
+# The switch --try-venue-switch adds to the venue's own: DeepSeek's, the only one
+# that worked on every Novita and GMI Cloud model bought direct (pull request 17).
+VENUE_EXTRA_SWITCH = {"thinking": {"type": "disabled"}}
+
+
+def all_venue_endpoints(listing, accepted):
+    """Every endpoint at an accepted precision, not only each provider's cheapest,
+    so that every tier a provider sells is tried."""
+    out = []
+    endpoints = (((listing.get("response") or {}).get("data") or {}).get("endpoints")) or []
+    for ep in endpoints:
+        if (ep.get("quantization") or "unspecified") not in accepted or not ep.get("tag"):
+            continue
+        out.append({"route": "openrouter", "checkpoint": listing["checkpoint"],
+                    "provider": ep.get("provider_name", "unknown"), "tag": ep["tag"],
+                    "quantization": ep.get("quantization"), "listed": {}})
+    return sorted(out, key=lambda t: (t["provider"].lower(), t["tag"]))
+
+
+def switch_outcome(rec):
+    """(kind, short text, detail): kind is "answer", "thinking", "rate limit" or "error"."""
+    if rec["error"]:
+        detail = rec.get("error_body")
+        detail = detail if isinstance(detail, str) else json.dumps(detail or "")
+        detail = " ".join(detail.split())[:160]
+        if rec.get("http_status") == 429:
+            return "rate limit", "rate-limited", detail
+        label = rec["error"] if rec["error"].startswith("HTTP") else rec["error"].split(":")[0]
+        return "error", f"ERROR {label}"[:30], detail
+    lines = [ln.strip() for ln in reply_text(rec).splitlines() if ln.strip()]
+    first = lines[0] if lines else ""
+    if thought(rec):
+        return "thinking", ("thinking, then answer" if first else "thinking only"), first
+    return "answer", f"answer: {first or '(empty)'}"[:30], first
+
+
+def switch_change(a, b):
+    """What adding DeepSeek's switch changed, in a few words."""
+    if "rate limit" in (a[0], b[0]):
+        return "INCONCLUSIVE, rate limit"
+    if a[0] == b[0]:
+        if a[0] == "answer" and a[1] != b[1]:
+            return "ANSWER DIFFERS"
+        return "same"
+    if a[0] == "thinking" and b[0] == "answer":
+        return "SWITCH WORKS"
+    if b[0] == "error":
+        return "BREAKS"
+    if b[0] == "thinking":
+        return "WORSE, thinking"
+    return "CHANGED"
+
+
+def try_venue_switch(panel, candidates, names, prompt_body, day, timeout, read_timeout, workers=4):
+    targets = []
+    for checkpoint in panel["probe"]:
+        listing = fetch_listing(checkpoint)
+        targets += all_venue_endpoints(listing, accepted_precisions(candidates, checkpoint))
+    if names:
+        known = {t["provider"] for t in targets}
+        unknown = sorted(set(names) - known)
+        if unknown:
+            print("Not listed at an accepted precision today: " + ", ".join(unknown)
+                  + ". Listed: " + ", ".join(sorted(known, key=str.lower)))
+            return 2
+        targets = [t for t in targets if t["provider"] in names]
+    print(f"{len(targets)} endpoints, two requests each, 60 output tokens, writing nothing.")
+    print("A: the request as sent each day, with the venue's switch for thinking only.")
+    print("B: the same, also carrying " + json.dumps(VENUE_EXTRA_SWITCH, separators=(",", ":")) + ".\n")
+
+    def attempt(t):
+        # 60 tokens is enough to see whether the reply starts with thinking or the answer.
+        rec = run_request(t, prompt_body, 0, day, 60, timeout, read_timeout)
+        for pause in (10, 20):
+            if rec.get("http_status") != 429:
+                break
+            time.sleep(pause)
+            rec = run_request(t, prompt_body, 0, day, 60, timeout, read_timeout)
+        return rec
+
+    def pair(t):
+        a = switch_outcome(attempt(t))
+        b = switch_outcome(attempt(dict(t, extra=VENUE_EXTRA_SWITCH)))
+        return t, a, b
+
+    with concurrent.futures.ThreadPoolExecutor(max_workers=workers) as pool:
+        results = list(pool.map(pair, targets))
+    counts, errors = {}, []
+    for t, a, b in results:
+        change = switch_change(a, b)
+        counts[change] = counts.get(change, 0) + 1
+        short = t["checkpoint"].split("/")[-1].replace("deepseek-", "")
+        print(f"{short:<15} {t['tag']:<24} A {a[1]:<30} B {b[1]:<30} {change}")
+        errors += [(short, t["tag"], form, o[2]) for form, o in (("A", a), ("B", b)) if o[0] == "error"]
+    print("\n" + ", ".join(f"{k}: {v}" for k, v in sorted(counts.items())))
+    if errors:
+        print("\nErrors in full:")
+        for short, tag, form, detail in errors:
+            print(f"  {short} {tag} {form}: {detail}")
+    return 0
+
+
 def one_line(record):
     """One line per request, for --test-direct: enough to see that the model name,
     the key and the switch for thinking all work."""
@@ -439,6 +552,14 @@ def main(argv):
             prompt_body = f.read()
         return try_switches(panel, names, prompt_body, utc_now().strftime("%Y-%m-%d"),
                             int(panel.get("timeout_seconds", 120)), int(panel.get("read_timeout_seconds", 60)))
+    if "--try-venue-switch" in argv:
+        names = argv[argv.index("--try-venue-switch") + 1:]
+        panel = load_json("panel.json")
+        with open("prompt.txt") as f:
+            prompt_body = f.read()
+        return try_venue_switch(panel, load_json("candidates.json"), names, prompt_body,
+                                utc_now().strftime("%Y-%m-%d"), int(panel.get("timeout_seconds", 120)),
+                                int(panel.get("read_timeout_seconds", 60)), int(panel.get("concurrency", 4)))
     if "--test-direct" in argv:
         mode, direct_only = "test", True
     elif "--test" in argv:

@@ -5,7 +5,9 @@ requests with a streamed reply in OpenRouter's format, including the final
 usage record with a cost. Two tags behave badly on purpose: one is refused
 with HTTP 404, one breaks with an error part way through the stream. A third,
 SLOW_TAG, is set by a test when it needs a reply that trickles: keep-alive lines
-for SLOW_SECONDS before any text.
+for SLOW_SECONDS before any text. THINK_TAG and REJECT_FIELD_TAG, set by the test
+of --try-venue-switch, make one venue endpoint think unless the request carries
+THINK_UNLESS, and another refuse any request carrying a "thinking" field.
 """
 import json
 import os
@@ -20,6 +22,8 @@ SLOW_TAG = None
 SLOW_SECONDS = 6
 THINK_MODEL = None         # a direct model that sends its thinking as reasoning_content
 THINK_UNLESS = None        # ...unless the request carries all of these fields
+THINK_TAG = None           # a venue endpoint that thinks, unless THINK_UNLESS
+REJECT_FIELD_TAG = None    # a venue endpoint that refuses a "thinking" field with HTTP 400
 SEEN = []                  # every chat request body received
 
 
@@ -54,6 +58,8 @@ class Handler(BaseHTTPRequestHandler):
         tag = ((body.get("provider") or {}).get("only") or ["direct"])[0]
         if tag == REFUSE_TAG:
             return self._json(404, {"error": {"code": 404, "message": "No endpoints found"}})
+        if REJECT_FIELD_TAG and tag == REJECT_FIELD_TAG and "thinking" in body:
+            return self._json(400, {"error": {"code": 400, "message": "Unrecognised field: thinking"}})
         self.send_response(200)
         self.send_header("Content-Type", "text/event-stream")
         self.end_headers()
@@ -75,7 +81,8 @@ class Handler(BaseHTTPRequestHandler):
                 return
         provider = tag.split("/")[0]
         switched_off = THINK_UNLESS and all(body.get(k) == v for k, v in THINK_UNLESS.items())
-        if THINK_MODEL and body.get("model") == THINK_MODEL and not switched_off:
+        thinks = (THINK_MODEL and body.get("model") == THINK_MODEL) or (THINK_TAG and tag == THINK_TAG)
+        if thinks and not switched_off:
             send({"id": "gen-1", "choices": [{"index": 0, "delta": {"reasoning_content": "Let me think."},
                                               "finish_reason": None}]})
         words = ["ISLAND DUKE Prospero\n", "LAST SPEAKER Miranda\n"] + ["word "] * 60

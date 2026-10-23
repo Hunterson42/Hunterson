@@ -123,6 +123,7 @@ class ProbeTests(unittest.TestCase):
             self.assertEqual(len(body["provider"]["only"]), 1)
             self.assertFalse(body["provider"]["allow_fallbacks"])
             self.assertEqual(body["reasoning"], {"enabled": False})
+            self.assertNotIn("thinking", body, "the daily request carries only the venue's switch")
             first_line = body["messages"][0]["content"].splitlines()[0]
             self.assertTrue(first_line.startswith("PROBE "))
             nonces.add(first_line)
@@ -231,6 +232,50 @@ class ProbeTests(unittest.TestCase):
         self.assertIn('{"thinking":{"type":"disabled"}}', off[0])
         self.assertTrue(all(b["max_tokens"] == 60 for b in mock_openrouter.SEEN))
         self.assertFalse(os.path.exists(os.path.join(self.dir, "data")))
+
+    def accepted_endpoints(self):
+        """Every endpoint at fp8 in the saved census, across the probed checkpoints."""
+        tags = []
+        for cp in load(os.path.join(ROOT, "panel.json"))["probe"]:
+            path = os.path.join(CENSUS, "endpoints", cp.replace("/", "__") + ".json")
+            if os.path.exists(path):
+                tags += [e["tag"] for e in load(path)["data"]["endpoints"]
+                         if e.get("quantization") == "fp8" and e.get("tag")]
+        return tags
+
+    def test_try_venue_switch_tries_both_forms_on_every_endpoint(self):
+        tags = self.accepted_endpoints()
+        think = "novita/fp8" if "novita/fp8" in tags else tags[0]
+        reject = next(t for t in tags if t not in (think, mock_openrouter.REFUSE_TAG, mock_openrouter.BREAK_TAG))
+        mock_openrouter.THINK_TAG, mock_openrouter.REJECT_FIELD_TAG = think, reject
+        mock_openrouter.THINK_UNLESS = {"thinking": {"type": "disabled"}}
+        try:
+            r = self.run_probe("--try-venue-switch")
+        finally:
+            mock_openrouter.THINK_TAG = mock_openrouter.REJECT_FIELD_TAG = mock_openrouter.THINK_UNLESS = None
+        self.assertEqual(r.returncode, 0, r.stderr)
+        rows = [ln for ln in r.stdout.splitlines() if " A " in ln and " B " in ln]
+        self.assertEqual(len(rows), len(tags), r.stdout)
+        self.assertEqual(len(mock_openrouter.SEEN), 2 * len(tags))
+        self.assertTrue(all(b["max_tokens"] == 60 and b["reasoning"] == {"enabled": False}
+                            and len(b["provider"]["only"]) == 1 for b in mock_openrouter.SEEN))
+        with_switch = [b for b in mock_openrouter.SEEN if b.get("thinking") == {"type": "disabled"}]
+        self.assertEqual(len(with_switch), len(tags), "exactly one request per endpoint carries DeepSeek's switch")
+        self.assertEqual(sorted(b["provider"]["only"][0] for b in with_switch), sorted(tags))
+        self.assertTrue(any(think in ln and "SWITCH WORKS" in ln for ln in rows), r.stdout)
+        self.assertTrue(any(reject in ln and "BREAKS" in ln for ln in rows), r.stdout)
+        self.assertTrue(any(mock_openrouter.REFUSE_TAG in ln and ln.endswith("same") for ln in rows)
+                        or mock_openrouter.REFUSE_TAG not in tags)
+        self.assertFalse(os.path.exists(os.path.join(self.dir, "data")))
+
+    def test_try_venue_switch_can_be_limited_to_named_providers(self):
+        r = self.run_probe("--try-venue-switch", "Novita")
+        self.assertEqual(r.returncode, 0, r.stderr)
+        self.assertTrue(mock_openrouter.SEEN)
+        self.assertTrue(all(b["provider"]["only"][0].startswith("novita/") for b in mock_openrouter.SEEN))
+        r = self.run_probe("--try-venue-switch", "Nobody")
+        self.assertEqual(r.returncode, 2)
+        self.assertIn("Not listed at an accepted precision today: Nobody", r.stdout)
 
     def test_try_switches_needs_a_known_account(self):
         r = self.run_probe("--try-switches", "Nobody")
