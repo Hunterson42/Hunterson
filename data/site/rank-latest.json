@@ -1,8 +1,8 @@
 {
  "schema_version": 1,
- "date": "2026-10-23",
- "models_with_endpoints": 441,
- "models_with_five_plus_providers": 57,
+ "date": "2026-10-24",
+ "models_with_endpoints": 442,
+ "models_with_five_plus_providers": 58,
  "rows": [
   {
    "rank": 1,
@@ -17,17 +17,34 @@
    },
    "output_usd_per_m": {
     "low": 1.4,
-    "median": 4.4,
+    "median": 4.3905,
     "high": 8.8
    }
   },
   {
    "rank": 2,
-   "model": "deepseek/deepseek-v4.1-flash",
-   "providers": 32,
-   "endpoints": 40,
+   "model": "z-ai/glm-5.3-flash",
+   "providers": 34,
+   "endpoints": 38,
    "quantisation": {
-    "fp8": 18,
+    "unknown": 12,
+    "fp4": 11,
+    "fp8": 11,
+    "nvfp4": 4
+   },
+   "output_usd_per_m": {
+    "low": 0.0788,
+    "median": 0.5,
+    "high": 2.4
+   }
+  },
+  {
+   "rank": 3,
+   "model": "deepseek/deepseek-v4.1-flash",
+   "providers": 33,
+   "endpoints": 41,
+   "quantisation": {
+    "fp8": 19,
     "unknown": 16,
     "fp4": 5,
     "mxfp4": 1
@@ -39,36 +56,19 @@
    }
   },
   {
-   "rank": 3,
-   "model": "z-ai/glm-5.3-flash",
-   "providers": 32,
-   "endpoints": 37,
-   "quantisation": {
-    "fp4": 11,
-    "unknown": 11,
-    "fp8": 11,
-    "nvfp4": 4
-   },
-   "output_usd_per_m": {
-    "low": 0.145,
-    "median": 0.5,
-    "high": 2.4
-   }
-  },
-  {
    "rank": 4,
    "model": "deepseek/deepseek-v4.1-flash-1017",
    "providers": 29,
-   "endpoints": 33,
+   "endpoints": 34,
    "quantisation": {
     "fp8": 15,
-    "unknown": 13,
+    "unknown": 14,
     "fp4": 4,
     "mxfp4": 1
    },
    "output_usd_per_m": {
     "low": 0.15,
-    "median": 0.78,
+    "median": 0.82,
     "high": 1.32
    }
   },
@@ -84,7 +84,7 @@
     "nvfp4": 1
    },
    "output_usd_per_m": {
-    "low": 1.44,
+    "low": 0.594,
     "median": 4.4,
     "high": 8.0
    }
@@ -92,18 +92,18 @@
   {
    "rank": 6,
    "model": "deepseek/deepseek-v4-flash-0731",
-   "providers": 23,
-   "endpoints": 26,
+   "providers": 22,
+   "endpoints": 25,
    "quantisation": {
     "fp8": 10,
-    "unknown": 9,
+    "unknown": 8,
     "fp4": 5,
-    "nvfp4": 1,
-    "fp32": 1
+    "fp32": 1,
+    "nvfp4": 1
    },
    "output_usd_per_m": {
-    "low": 0.15,
-    "median": 0.338,
+    "low": 0.1333,
+    "median": 0.28,
     "high": 1.32
    }
   },
@@ -138,7 +138,7 @@
     "mxfp4": 1
    },
    "output_usd_per_m": {
-    "low": 0.8,
+    "low": 0.396,
     "median": 3.96,
     "high": 8.0
    }
@@ -157,7 +157,7 @@
    "output_usd_per_m": {
     "low": 5.5,
     "median": 14.519,
-    "high": 22.5
+    "high": 24.0
    }
   },
   {
@@ -186,12 +186,12 @@
    "quantisation": {
     "int4": 6,
     "unknown": 4,
-    "fp8": 3,
     "fp4": 3,
+    "fp8": 3,
     "bf16": 1
    },
    "output_usd_per_m": {
-    "low": 1.95,
+    "low": 1.892,
     "median": 3.5,
     "high": 4.6
    }
@@ -208,7 +208,7 @@
     "mxfp4": 1
    },
    "output_usd_per_m": {
-    "low": 0.14,
+    "low": 0.0857,
     "median": 0.28,
     "high": 1.32
    }
@@ -224,8 +224,8 @@
     "fp4": 2
    },
    "output_usd_per_m": {
-    "low": 1.5,
-    "median": 2.832,
+    "low": 1.0002,
+    "median": 2.6,
     "high": 3.83
    }
   },
@@ -255,29 +255,13 @@
     "unknown": 2
    },
    "output_usd_per_m": {
-    "low": 3.036,
-    "median": 4.4,
+    "low": 3.0316,
+    "median": 4.2,
     "high": 4.4044
    }
   },
   {
    "rank": 16,
-   "model": "deepseek/deepseek-v3.2",
-   "providers": 12,
-   "endpoints": 12,
-   "quantisation": {
-    "unknown": 7,
-    "fp8": 4,
-    "fp4": 1
-   },
-   "output_usd_per_m": {
-    "low": 0.3096,
-    "median": 0.88,
-    "high": 4.5
-   }
-  },
-  {
-   "rank": 17,
    "model": "google/gemma-4-31b-it",
    "providers": 12,
    "endpoints": 15,
@@ -294,7 +278,7 @@
    }
   },
   {
-   "rank": 18,
+   "rank": 17,
    "model": "minimax/minimax-m3",
    "providers": 12,
    "endpoints": 13,
@@ -310,7 +294,40 @@
    }
   },
   {
+   "rank": 18,
+   "model": "deepseek/deepseek-v3.2",
+   "providers": 11,
+   "endpoints": 11,
+   "quantisation": {
+    "unknown": 6,
+    "fp8": 4,
+    "fp4": 1
+   },
+   "output_usd_per_m": {
+    "low": 0.3096,
+    "median": 0.8,
+    "high": 4.5
+   }
+  },
+  {
    "rank": 19,
+   "model": "minimax/minimax-m3.1-flash",
+   "providers": 11,
+   "endpoints": 12,
+   "quantisation": {
+    "unknown": 5,
+    "fp4": 4,
+    "fp8": 2,
+    "fp16": 1
+   },
+   "output_usd_per_m": {
+    "low": 0.55,
+    "median": 0.6,
+    "high": 1.2
+   }
+  },
+  {
+   "rank": 20,
    "model": "moonshotai/kimi-k2.7-code",
    "providers": 11,
    "endpoints": 12,
@@ -324,23 +341,6 @@
     "low": 3.0,
     "median": 3.92,
     "high": 8.0
-   }
-  },
-  {
-   "rank": 20,
-   "model": "meta-llama/llama-3.3-70b-instruct",
-   "providers": 10,
-   "endpoints": 11,
-   "quantisation": {
-    "unknown": 5,
-    "fp8": 4,
-    "bf16": 1,
-    "fp16": 1
-   },
-   "output_usd_per_m": {
-    "low": 0.32,
-    "median": 0.72,
-    "high": 2.253
    }
   },
   {
@@ -404,28 +404,62 @@
     "unknown": 1
    },
    "output_usd_per_m": {
-    "low": 0.238,
+    "low": 0.182,
     "median": 0.28,
     "high": 0.35
    }
   },
   {
    "rank": 25,
-   "model": "z-ai/glm-5",
-   "providers": 8,
-   "endpoints": 8,
+   "model": "meta-llama/llama-3.3-70b-instruct",
+   "providers": 9,
+   "endpoints": 10,
    "quantisation": {
-    "fp8": 7,
-    "unknown": 1
+    "fp8": 4,
+    "unknown": 4,
+    "bf16": 1,
+    "fp16": 1
    },
    "output_usd_per_m": {
-    "low": 1.92,
-    "median": 2.875,
-    "high": 3.2
+    "low": 0.32,
+    "median": 0.715,
+    "high": 2.253
    }
   },
   {
    "rank": 26,
+   "model": "nvidia/nemotron-3.5-super-vl",
+   "providers": 8,
+   "endpoints": 8,
+   "quantisation": {
+    "nvfp4": 3,
+    "fp4": 3,
+    "bf16": 1,
+    "unknown": 1
+   },
+   "output_usd_per_m": {
+    "low": 0.35,
+    "median": 0.5,
+    "high": 1.25
+   }
+  },
+  {
+   "rank": 27,
+   "model": "z-ai/glm-5",
+   "providers": 8,
+   "endpoints": 9,
+   "quantisation": {
+    "fp8": 7,
+    "unknown": 2
+   },
+   "output_usd_per_m": {
+    "low": 1.92,
+    "median": 3.2,
+    "high": 4.0
+   }
+  },
+  {
+   "rank": 28,
    "model": "minimax/minimax-m2.5",
    "providers": 7,
    "endpoints": 8,
@@ -440,24 +474,7 @@
    }
   },
   {
-   "rank": 27,
-   "model": "nvidia/nemotron-3.5-super-vl",
-   "providers": 7,
-   "endpoints": 7,
-   "quantisation": {
-    "fp4": 3,
-    "nvfp4": 2,
-    "bf16": 1,
-    "unknown": 1
-   },
-   "output_usd_per_m": {
-    "low": 0.4,
-    "median": 0.5,
-    "high": 1.25
-   }
-  },
-  {
-   "rank": 28,
+   "rank": 29,
    "model": "qwen/qwen3.5-35b-a3b",
    "providers": 7,
    "endpoints": 7,
@@ -473,7 +490,7 @@
    }
   },
   {
-   "rank": 29,
+   "rank": 30,
    "model": "qwen/qwen3.6-27b",
    "providers": 7,
    "endpoints": 7,
@@ -488,7 +505,7 @@
    }
   },
   {
-   "rank": 30,
+   "rank": 31,
    "model": "meta/muse-spark-open",
    "providers": 6,
    "endpoints": 6,
@@ -503,7 +520,7 @@
    }
   },
   {
-   "rank": 31,
+   "rank": 32,
    "model": "qwen/qwen3.5-27b",
    "providers": 6,
    "endpoints": 6,
@@ -519,7 +536,23 @@
    }
   },
   {
-   "rank": 32,
+   "rank": 33,
+   "model": "reflection/beam-1.0-501b-a23b",
+   "providers": 6,
+   "endpoints": 6,
+   "quantisation": {
+    "fp4": 3,
+    "unknown": 2,
+    "fp8": 1
+   },
+   "output_usd_per_m": {
+    "low": 0.98,
+    "median": 1.1,
+    "high": 1.2
+   }
+  },
+  {
+   "rank": 34,
    "model": "z-ai/glm-4.7",
    "providers": 6,
    "endpoints": 7,
@@ -535,7 +568,7 @@
    }
   },
   {
-   "rank": 33,
+   "rank": 35,
    "model": "anthropic/claude-fable-5",
    "providers": 5,
    "endpoints": 6,
@@ -549,7 +582,7 @@
    }
   },
   {
-   "rank": 34,
+   "rank": 36,
    "model": "anthropic/claude-haiku-5.5",
    "providers": 5,
    "endpoints": 10,
@@ -563,7 +596,7 @@
    }
   },
   {
-   "rank": 35,
+   "rank": 37,
    "model": "anthropic/claude-opus-4.5",
    "providers": 5,
    "endpoints": 6,
@@ -577,7 +610,7 @@
    }
   },
   {
-   "rank": 36,
+   "rank": 38,
    "model": "anthropic/claude-opus-4.6",
    "providers": 5,
    "endpoints": 6,
@@ -591,7 +624,7 @@
    }
   },
   {
-   "rank": 37,
+   "rank": 39,
    "model": "anthropic/claude-opus-4.7",
    "providers": 5,
    "endpoints": 8,
@@ -605,7 +638,7 @@
    }
   },
   {
-   "rank": 38,
+   "rank": 40,
    "model": "anthropic/claude-opus-4.8",
    "providers": 5,
    "endpoints": 11,
@@ -616,34 +649,6 @@
     "low": 25.0,
     "median": 27.5,
     "high": 50.0
-   }
-  },
-  {
-   "rank": 39,
-   "model": "anthropic/claude-opus-5",
-   "providers": 5,
-   "endpoints": 11,
-   "quantisation": {
-    "unknown": 11
-   },
-   "output_usd_per_m": {
-    "low": 25.0,
-    "median": 27.5,
-    "high": 50.0
-   }
-  },
-  {
-   "rank": 40,
-   "model": "anthropic/claude-opus-5.5",
-   "providers": 5,
-   "endpoints": 11,
-   "quantisation": {
-    "unknown": 11
-   },
-   "output_usd_per_m": {
-    "low": 20.0,
-    "median": 22.0,
-    "high": 40.0
    }
   }
  ]
