@@ -631,6 +631,33 @@ models.
   new reference on the day, so the published conversion ratio can be read
   beside the difference in capability
 
+### 1.18 The watchlist cleared, 26 October 2026
+
+The tracker's watchlist held ten models, most of them since the first census on 11 September. Rule 1.7 (D3) requires every model on it to be placed in a grade or on the ignore list within ten working days, which from 14 October is 28 October, because the launch threshold depends on the list of candidates being complete. All ten are placed, by active parameters under rule 1.1:
+
+| Model | Active | Grade | Accepted tag | Qualifying, 26 Oct |
+|---|---|---|---|---|
+| DeepSeek V4 Flash 0423, `deepseek/deepseek-v4-flash` | 13B | Standard | fp8 | 9 |
+| MiniMax M3, `minimax/minimax-m3` | 23B | Standard | bf16 | 0 |
+| MiMo-V2.6-Flash, `xiaomi/mimo-v2.6-flash` | 15B | Standard | fp8 | 6 |
+| Qwen3.5 397B A17B, `qwen/qwen3.5-397b-a17b` | 17B | Standard | fp8 | 4 |
+| GLM-5.1, `z-ai/glm-5.1` | 40B | Heavy | fp8 | 11 |
+| GLM-5, `z-ai/glm-5` | 40B | Heavy | fp8 | 7 |
+| DeepSeek V4 Pro 0423, `deepseek/deepseek-v4-pro` | 49B | Heavy | fp8 | 8 |
+| DeepSeek V3.2, `deepseek/deepseek-v3.2` | 37B | Heavy | fp8 | 4 |
+| Kimi K2.7 Code, `moonshotai/kimi-k2.7-code` | 32B | Heavy | int4 | 5 |
+| Gemma 4 31B, `google/gemma-4-31b-it` | 30.7B, dense | Heavy | bf16 | 2 |
+
+**None can change the Standard result.** On each of the 20 census days from 7 to 26 October, none of the four Standard placements had more than nine providers at any one declared precision, whatever its native precision proves to be, while the reference had 14 to 16 qualifying providers. The reference's run under rule 1.7, and gate condition G4, stand. All four can switch thinking off, so all four are eligible under rule 1.8 and are now challengers the tracker watches.
+
+**Native precision is provisional for all ten.** The `config.json` files were not read for these placements, so each accepted tag is set from the lab's published description, a third party's reading of the repository, or the family's precedent, as each entry in sections 3 and 4 says. Each is confirmed from `config.json` before the model is probed or could become a reference, as 1017's hash was. Until then a wrong tag changes only the tracker's counts, never an assessment.
+
+**Two placements sit inside the 20 per cent band around the 30B boundary (rule 1.1):** Gemma 4 31B, dense at 30.7B, 2 per cent above the line, and Kimi K2.7 Code at 32B, as Kimi K2.6. Both are on the record for the boundary's annual review. Gemma 4 31B is the first dense model above the line, and the closest to it of any model placed.
+
+**Two reached the watchlist only on endpoints of no declared precision.** Qwen3.5 397B A17B and DeepSeek V3.2 had six providers each marked "unknown", which the methodology's rule, five providers at one declared precision, does not count. They are placed anyway, since placing them costs nothing and keeps the list complete.
+
+**Aliases.** The undated `deepseek/deepseek-v4-flash` and `deepseek/deepseek-v4-pro` are the April preview checkpoints, listed as DeepSeek V4 Flash 0423 and V4 Pro 0423 (canonical slugs ending `-20260423`), and are separate products from 0731, 0813 and the V4.1 checkpoints. `xiaomi/mimo-v2.6-flash` names `XiaomiMiMo/MiMo-V2.6-Flash-RL`, canonical slug `xiaomi/mimo-v2.6-flash-20260921`.
+
 ---
 
 ## 2. Daily tracking
@@ -899,6 +926,51 @@ Placed on 17 October 2026, the day of release, as a Standard candidate under the
 - OpenRouter, 17 October: one endpoint, DeepSeek's own, precision "unknown", so **qualifying: 0**. Base price $0.15 input and $0.60 output per million, doubled on weekdays from 01:00 to 04:00 and 06:00 to 10:00 UTC. Reasoning optional, not mandatory, so eligible under rule 1.8 on that day's listing
 - Why it matters: if it holds more qualifying providers than the reference on any census day, the reference's 20-day run under 1.4 ends; if it leads for 20 consecutive census days, it becomes the reference on the twentieth day under 1.6
 
+### 3.6 deepseek-ai/DeepSeek-V4-Flash (V4 Flash 0423)
+
+Placed 26 October 2026 (rule 1.18).
+
+- OpenRouter id: `deepseek/deepseek-v4-flash`, listed as "DeepSeek V4 Flash 0423", created 24 April 2026. Hugging Face: `deepseek-ai/DeepSeek-V4-Flash`
+- Commit hash: not read
+- Parameters: 284B total, 13B active (the listing's description, and the V4 model card). **Standard**
+- Native precision: "FP4 + FP8 Mixed" for the official weights (V4 model card, framia.converge.ai), the same form as the reference. **Accepted tag: fp8, provisional,** under D5
+- Licence: MIT. Thinking can be switched off
+- Census 26 Oct: 17 providers, 17 endpoints. fp8 9, unknown 5, fp4 2, mxfp4 1. **Qualifying: 9.** It reached 11 at fp8 in late September
+
+### 3.7 MiniMaxAI/MiniMax-M3
+
+Placed 26 October 2026 (rule 1.18). Open item 8.
+
+- OpenRouter id: `minimax/minimax-m3`, created 31 May 2026. Hugging Face: `MiniMaxAI/Minimax-M3`
+- Commit hash: not read
+- Parameters: about 428B total, about 23B activated (model card, as mirrored on Dell's Hugging Face hub). **Standard,** 23 per cent below the boundary
+- Native precision: not stated on the card. Toolhalla measured the weight files at about 854 GB from the Hugging Face API on 13 June 2026, two bytes a parameter, which is a 16-bit release. **Accepted tag: bf16, provisional.** Nine providers list it at fp8; if MiniMax also publishes an fp8 checkpoint, they qualify and the count is 9, still below the reference
+- Licence: MiniMax Community License, custom. Read before relying on it
+- Thinking: three modes, enabled, adaptive and disabled, through a `thinking` parameter; not mandatory on the listing
+- Census 26 Oct: 12 providers, 13 endpoints. fp8 9, unknown 2, fp4 1. **Qualifying: 0**
+
+### 3.8 XiaomiMiMo/MiMo-V2.6-Flash-RL
+
+Placed 26 October 2026 (rule 1.18).
+
+- OpenRouter id: `xiaomi/mimo-v2.6-flash`, created 21 September 2026. Hugging Face: `XiaomiMiMo/MiMo-V2.6-Flash-RL`
+- Commit hash: not read
+- Parameters: 309B total, 15B active (the listing's description and vLLM's recipe for it). 48 layers, 256 routed experts, 8 per token. **Standard**
+- Native precision: vLLM's recipe says the weights "are stored as mxfp4 and computed as FP8 (block-wise e4m3, 128x128)", and gives the checkpoint as about 173 GB, about 4.5 bits a parameter, so a four-bit release with fp8 parts, as DeepSeek's; another guide says it "ships with FP8 weights". **Accepted tag: fp8, provisional,** by analogy with D5. Its mxfp4 and fp4 endpoints are excluded until `config.json` settles the format
+- Thinking can be switched off (`enable_thinking: false`)
+- Census 26 Oct: 10 providers, 10 endpoints. fp8 6, fp4 1, bf16 1, mxfp4 1, unknown 1. **Qualifying: 6**
+
+### 3.9 Qwen/Qwen3.5-397B-A17B
+
+Placed 26 October 2026 (rule 1.18).
+
+- OpenRouter id: `qwen/qwen3.5-397b-a17b`, created 16 February 2026. Hugging Face: `Qwen/Qwen3.5-397B-A17B`
+- Commit hash: not read
+- Parameters: 397B total, 17B activated (model card, as mirrored on Dell's Hugging Face hub). **Standard**
+- Native precision: not stated on the card. **Accepted tag: fp8, provisional,** as the other Qwen candidates
+- Licence: Apache 2.0. Thinking on by default, switched off with `enable_thinking: false`
+- Census 26 Oct: 10 providers, 10 endpoints. unknown 6, fp8 4. **Qualifying: 4.** On the watchlist only through its unknown endpoints (rule 1.18)
+
 ---
 
 ## 4. Heavy grade candidates
@@ -949,6 +1021,72 @@ Placed on 17 October 2026, the day of release, as a Standard candidate under the
   code. Weights change triggers rollover; loading code does not
 - Grade: Heavy at 32B active, 7 per cent above the boundary, inside the 20 per
   cent review trigger
+
+### 4.4 zai-org/GLM-5.1
+
+Placed 26 October 2026 (rule 1.18).
+
+- OpenRouter id: `z-ai/glm-5.1`, created 7 April 2026. Hugging Face: `zai-org/GLM-5.1`
+- Commit hash: not read
+- Parameters: 744B total, 40B active (vLLM's recipe for it: "a refreshed version of GLM-5"). **Heavy**
+- Native precision: "Both BF16 and native FP8 checkpoints are published" (vLLM), the FP8 one as `zai-org/GLM-5.1-FP8`. **Accepted tag: fp8, provisional,** as GLM-5.2 and GLM-5.3
+- Census 26 Oct: 13 providers, 13 endpoints. fp8 11, unknown 2. **Qualifying: 11,** against the Heavy reference GLM-5.2's 12: a superseded model one provider behind, which bears on tripwire 7
+
+### 4.5 zai-org/GLM-5
+
+Placed 26 October 2026 (rule 1.18).
+
+- OpenRouter id: `z-ai/glm-5`, created 11 February 2026. Hugging Face: `zai-org/GLM-5`
+- Commit hash: not read
+- Parameters: 744B total, 40B active (a guide to GLM-5-FP8, which also gives 753B, as GLM-5.3's card does). **Heavy**
+- Native precision: an official FP8 checkpoint, `GLM-5-FP8`, is published. **Accepted tag: fp8, provisional,** as the family
+- Licence: MIT, per the same guide
+- Census 26 Oct: 8 providers, 9 endpoints. fp8 7, unknown 2. **Qualifying: 7**
+
+### 4.6 deepseek-ai/DeepSeek-V4-Pro (V4 Pro 0423)
+
+Placed 26 October 2026 (rule 1.18).
+
+- OpenRouter id: `deepseek/deepseek-v4-pro`, listed as "DeepSeek V4 Pro 0423", created 24 April 2026. Hugging Face: `deepseek-ai/DeepSeek-V4-Pro`. The alias warning in 4.2 refers to it
+- Commit hash: not read
+- Parameters: 1.6T total, 49B active (the listing's description and the V4 model card). **Heavy**
+- Native precision: "FP4 + FP8 Mixed" (V4 model card). **Accepted tag: fp8, provisional,** as 0813
+- Licence: MIT
+- Census 26 Oct: 15 providers, 16 endpoints. fp8 8, unknown 5, fp4 2. **Qualifying: 8**
+
+### 4.7 deepseek-ai/DeepSeek-V3.2
+
+Placed 26 October 2026 (rule 1.18).
+
+- OpenRouter id: `deepseek/deepseek-v3.2`, created 1 December 2025. Hugging Face: `deepseek-ai/DeepSeek-V3.2`
+- Commit hash: not read
+- Parameters: 671B total, 37B active, the DeepSeek-V3 architecture it keeps, with DeepSeek Sparse Attention added (V3 technical report; not re-read on 26 October). **Heavy**
+- Native precision: fp8, as the V3 series was published. **Accepted tag: fp8, provisional**
+- Thinking optional
+- Census 26 Oct: 11 providers, 11 endpoints. unknown 6, fp8 4, fp4 1. **Qualifying: 4.** On the watchlist only through its unknown endpoints (rule 1.18)
+
+### 4.8 moonshotai/Kimi-K2.7-Code
+
+Placed 26 October 2026 (rule 1.18).
+
+- OpenRouter id: `moonshotai/kimi-k2.7-code`, created 12 June 2026. Hugging Face: `moonshotai/Kimi-K2.7-Code`
+- Commit hash: not read
+- Parameters: 1T total, 32B activated, 384 experts with 8 selected (release report, AI Weekly). **Heavy,** at 32B inside the review band, as Kimi K2.6
+- Native precision: "native INT4 quantization" (same report); third parties publish BF16 and NVFP4 conversions. **Accepted tag: int4, provisional,** as K2.6
+- Licence: Modified MIT
+- **Not eligible as a reference:** thinking is mandatory on the listing (rule 1.8)
+- Census 26 Oct: 11 providers, 12 endpoints. int4 5, fp8 3, unknown 2, fp4 1. **Qualifying: 5**
+
+### 4.9 google/gemma-4-31B-it
+
+Placed 26 October 2026 (rule 1.18).
+
+- OpenRouter id: `google/gemma-4-31b-it`, created 2 April 2026. Hugging Face: `google/gemma-4-31B-it`
+- Commit hash: not read
+- Parameters: 30.7B, dense, so every parameter is active (the listing's description). **Heavy,** 2 per cent above the boundary, inside the review band (rule 1.18)
+- Native precision: bf16, as Gemma 4 26B A4B. **Accepted tag: bf16, provisional**
+- Thinking configurable, off by default
+- Census 26 Oct: 12 providers, 15 endpoints. fp4 5, unknown 3, fp8 3, bf16 2. **Qualifying: 2**
 
 ---
 
@@ -1020,7 +1158,7 @@ The ambiguity of bare `fp4` is a live problem for gpt-oss, whose native format i
 6. Check whether Kimi K2.6 config commit `2755962` touched weights
 7. Reconcile the DeepSeek V4 Flash 167 GB against 304B parameters. Its
    `config.json` has no key that explains it (section 3.2)
-8. Check the Minimax M3 card; 8 fp8 providers and never examined
+8. Settled 26 October: Minimax M3 examined and placed in Standard (section 3.7)
 9. Add to the methodology: the once-per-day census rule (1.5), the launch
    threshold and maintenance floor (1.4), and reference selection before first
    publication (1.6); done in methodology 0.9, 20 October
@@ -1029,6 +1167,9 @@ The ambiguity of bare `fp4` is a live problem for gpt-oss, whose native format i
     also carry the model maker's own switch for thinking; whether the test piece
     needs protecting against caching that ignores the unique first line. The
     promised cryptographic timestamp was built on 21 October (rule 1.13)
+11. Confirm from `config.json` the native precision of the ten models placed on
+    26 October, and read their commit hashes, before any is probed or could
+    become a reference (rule 1.18)
 
 ---
 

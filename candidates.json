@@ -14,13 +14,23 @@
       {"openrouter_id": "deepseek/deepseek-v4-flash-0731", "name": "DeepSeek V4 Flash 0731", "native_precision": "fp8"},
       {"openrouter_id": "openai/gpt-oss-120b", "native_precision": ["mxfp4", "fp4"]},
       {"openrouter_id": "qwen/qwen3.6-35b-a3b", "native_precision": "fp8"},
-      {"openrouter_id": "google/gemma-4-26b-a4b-it", "native_precision": "bf16"}
+      {"openrouter_id": "google/gemma-4-26b-a4b-it", "native_precision": "bf16"},
+      {"openrouter_id": "deepseek/deepseek-v4-flash", "name": "DeepSeek V4 Flash 0423", "native_precision": "fp8"},
+      {"openrouter_id": "minimax/minimax-m3", "name": "MiniMax M3", "native_precision": "bf16"},
+      {"openrouter_id": "xiaomi/mimo-v2.6-flash", "name": "MiMo-V2.6-Flash", "native_precision": "fp8"},
+      {"openrouter_id": "qwen/qwen3.5-397b-a17b", "name": "Qwen3.5 397B A17B", "native_precision": "fp8"}
     ],
     "Heavy (above 30B active, not published)": [
       {"openrouter_id": "z-ai/glm-5.2", "native_precision": "fp8", "reference": true},
       {"openrouter_id": "z-ai/glm-5.3", "native_precision": "fp8"},
       {"openrouter_id": "deepseek/deepseek-v4-pro-0813", "native_precision": "fp8"},
-      {"openrouter_id": "moonshotai/kimi-k2.6", "native_precision": "int4"}
+      {"openrouter_id": "moonshotai/kimi-k2.6", "native_precision": "int4"},
+      {"openrouter_id": "z-ai/glm-5.1", "name": "GLM-5.1", "native_precision": "fp8"},
+      {"openrouter_id": "z-ai/glm-5", "name": "GLM-5", "native_precision": "fp8"},
+      {"openrouter_id": "deepseek/deepseek-v4-pro", "name": "DeepSeek V4 Pro 0423", "native_precision": "fp8"},
+      {"openrouter_id": "deepseek/deepseek-v3.2", "name": "DeepSeek V3.2", "native_precision": "fp8"},
+      {"openrouter_id": "moonshotai/kimi-k2.7-code", "name": "Kimi K2.7 Code", "native_precision": "int4"},
+      {"openrouter_id": "google/gemma-4-31b-it", "name": "Gemma 4 31B", "native_precision": "bf16"}
     ],
     "Frontier (not published)": [
       {"openrouter_id": "moonshotai/kimi-k3", "native_precision": ["mxfp4", "fp4"], "reference": true},
