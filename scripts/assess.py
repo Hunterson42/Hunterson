@@ -106,6 +106,11 @@ def dec(x):
     return None if x is None else Decimal(str(x))
 
 
+def per_million(x):
+    """A listed per-token price as US dollars per million, to four places, or "-"."""
+    return "-" if x is None else q4(dec(x) * 1000000)
+
+
 def median(values):
     v = sorted(values)
     n = len(v)
@@ -257,12 +262,20 @@ def speed(rec):
     return u["completion_tokens"] / (total - ft)
 
 
-def price_in_force(listed, when):
+def price_in_force(listed, when, prompt_tokens=None):
     """The listed (prompt, completion) per-token prices at a moment, honouring any
     time-of-day override in the listing: utc_days, and utc_start and utc_end as
-    HHMM, an end of 0 meaning midnight. The first override that matches applies."""
+    HHMM, an end of 0 meaning midnight. The first override that matches applies.
+
+    An override with min_prompt_tokens is a price for long requests, and applies
+    only to a request with at least that many input tokens. The assessed price is
+    the price below any such threshold (D39), so an override whose threshold the
+    request does not reach, or a request whose size is not known, is passed over."""
     hm = when.hour * 100 + when.minute
     for o in listed.get("overrides") or []:
+        if o.get("min_prompt_tokens") is not None:
+            if prompt_tokens is None or prompt_tokens < int(o["min_prompt_tokens"]):
+                continue
         days = [d.lower() for d in o.get("utc_days") or []]
         if days and WEEKDAYS[when.weekday()] not in days:
             continue
@@ -406,7 +419,7 @@ def test_provider(cp, provider, recs, ctx):
             continue
         paid_in.append(cin / u["prompt_tokens"])
         paid_out.append(cout / u["completion_tokens"])
-        pin, pout = price_in_force(listed, parse_time(r["started_utc"]))
+        pin, pout = price_in_force(listed, parse_time(r["started_utc"]), u.get("prompt_tokens"))
         if pin is None or pout is None:
             wrong = wrong or "Receipt: no listed price to check against"
             continue
@@ -666,6 +679,26 @@ def assess_all(root=".", today=None, now=None, verbose=True):
 
 # The report ---------------------------------------------------------------
 
+def length_rules(listing, accepted, tiers=None, day=None):
+    """Every endpoint at an accepted precision, on a tier that is observed, whose
+    listing sets a price that depends on the length of the request (an override
+    with min_prompt_tokens), as (provider, tag, threshold, prompt, completion).
+    For the report only (D39): such a price never applies to the test, whose
+    request is far shorter than any threshold yet seen."""
+    endpoints = (((listing or {}).get("response") or {}).get("data") or {}).get("endpoints") or []
+    out = []
+    for ep in endpoints:
+        if (ep.get("quantization") or "unspecified") not in accepted:
+            continue
+        name = ep.get("provider_name", "unknown")
+        if service_tiers.not_observed(tiers, name, ep.get("tag"), day):
+            continue
+        for o in (ep.get("pricing") or {}).get("overrides") or []:
+            if o.get("min_prompt_tokens") is not None:
+                out.append((name, ep.get("tag"), int(o["min_prompt_tokens"]), o.get("prompt"), o.get("completion")))
+    return out
+
+
 def report(target, root=".", ignore_reliability=False, max_first_token=None):
     panel = load_json(os.path.join(root, "panel.json"))
     info = checkpoints_info(load_json(os.path.join(root, "candidates.json")))
@@ -717,6 +750,14 @@ def report(target, root=".", ignore_reliability=False, max_first_token=None):
                   f"   (before discounts: {un['output']} / {un['input']} / {un['blended']})")
         else:
             print(f"  No price: fewer than {s['minimum_contributors']} contributors")
+        listing = win.listing(cp)
+        rules = length_rules(listing, (listing or {}).get("accepted_precisions") or info[cp]["accepted"],
+                             ctx.get("tiers"), ctx.get("tier_day"))
+        if not rules:
+            print("  Length-based prices on qualifying endpoints: none")
+        for name, tag, threshold, pin, pout in rules:
+            print(f"  LENGTH-BASED PRICE: {name} ({tag}) from {threshold:,} input tokens, "
+                  f"{per_million(pin)} / {per_million(pout)} input / output per million (D39)")
     return 0
 
 

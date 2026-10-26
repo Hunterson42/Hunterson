@@ -330,6 +330,42 @@ class AssessTests(unittest.TestCase):
         self.assertEqual(at(listed, dt.datetime(2026, 10, 19, 14, 5)), (Decimal(1), Decimal(2)))    # no override
         self.assertEqual(at({"prompt": "1", "completion": "2"}, dt.datetime(2026, 10, 19, 14, 5)), (Decimal(1), Decimal(2)))
 
+    # Prices by length of request (D39) ---------------------------------------
+
+    def test_a_price_for_long_requests_applies_only_from_its_threshold(self):
+        listed = {"prompt": "1", "completion": "2", "overrides": [
+            {"min_prompt_tokens": 100000, "prompt": "5", "completion": "10"},
+            {"utc_start": 100, "utc_end": 400, "prompt": "3", "completion": "4"}]}
+        at = assess.price_in_force
+        monday_1405, monday_0200 = dt.datetime(2026, 10, 19, 14, 5), dt.datetime(2026, 10, 19, 2, 0)
+        self.assertEqual(at(listed, monday_1405, 7613), (Decimal(1), Decimal(2)))
+        self.assertEqual(at(listed, monday_1405), (Decimal(1), Decimal(2)), "size unknown: passed over")
+        self.assertEqual(at(listed, monday_0200, 7613), (Decimal(3), Decimal(4)), "the time of day still applies")
+        self.assertEqual(at(listed, monday_1405, 100000), (Decimal(5), Decimal(10)))
+
+    def test_a_provider_with_a_price_for_long_requests_still_contributes(self):
+        long_price = [{"min_prompt_tokens": 100000, "prompt": str(per_token("0.30")),
+                       "completion": str(per_token("1.50"))}]
+        provs = {n: spec(str(o), str(i)) for n, (o, i) in GOOD.items()}
+        provs["Long dearer"] = spec(overrides=long_price)
+        self.history(8, provs)
+        make_window(self.root, self.days[8], provs)
+        self.run_all(self.days[8])
+        res = {p["provider"]: p for p in self.result(self.days[8])["providers"]}
+        self.assertEqual(res["Long dearer"]["result"], "contributor")
+
+    def test_length_rules_are_listed_for_the_report(self):
+        listing = {"response": {"data": {"endpoints": [
+            {"provider_name": "A", "tag": "a/fp8", "quantization": "fp8",
+             "pricing": {"overrides": [{"min_prompt_tokens": 128000, "prompt": "0.0000003", "completion": "0.0000012"}]}},
+            {"provider_name": "B", "tag": "b/fp4", "quantization": "fp4",
+             "pricing": {"overrides": [{"min_prompt_tokens": 64000, "prompt": "1", "completion": "1"}]}},
+            {"provider_name": "C", "tag": "c/fp8", "quantization": "fp8",
+             "pricing": {"overrides": [{"utc_start": 0, "utc_end": 1400, "prompt": "1", "completion": "1"}]}}]}}}
+        self.assertEqual(assess.length_rules(listing, ["fp8"]),
+                         [("A", "a/fp8", 128000, "0.0000003", "0.0000012")])
+        self.assertEqual(assess.per_million("0.0000003"), "0.3000")
+
     # Rule 10 -------------------------------------------------------------------
 
     def test_a_group_gives_one_observation(self):

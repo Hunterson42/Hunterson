@@ -289,8 +289,18 @@ class MarketDataTests(unittest.TestCase):
         self.assertIn("apps, 2 pages: 130 apps, 2026-10-12 to 2026-10-18", r.stdout, "every page is counted")
         self.assertIn("apps by subcategory, tokens in the listed apps: cli-agent 2.28T (5); ", r.stdout)
         self.assertIn("session-cost, 3 pages: 1,120 cells", r.stdout)
-        self.assertIn("1-turn $0.05; 2-9-turns $0.10; 10-49-turns $0.15; 50-plus-turns $0.20", r.stdout)
+        self.assertIn("1-turn $0.0500; 2-9-turns $0.10; 10-49-turns $0.15; 50-plus-turns $0.20", r.stdout)
         self.assertNotIn("PROBLEM", r.stdout)
+
+    def test_session_costs_below_a_cent_keep_their_digits(self):
+        sys.path.insert(0, os.path.join(ROOT, "scripts"))
+        import marketdata
+        self.assertEqual(marketdata.money(0.00319), "$0.00319")
+        self.assertEqual(marketdata.money(0.0174), "$0.0174")
+        self.assertEqual(marketdata.money(0.1749), "$0.17")
+        self.assertEqual(marketdata.money(1.13), "$1.13")
+        self.assertEqual(marketdata.money(1234.5), "$1,234.50")
+        self.assertEqual(marketdata.money(0), "$0.00")
 
     def test_report_flags_a_reply_in_a_changed_format(self):
         self.run_market("--slot", "morning")

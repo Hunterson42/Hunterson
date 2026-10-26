@@ -61,6 +61,7 @@ Uses only the Python standard library.
 import datetime as dt
 import hashlib
 import json
+import math
 import os
 import shutil
 import subprocess
@@ -567,6 +568,17 @@ def summary_apps(obj):
             "top: " + "; ".join(f"{r.get('rank')}. {r.get('app_name')} {tokens(r.get('total_tokens'))}" for r in top)]
 
 
+def money(x):
+    """US dollars: to the cent from ten cents up; below that, to three significant
+    figures, so that a session costing a fraction of a cent does not show as $0.00.
+    The raw replies keep the exact figures."""
+    x = float(x)
+    if x == 0 or abs(x) >= 0.1:
+        return f"${x:,.2f}"
+    places = 2 - math.floor(math.log10(abs(x)))
+    return f"${x:.{places}f}"
+
+
 def summary_session_cost(obj):
     rows = obj["data"]
     meta = obj.get("meta") or {}
@@ -581,7 +593,7 @@ def summary_session_cost(obj):
         return int(head) if head.isdigit() else 10 ** 6
     return [f"{len(rows):,} cells, {meta.get('window_days')} days to {meta.get('window_end_date')} "
             f"(as of {as_of(obj)})",
-            "median of the medians: " + "; ".join(f"{k} ${median(v):,.2f}" for k, v in sorted(
+            "median of the medians: " + "; ".join(f"{k} {money(median(v))}" for k, v in sorted(
                 by_turns.items(), key=lambda kv: first_turn(kv[0])))]
 
 
