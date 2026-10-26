@@ -1,6 +1,6 @@
 {
  "schema_version": 1,
- "date": "2026-10-25",
+ "date": "2026-10-26",
  "models_with_endpoints": 440,
  "models_with_five_plus_providers": 58,
  "rows": [
@@ -17,7 +17,7 @@
    },
    "output_usd_per_m": {
     "low": 1.4,
-    "median": 4.3921,
+    "median": 4.4,
     "high": 8.8
    }
   },
@@ -28,12 +28,12 @@
    "endpoints": 38,
    "quantisation": {
     "unknown": 12,
-    "fp4": 11,
     "fp8": 11,
+    "fp4": 11,
     "nvfp4": 4
    },
    "output_usd_per_m": {
-    "low": 0.0698,
+    "low": 0.01,
     "median": 0.5,
     "high": 2.4
    }
@@ -58,33 +58,33 @@
   {
    "rank": 4,
    "model": "deepseek/deepseek-v4.1-flash-1017",
-   "providers": 29,
-   "endpoints": 34,
+   "providers": 30,
+   "endpoints": 35,
    "quantisation": {
-    "fp8": 15,
+    "fp8": 16,
     "unknown": 14,
     "fp4": 4,
     "mxfp4": 1
    },
    "output_usd_per_m": {
     "low": 0.15,
-    "median": 0.82,
+    "median": 0.84,
     "high": 1.32
    }
   },
   {
    "rank": 5,
    "model": "z-ai/glm-5.2",
-   "providers": 26,
-   "endpoints": 35,
+   "providers": 25,
+   "endpoints": 34,
    "quantisation": {
-    "fp8": 18,
+    "fp8": 17,
     "fp4": 10,
     "unknown": 6,
     "nvfp4": 1
    },
    "output_usd_per_m": {
-    "low": 0.594,
+    "low": 1.44,
     "median": 4.4,
     "high": 8.0
    }
@@ -98,17 +98,34 @@
     "fp8": 10,
     "unknown": 8,
     "fp4": 5,
-    "nvfp4": 1,
-    "fp32": 1
+    "fp32": 1,
+    "nvfp4": 1
    },
    "output_usd_per_m": {
-    "low": 0.1333,
+    "low": 0.15,
     "median": 0.28,
     "high": 1.32
    }
   },
   {
    "rank": 7,
+   "model": "deepseek/deepseek-v4-pro-0813",
+   "providers": 22,
+   "endpoints": 24,
+   "quantisation": {
+    "unknown": 11,
+    "fp8": 8,
+    "fp4": 4,
+    "mxfp4": 1
+   },
+   "output_usd_per_m": {
+    "low": 0.8,
+    "median": 3.96,
+    "high": 8.0
+   }
+  },
+  {
+   "rank": 8,
    "model": "openai/gpt-oss-120b",
    "providers": 22,
    "endpoints": 24,
@@ -124,23 +141,6 @@
     "low": 0.15,
     "median": 0.5,
     "high": 0.95
-   }
-  },
-  {
-   "rank": 8,
-   "model": "deepseek/deepseek-v4-pro-0813",
-   "providers": 21,
-   "endpoints": 23,
-   "quantisation": {
-    "unknown": 11,
-    "fp8": 8,
-    "fp4": 3,
-    "mxfp4": 1
-   },
-   "output_usd_per_m": {
-    "low": 0.396,
-    "median": 3.8,
-    "high": 8.0
    }
   },
   {
@@ -180,52 +180,52 @@
   },
   {
    "rank": 11,
+   "model": "deepseek/deepseek-v4-flash",
+   "providers": 17,
+   "endpoints": 17,
+   "quantisation": {
+    "fp8": 9,
+    "unknown": 5,
+    "fp4": 2,
+    "mxfp4": 1
+   },
+   "output_usd_per_m": {
+    "low": 0.1652,
+    "median": 0.28,
+    "high": 1.32
+   }
+  },
+  {
+   "rank": 12,
    "model": "moonshotai/kimi-k2.6",
    "providers": 17,
    "endpoints": 17,
    "quantisation": {
     "int4": 6,
     "unknown": 4,
-    "fp4": 3,
     "fp8": 3,
+    "fp4": 3,
     "bf16": 1
    },
    "output_usd_per_m": {
-    "low": 1.892,
+    "low": 1.95,
     "median": 3.5,
     "high": 4.6
    }
   },
   {
-   "rank": 12,
-   "model": "deepseek/deepseek-v4-flash",
-   "providers": 15,
-   "endpoints": 15,
-   "quantisation": {
-    "fp8": 8,
-    "unknown": 4,
-    "fp4": 2,
-    "mxfp4": 1
-   },
-   "output_usd_per_m": {
-    "low": 0.0445,
-    "median": 0.28,
-    "high": 1.32
-   }
-  },
-  {
    "rank": 13,
    "model": "deepseek/deepseek-v4-pro",
-   "providers": 14,
-   "endpoints": 15,
+   "providers": 15,
+   "endpoints": 16,
    "quantisation": {
-    "fp8": 8,
+    "fp8": 9,
     "unknown": 5,
     "fp4": 2
    },
    "output_usd_per_m": {
-    "low": 0.4157,
-    "median": 2.6,
+    "low": 1.5,
+    "median": 2.976,
     "high": 3.83
    }
   },
@@ -247,23 +247,6 @@
   },
   {
    "rank": 15,
-   "model": "google/gemma-4-31b-it",
-   "providers": 13,
-   "endpoints": 16,
-   "quantisation": {
-    "fp4": 5,
-    "fp8": 5,
-    "unknown": 4,
-    "bf16": 2
-   },
-   "output_usd_per_m": {
-    "low": 0.32,
-    "median": 0.4,
-    "high": 1.15
-   }
-  },
-  {
-   "rank": 16,
    "model": "z-ai/glm-5.1",
    "providers": 13,
    "endpoints": 13,
@@ -272,9 +255,26 @@
     "unknown": 2
    },
    "output_usd_per_m": {
-    "low": 3.0316,
-    "median": 4.2,
+    "low": 3.036,
+    "median": 4.4,
     "high": 4.4044
+   }
+  },
+  {
+   "rank": 16,
+   "model": "google/gemma-4-31b-it",
+   "providers": 12,
+   "endpoints": 15,
+   "quantisation": {
+    "fp4": 5,
+    "fp8": 5,
+    "unknown": 3,
+    "bf16": 2
+   },
+   "output_usd_per_m": {
+    "low": 0.32,
+    "median": 0.4,
+    "high": 1.15
    }
   },
   {
@@ -538,6 +538,23 @@
   },
   {
    "rank": 33,
+   "model": "qwen/qwen3.5-9b",
+   "providers": 6,
+   "endpoints": 6,
+   "quantisation": {
+    "bf16": 3,
+    "fp4": 1,
+    "fp8": 1,
+    "unknown": 1
+   },
+   "output_usd_per_m": {
+    "low": 0.13,
+    "median": 0.2,
+    "high": 0.25
+   }
+  },
+  {
+   "rank": 34,
    "model": "reflection/beam-1.0-501b-a23b",
    "providers": 6,
    "endpoints": 6,
@@ -553,7 +570,7 @@
    }
   },
   {
-   "rank": 34,
+   "rank": 35,
    "model": "z-ai/glm-4.7",
    "providers": 6,
    "endpoints": 7,
@@ -569,7 +586,7 @@
    }
   },
   {
-   "rank": 35,
+   "rank": 36,
    "model": "anthropic/claude-fable-5",
    "providers": 5,
    "endpoints": 6,
@@ -583,7 +600,7 @@
    }
   },
   {
-   "rank": 36,
+   "rank": 37,
    "model": "anthropic/claude-haiku-5.5",
    "providers": 5,
    "endpoints": 10,
@@ -597,7 +614,7 @@
    }
   },
   {
-   "rank": 37,
+   "rank": 38,
    "model": "anthropic/claude-opus-4.5",
    "providers": 5,
    "endpoints": 6,
@@ -611,7 +628,7 @@
    }
   },
   {
-   "rank": 38,
+   "rank": 39,
    "model": "anthropic/claude-opus-4.6",
    "providers": 5,
    "endpoints": 6,
@@ -625,7 +642,7 @@
    }
   },
   {
-   "rank": 39,
+   "rank": 40,
    "model": "anthropic/claude-opus-4.7",
    "providers": 5,
    "endpoints": 8,
@@ -636,20 +653,6 @@
     "low": 25.0,
     "median": 25.0,
     "high": 27.5
-   }
-  },
-  {
-   "rank": 40,
-   "model": "anthropic/claude-opus-4.8",
-   "providers": 5,
-   "endpoints": 11,
-   "quantisation": {
-    "unknown": 11
-   },
-   "output_usd_per_m": {
-    "low": 25.0,
-    "median": 27.5,
-    "high": 50.0
    }
   }
  ]
