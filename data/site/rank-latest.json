@@ -1,7 +1,7 @@
 {
  "schema_version": 1,
- "date": "2026-10-26",
- "models_with_endpoints": 440,
+ "date": "2026-10-27",
+ "models_with_endpoints": 437,
  "models_with_five_plus_providers": 58,
  "rows": [
   {
@@ -28,14 +28,14 @@
    "endpoints": 38,
    "quantisation": {
     "unknown": 12,
+    "fp4": 12,
     "fp8": 11,
-    "fp4": 11,
-    "nvfp4": 4
+    "nvfp4": 3
    },
    "output_usd_per_m": {
-    "low": 0.01,
+    "low": 0.043,
     "median": 0.5,
-    "high": 2.4
+    "high": 1.2
    }
   },
   {
@@ -51,7 +51,7 @@
    },
    "output_usd_per_m": {
     "low": 0.18,
-    "median": 0.84,
+    "median": 0.9,
     "high": 2.4
    }
   },
@@ -68,7 +68,7 @@
    },
    "output_usd_per_m": {
     "low": 0.15,
-    "median": 0.84,
+    "median": 0.78,
     "high": 1.32
    }
   },
@@ -91,30 +91,12 @@
   },
   {
    "rank": 6,
-   "model": "deepseek/deepseek-v4-flash-0731",
-   "providers": 22,
+   "model": "deepseek/deepseek-v4-pro-0813",
+   "providers": 23,
    "endpoints": 25,
    "quantisation": {
-    "fp8": 10,
-    "unknown": 8,
-    "fp4": 5,
-    "fp32": 1,
-    "nvfp4": 1
-   },
-   "output_usd_per_m": {
-    "low": 0.15,
-    "median": 0.28,
-    "high": 1.32
-   }
-  },
-  {
-   "rank": 7,
-   "model": "deepseek/deepseek-v4-pro-0813",
-   "providers": 22,
-   "endpoints": 24,
-   "quantisation": {
     "unknown": 11,
-    "fp8": 8,
+    "fp8": 9,
     "fp4": 4,
     "mxfp4": 1
    },
@@ -125,13 +107,13 @@
    }
   },
   {
-   "rank": 8,
+   "rank": 7,
    "model": "openai/gpt-oss-120b",
-   "providers": 22,
-   "endpoints": 24,
+   "providers": 23,
+   "endpoints": 25,
    "quantisation": {
     "unknown": 9,
-    "fp4": 7,
+    "fp4": 8,
     "bf16": 4,
     "fp8": 2,
     "int4": 1,
@@ -144,20 +126,38 @@
    }
   },
   {
+   "rank": 8,
+   "model": "deepseek/deepseek-v4-flash-0731",
+   "providers": 22,
+   "endpoints": 25,
+   "quantisation": {
+    "fp8": 10,
+    "unknown": 8,
+    "fp4": 5,
+    "nvfp4": 1,
+    "fp32": 1
+   },
+   "output_usd_per_m": {
+    "low": 0.15,
+    "median": 0.28,
+    "high": 1.32
+   }
+  },
+  {
    "rank": 9,
    "model": "moonshotai/kimi-k3",
    "providers": 21,
-   "endpoints": 29,
+   "endpoints": 30,
    "quantisation": {
+    "unknown": 11,
     "fp4": 10,
-    "unknown": 10,
     "mxfp4": 7,
     "fp8": 2
    },
    "output_usd_per_m": {
-    "low": 5.5,
-    "median": 14.519,
-    "high": 22.5
+    "low": 8.25,
+    "median": 14.125,
+    "high": 28.125
    }
   },
   {
@@ -201,14 +201,14 @@
    "providers": 17,
    "endpoints": 17,
    "quantisation": {
-    "int4": 6,
-    "unknown": 4,
+    "int4": 5,
+    "unknown": 5,
     "fp8": 3,
     "fp4": 3,
     "bf16": 1
    },
    "output_usd_per_m": {
-    "low": 1.95,
+    "low": 1.8,
     "median": 3.5,
     "high": 4.6
    }
@@ -216,32 +216,32 @@
   {
    "rank": 13,
    "model": "deepseek/deepseek-v4-pro",
-   "providers": 15,
-   "endpoints": 16,
+   "providers": 14,
+   "endpoints": 15,
    "quantisation": {
     "fp8": 9,
-    "unknown": 5,
+    "unknown": 4,
     "fp4": 2
    },
    "output_usd_per_m": {
     "low": 1.5,
-    "median": 2.976,
+    "median": 3.12,
     "high": 3.83
    }
   },
   {
    "rank": 14,
    "model": "google/gemma-4-26b-a4b-it",
-   "providers": 13,
-   "endpoints": 13,
+   "providers": 14,
+   "endpoints": 14,
    "quantisation": {
-    "bf16": 7,
+    "bf16": 8,
     "unknown": 4,
     "fp8": 2
    },
    "output_usd_per_m": {
     "low": 0.22,
-    "median": 0.33,
+    "median": 0.32,
     "high": 0.6
    }
   },
@@ -255,7 +255,7 @@
     "unknown": 2
    },
    "output_usd_per_m": {
-    "low": 3.036,
+    "low": 2.9,
     "median": 4.4,
     "high": 4.4044
    }
@@ -283,8 +283,8 @@
    "providers": 12,
    "endpoints": 13,
    "quantisation": {
-    "fp8": 10,
-    "unknown": 2,
+    "fp8": 9,
+    "unknown": 3,
     "fp4": 1
    },
    "output_usd_per_m": {
@@ -295,24 +295,6 @@
   },
   {
    "rank": 18,
-   "model": "minimax/minimax-m3.1-flash",
-   "providers": 12,
-   "endpoints": 13,
-   "quantisation": {
-    "fp4": 5,
-    "unknown": 4,
-    "fp8": 2,
-    "fp16": 1,
-    "nvfp4": 1
-   },
-   "output_usd_per_m": {
-    "low": 0.5,
-    "median": 0.6,
-    "high": 1.2
-   }
-  },
-  {
-   "rank": 19,
    "model": "deepseek/deepseek-v3.2",
    "providers": 11,
    "endpoints": 11,
@@ -328,20 +310,37 @@
    }
   },
   {
-   "rank": 20,
+   "rank": 19,
    "model": "moonshotai/kimi-k2.7-code",
    "providers": 11,
    "endpoints": 12,
    "quantisation": {
-    "int4": 6,
+    "int4": 4,
+    "unknown": 4,
     "fp8": 3,
-    "unknown": 2,
     "fp4": 1
    },
    "output_usd_per_m": {
     "low": 3.0,
     "median": 3.92,
     "high": 8.0
+   }
+  },
+  {
+   "rank": 20,
+   "model": "minimax/minimax-m3.1-flash",
+   "providers": 10,
+   "endpoints": 11,
+   "quantisation": {
+    "fp4": 4,
+    "unknown": 4,
+    "fp8": 2,
+    "fp16": 1
+   },
+   "output_usd_per_m": {
+    "low": 0.57,
+    "median": 0.6,
+    "high": 0.6
    }
   },
   {
@@ -388,7 +387,7 @@
    },
    "output_usd_per_m": {
     "low": 0.7,
-    "median": 1.0,
+    "median": 0.975,
     "high": 1.8
    }
   },
@@ -405,7 +404,7 @@
     "unknown": 1
    },
    "output_usd_per_m": {
-    "low": 0.182,
+    "low": 0.238,
     "median": 0.28,
     "high": 0.35
    }
@@ -430,12 +429,12 @@
   {
    "rank": 26,
    "model": "nvidia/nemotron-3.5-super-vl",
-   "providers": 8,
-   "endpoints": 8,
+   "providers": 9,
+   "endpoints": 9,
    "quantisation": {
     "nvfp4": 3,
     "fp4": 3,
-    "bf16": 1,
+    "bf16": 2,
     "unknown": 1
    },
    "output_usd_per_m": {
@@ -465,8 +464,8 @@
    "providers": 7,
    "endpoints": 8,
    "quantisation": {
-    "fp8": 5,
-    "unknown": 3
+    "unknown": 5,
+    "fp8": 3
    },
    "output_usd_per_m": {
     "low": 0.95,
@@ -555,18 +554,18 @@
   },
   {
    "rank": 34,
-   "model": "reflection/beam-1.0-501b-a23b",
+   "model": "tencent/hy4-preview",
    "providers": 6,
    "endpoints": 6,
    "quantisation": {
-    "fp4": 3,
-    "unknown": 2,
-    "fp8": 1
+    "fp8": 4,
+    "unknown": 1,
+    "fp4": 1
    },
    "output_usd_per_m": {
-    "low": 0.98,
-    "median": 1.1,
-    "high": 1.2
+    "low": 2.501,
+    "median": 2.501,
+    "high": 2.501
    }
   },
   {
