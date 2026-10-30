@@ -658,6 +658,20 @@ The tracker's watchlist held ten models, most of them since the first census on 
 
 **Aliases.** The undated `deepseek/deepseek-v4-flash` and `deepseek/deepseek-v4-pro` are the April preview checkpoints, listed as DeepSeek V4 Flash 0423 and V4 Pro 0423 (canonical slugs ending `-20260423`), and are separate products from 0731, 0813 and the V4.1 checkpoints. `xiaomi/mimo-v2.6-flash` names `XiaomiMiMo/MiMo-V2.6-Flash-RL`, canonical slug `xiaomi/mimo-v2.6-flash-20260921`.
 
+### 1.19 Decisions for methodology 1.0, 24 to 29 October 2026
+
+Recorded with methodology 1.0, fixed on 30 October 2026. Each is written into the methodology where shown.
+
+- **D39. The test job's length is stated, watched and measured, not changed (section 3).** The test job, about 7,600 input tokens and 500 output, falls in a band of request lengths that carried about 8 per cent of the tokens bought through the venue on 28 October 2026. No provider of any probed checkpoint prices by length, so the price per token paid is also what a longer request pays for fresh tokens; where a provider sets a price above some length, the assessed price is the price below it. The listings are checked each weekday, and the assessor's report shows any such price. Lengthening the test job was rejected: it would restart the shadow run, need a new frozen hash and break comparison with the windows before it
+- **D40. The leading challenger is published beside the reference; a tie is decided by volume; a stale reference is flagged (sections 4.5 and 16).** A challenger with the same number of qualifying providers as the reference leads on that census day if its tokens bought through the venue over the previous seven days were at least 1.5 times the reference's; without those figures a tie breaks the run, as before. The tie rule applies from the census of 31 October 2026, and governs which model is the reference, not whether a grade can launch (section 4.6). The reason: every provider serving DeepSeek V4.1-Flash-1017 at fp8 also served the reference, so without it a challenger that buyers had already moved to could at best tie, and the reference could trail its buyers for months. Choosing the reference by volume, and making 1017 the reference by decision, were rejected. On 29 October 1017 had 15 qualifying providers against the reference's 16, one of them, Mistral, serving 1017 alone
+- **D41. Days of failed delivery: no further rule (section 7).** The figure moved by more than a tenth between windows on four of ten occasions in the shadow period, mostly because of who delivered. Smoothing would publish, for some day, a price nobody paid. Users who need a steadier figure average it over a period
+- **D42. The venue's position is stated in its own terms, dated, with what follows a refusal (section 8)**
+- **D43. The IOSCO principles: a separate statement, `IOSCO.md`, says paragraph by paragraph how each is met, and where it is not (section 17).** With four additions to the methodology: why the window is the hour it is; records kept at least five years and made available to market authorities; complaint records kept five years; and a yearly review
+- **D44. The cached input price is to be bought, not read,** by a separate test, for the planned series in section 16; never part of the Standard figure
+- **D45. Checkpoints of one family as one grade:** to be set out by the end of November 2026 and decided in December, and, if adopted, introduced under section 12 with 30 days' notice
+- **D46. The control group is to be widened** until it could carry a figure if the venue were lost; the methodology no longer fixes its size (section 8)
+- **D47. The venue's market data enters the rules only through D40's tie rule (section 4.5).** Every other stream collected beside the price is never an input
+
 ---
 
 ## 2. Daily tracking

@@ -16,7 +16,7 @@ set -euo pipefail
 SRC="$1"
 DST="$2"
 
-FILES=(README.md LICENSE.md LICENCE-DATA.md METHODOLOGY.md candidates.json panel.json prompt.txt affiliations.json gpu_sources.json market_sources.json .gitignore data/track.md)
+FILES=(README.md LICENSE.md LICENCE-DATA.md METHODOLOGY.md IOSCO.md candidates.json panel.json prompt.txt affiliations.json gpu_sources.json market_sources.json .gitignore data/track.md)
 DIRS=(notes scripts tests docs data/rank data/site)
 
 for f in "${FILES[@]}"; do

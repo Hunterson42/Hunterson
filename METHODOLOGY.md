@@ -2,15 +2,13 @@
 
 ## Methodology
 
-Version 0.9, draft for comment, October 2026. Amended October 2026: sections 5, 6, 7, 8, 10 and 13.
+Version 1.0, 30 October 2026.
 
 This document explains, in plain language, exactly how the Hunterson Standard Inference number is produced each weekday. Anyone with the data we publish and this document should be able to reproduce the number exactly, to the published precision. If they cannot, the document is wrong and we will fix it.
 
 The raw records behind each day's number include the venue's own responses, so they are kept privately. Every raw file is fingerprinted, and the fingerprints are published, so that any record produced later can be checked against them (section 8).
 
-Square brackets mark details that will be settled before version 1.0.
-
-This draft is open for comment for at least seven days. Version 1.0 will be fixed after that, and from then on every change follows section 12. Comments are welcome by email to malcolm@hunterson.org.
+This version was fixed on 30 October 2026. Version 0.9 had been public since 20 October 2026 and open for comment since 23 October; no comments were received. Every change from now on follows section 12, and comments remain welcome at any time, by email to malcolm@hunterson.org. The changes from version 0.9 are listed in section 19.
 
 ---
 
@@ -79,6 +77,10 @@ The full specification:
 | Price used | The price paid, taken from the receipt. The listed price for the endpoint, in force at the moment of the request, is the check: a receipt more than one per cent away from it excludes the provider that day. Promotional discounts open to every buyer are included, because they are what is paid. Volume and committed-use discounts are not included |
 | Unit | US dollars per million output tokens, to four decimal places. The input price is published alongside, and a blended price at 16 input tokens to 1 output token |
 
+**Why this hour.** European and American business hours overlap between 14:00 and 15:00 UTC, so the test meets providers under ordinary daytime demand, and the hour leaves time to publish by 16:00 UTC. Some providers charge different prices at different hours; the receipt check uses the price in force at the moment of each request (section 7).
+
+**The length of the test job.** The test job, about 7,600 input tokens and 500 output, is shorter than much of the market's traffic: on 28 October 2026, requests of 1,000 to 10,000 tokens carried about 8 per cent of the tokens bought through the venue (Source: OpenRouter (openrouter.ai/rankings), as of 29 October 2026. Licensed under CC BY 4.0). No provider in the panel charges a different price per token for longer requests, so the price paid per token is also what a longer request pays for its fresh tokens. Where a provider sets a different price above some length of request, the assessed price is the price below that threshold, and every weekday the listings are checked for such prices. What a short test does not show is the price of stored (cached) input, which long requests mostly use, or delivery on long requests; both are measured separately, for research (section 16).
+
 ## 4. Which model, and how it is chosen
 
 ### 4.1 One model at a time
@@ -119,7 +121,11 @@ It also means the number is harder for any one provider to move by changing its 
 
 Models are replaced quickly in this market. The rules below stop the reference from jumping around, and give anyone using the number time to adjust.
 
-**Stickiness.** The reference changes only if another eligible Standard-grade model has more qualifying providers than the reference on 20 census days in a row. A tie breaks the run. One day, or ten, is not enough.
+**Stickiness.** The reference changes only if another eligible Standard-grade model leads it on 20 census days in a row. One day, or ten, is not enough.
+
+A model **leads** on a census day if it has more qualifying providers than the reference, or the same number and at least 1.5 times the reference's tokens bought through the venue over the previous seven days, as the venue's published market data shows (section 8). If those figures are not available that day, a tie breaks the run. Volume decides only ties, and is never the main test, because it can move within a day with a few large buyers' default settings. The tie rule applies from the census of 31 October 2026. It is the only place in these rules where the venue's market data is used.
+
+A run under way when the first publication is made continues. If it reaches its twentieth day after the first publication, the rules for after the first publication apply.
 
 **Before the first publication.** Nobody relies on the number yet, so the challenger becomes the reference on the twentieth day, with no parallel period and no conversion ratio.
 
@@ -128,6 +134,8 @@ Models are replaced quickly in this market. The rules below stop the reference f
 1. **Parallel period.** Both the old and the new reference are tested and published side by side for 30 assessment days. On each of those days we publish the ratio between the two prices.
 2. **Switch.** After 30 assessment days, the new model becomes the reference. The average ratio over the period is published, so that anyone who wrote something against the old reference can convert it.
 3. **Emergency.** If the old reference has fewer than five contributors on five assessment days in a row during the parallel period, the parallel period ends on its tenth assessment day, or at once if that day has passed.
+
+**A stale reference.** A note is published on the site, with the figures, on any day when the leading eligible challenger's tokens bought through the venue have exceeded twice the reference's on 20 census days in a row, or when the reference's discount depth (section 7) is 10 points or more above its average over the previous 20 assessment days. The note changes nothing in the figure. It says that the reference may be losing its buyers, which a change of reference under the rules above may later follow.
 
 **What counts as a new version.** The reference is pinned to a commit hash. If the maker changes the model's weights, or changes the chat template that wraps prompts before the model sees them, that is a new checkpoint. It is handled as a change of reference under the rules above.
 
@@ -139,7 +147,7 @@ Changes to documentation, evaluation results, or labels, and changes to the make
 
 A grade is first published only when both of these hold:
 
-1. **Breadth.** On each of the last 20 census days, the model that is its reference has had at least 10 qualifying providers, and at least as many as every other eligible model in the grade. The days count whether or not the model was the reference on them.
+1. **Breadth.** On each of the last 20 census days, the model that is its reference has had at least 10 qualifying providers, and at least as many as every other eligible model in the grade. The days count whether or not the model was the reference on them. This test counts providers alone; the tie rule in section 4.5 decides which model is the reference, not whether a grade can launch.
 2. **Shadow period.** The daily test has run for the grade, unpublished, until five assessment days in a row have each produced a figure, with nobody intervening in the test or the calculation.
 
 During the shadow period each day's assessment is produced in full and kept privately. None is published, and none is changed afterwards.
@@ -224,7 +232,7 @@ We record everything, and keep it privately:
 
 **Three tries.** Speed and first-token time are taken as the median of the provider's completed requests, so one slow moment does not disqualify a provider and one fast moment does not flatter it.
 
-**Switching thinking off.** The request uses the venue's own switch for thinking. Some providers have been seen to ignore it and return only thinking; they are excluded on each day they do. [Whether the request should also carry the model maker's own form of the switch, so that such providers can take part, will be settled before 1.0.]
+**Switching thinking off.** The request uses the venue's own switch for thinking. Some providers have been seen to ignore it and return only thinking; they are excluded on each day they do. Adding the model maker's own form of the switch was tested on 23 October 2026, on all 43 endpoints then at an accepted precision: 42 gave the same reply either way, one could not be compared because of a rate limit, and the provider that returns only thinking did so either way. The request therefore carries only the venue's switch.
 
 **A known limitation.** The prompt is published and sent at a fixed hour, so a provider could recognise it and give it special treatment. Buying through the venue hides who is asking, but not what is asked. We therefore also run the same test outside the window, at weekends and at a randomly chosen hour each day, and once a quarter we send an unannounced request with a different passage; we compare the speeds, and record the result. These readings are for research only and never enter the assessment.
 
@@ -288,7 +296,7 @@ The 16 to 1 ratio is a convention, not a claim about anyone's actual usage.
 
 The price is the price paid to the providers that delivered the product in the window. It can move when providers fail to deliver, without any provider's listed price moving. In the shadow period this was seen directly: on one day the cheapest providers were slow or turned away requests together, and the figure rose by more than a quarter; the next day they delivered again and it returned.
 
-This is the number working as intended, not an error. A price for a product that was not delivered is not a price for the product. The trim in step 3 protects against one provider's unusual price; it does not, and should not, hide a day on which much of the market failed to deliver. The table published each day shows which providers delivered and which did not, and why. [Whether any further rule is needed for such days will be settled before 1.0, in the light of the shadow period.]
+This is the number working as intended, not an error. A price for a product that was not delivered is not a price for the product. The trim in step 3 protects against one provider's unusual price; it does not, and should not, hide a day on which much of the market failed to deliver. The table published each day shows which providers delivered and which did not, and why. No further rule is applied. In the shadow period, from 15 to 29 October 2026, the figure moved by more than a tenth from one window to the next on four of ten occasions, mostly because of which providers delivered. Any rule that steadied it would publish, for some day, a price that was not paid that day. Users who need a steadier figure, for instance to settle a contract, can average the daily figures over a period; the published history makes that exact. This is reviewed at the first quarterly review, with three months of published figures.
 
 ## 8. Where the data comes from
 
@@ -302,17 +310,21 @@ This is the number working as intended, not an error. A price for a product that
 
 **The reference model's identity, size, and native precision.** The model's own published page and its `config.json` file.
 
-**The venue.** OpenRouter. Written permission for this use was requested from its sales team on 15 October 2026 and had not been given when this draft was published. The venue's raw responses are therefore not published. [Version 1.0 will state the position on the day it is fixed.]
+**The venue.** OpenRouter. Every observation is bought through OpenRouter's API, as any customer buys. The census also reads OpenRouter's full public listing of models and endpoints by script once a day. OpenRouter has said that its support team cannot give permission for this, that permission can be given only in writing by its sales team, and that the absence of an objection is not consent. Written permission for the daily reading, and for publishing figures derived from it, was requested from that team on 15 October 2026, and the request was renewed with this document on 23 October. When this version was fixed, on 30 October 2026, no permission had been given and no reply received. The venue's raw responses are therefore not published; only their fingerprints are. If OpenRouter refuses, or asks us to stop, the full daily reading stops within a week. The price continues, since it is built from the test's own purchases and the listings the test needs in order to buy; changes of reference are suspended, and the counts for grades not yet priced stop, until another source of provider counts is in place, announced under section 12. The position on any later day is stated on the site.
+
+**Dependence on one venue.** Every observation comes through one venue. If it stopped selling, stopped reporting what it charges, or ended our access, the assessment as defined here could not be made. The control group below is a second route, and is being widened so that it could carry a figure.
+
+**The venue's market data.** OpenRouter publishes data on the tokens bought through it, by model, under the Creative Commons Attribution 4.0 licence. It is read once a day, kept privately and cited as: Source: OpenRouter (openrouter.ai/rankings), as of the date given. Licensed under CC BY 4.0. It describes the venue's own customers, not the whole market, and it enters these rules only in the tie rule of section 4.5.
 
 **What the price leaves out.** The venue charges a fee when credit is bought, and UK VAT is charged on the credit and the fee. Neither is part of the price, which is quoted per token, as prices are normally quoted. At the time of writing, the fee on a $10 purchase was $0.80, and VAT was 20 per cent.
 
-**A check on the venue.** A control group of four providers is bought directly from their own services, rather than through the venue, in the same window and with the same test, from 20 October 2026. Its results are reported separately, and never enter the price.
+**A check on the venue.** A control group of providers is bought directly from their own services, rather than through the venue, in the same window and with the same test, from 20 October 2026. Its results are reported separately, and never enter the price while the venue serves. The group is being widened, so that it could carry a figure if the venue were lost; its size is not fixed by this document.
 
 **A monthly check.** Once a month we compare a sample of providers' own published prices with the venue's listing, and record any differences. A difference is not an error. The price assessed is the price paid through the venue, confirmed by the receipt.
 
 **What we keep.** Records fall into three classes:
 
-1. **Collected.** The census, the listing snapshots, the test records, and the readings taken outside the window. Written once, never changed, and kept permanently and privately. A SHA-256 fingerprint of every file is published each day, one file per day, and is itself written once. Anyone later shown a record can check it against its fingerprint.
+1. **Collected.** The census, the listing snapshots, the test records, and the readings taken outside the window. Written once, never changed, and kept permanently and privately, and in any case for at least five years. They are made available to any market authority entitled to them by law. A SHA-256 fingerprint of every file is published each day, one file per day, and is itself written once. Anyone later shown a record can check it against its fingerprint.
 2. **Derived.** The tracking and ranking pages. Rebuilt from the collected records whenever needed, with their history kept.
 3. **Published.** Each day's assessment. Written once and never recalculated, even if a later method would give a different figure. Mistakes are corrected under section 11.
 
@@ -368,7 +380,7 @@ Where a correction exists, a notice linking to it is shown with the original pag
 
 Errors we find ourselves and errors reported to us are treated the same way.
 
-**Complaints.** Anyone may complain about a published figure, or about how these rules have been applied, by email to malcolm@hunterson.org. We acknowledge a complaint within five working days, and reply in writing within twenty. Where a complaint leads to a correction, the outcome is published with it.
+**Complaints.** Anyone may complain about a published figure, or about how these rules have been applied, by email to malcolm@hunterson.org. We acknowledge a complaint within five working days, and reply in writing within twenty. Where a complaint leads to a correction, the outcome is published with it. Records of each complaint and its handling are kept for at least five years.
 
 ## 12. Changing these rules
 
@@ -377,6 +389,8 @@ Any change to this document is announced at least 30 days before it takes effect
 This includes the accepted provider tags in section 4.7, because changing them changes who is in the panel.
 
 Each version of this document is numbered and kept. The version in force on any day is recorded on that day's page.
+
+The whole document is reviewed at least once a year against the market it describes, and the outcome of each review is published, whether or not it leads to a change.
 
 A change of reference model follows section 4.5 and is not a change to these rules.
 
@@ -429,14 +443,15 @@ These are published with the daily price, and never change it:
 1. **The price without discounts,** and the gap between the two (section 7).
 2. **The control group:** the same test bought directly from providers' own services, set beside the venue's result for the same providers (section 8).
 3. **Provider counts for grades not yet priced** (section 10).
+4. **The leading challenger.** The figure for the leading eligible challenger in the grade, assessed in the same way, with its contributors and the ratio between its price and the reference's. It is published for information, and is not an assessment of the grade.
 
-Further figures are planned from January 2027, once a month of history exists, such as the output a graphics processor must deliver each hour to cover its rental at the assessed price. Each will be defined in a published note, with its sources, before it is first published.
+Further figures are planned from January 2027, once a month of history exists, such as the output a graphics processor must deliver each hour to cover its rental at the assessed price; the change in price paid among the providers that contributed on both of two consecutive assessment days, which separates a change in prices from a change in who delivered; and the price paid for stored (cached) input, bought by a separate test. Each will be defined in a published note, with its sources, before it is first published.
 
 ## 17. Standards followed
 
-These rules are written to follow the IOSCO Principles for Oil Price Reporting Agencies, adapted to a product that is bought and timed rather than traded.
+These rules are written with reference to the IOSCO Principles for Oil Price Reporting Agencies of 5 October 2012, adapted to a product that is bought and timed rather than traded.
 
-[Version 1.0 will set out, principle by principle, how each is met.]
+How each principle is met, met in another form, or not met, is set out principle by principle in a separate statement, `IOSCO.md` in the public repository, published with this version and reviewed each year. It is kept separate so that it can say so as soon as anything in it changes. Hunterson is produced by one person, so the principles that need a second person, a board or an independent auditor are not met as written; the statement says which they are, and what stands in their place.
 
 ## 18. What this number is not
 
@@ -458,6 +473,7 @@ It is not a price for output produced in Europe. See section 1.
 | 0.9, amended | October 2026 | Sections 8 and 10: timestamps built, settling the square bracket in section 10 |
 | 0.9, amended | October 2026 | Sections 5 and 7: tiers sold for lower or higher priority are not observed, settling the square bracket in section 5. Section 6: cached replies stay excluded, with a trigger for a new test piece, settling its square bracket |
 | 0.9, amended | October 2026 | Section 13: the figures under the Hunterson Data Licence in place of Creative Commons Attribution 4.0, before any figure was published |
+| 1.0 | 30 October 2026 | Fixed after comment; no comments were received. Every square bracket settled: the switch for thinking (section 6), days of failed delivery (section 7), the venue's position (section 8) and the IOSCO statement (section 17). Added: why this hour and the length of the test job (section 3); the tie rule, decided by the venue's volume, from 31 October 2026, and the stale-reference note (section 4.5); that the launch test counts providers alone (section 4.6); dependence on one venue, the venue's market data, and a control group of no fixed size (section 8); records kept for at least five years and made available to market authorities (sections 8 and 11); a yearly review (section 12); the leading challenger published alongside, and further planned figures (section 16) |
 
 ---
 
