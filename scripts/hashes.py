@@ -34,7 +34,8 @@ data/hashes/assessments/DATE/SLUG.sha256 (decision D33). The assessor writes
 each checkpoint's file once, but can add a file to an earlier day, for example
 when a checkpoint is placed after its windows ran; one fingerprint per file
 means such an addition is a new fingerprint, never a changed one. The
-assessments stay private until go-live; only their fingerprints are public.
+assessments are published from the launch date, each day once its page is
+built (scripts/site/gate.py); their fingerprints are published as they are made.
 Uses only the Python standard library.
 """
 import hashlib

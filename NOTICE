@@ -1,0 +1,13 @@
+Hunterson
+Copyright 2026 Malcolm Hunter (a pen name), trading as Hunterson
+
+The code in scripts/ and tests/, including the templates, styles and chart
+script of the site in scripts/site/, is licensed under the Apache License,
+Version 2.0, in LICENSE-APACHE-2.0.txt.
+
+The figures, the data and the written material are not covered by it: see
+LICENSE.md and LICENCE-DATA.md.
+
+This product includes Chart.js (MIT licence), and the IBM Plex Sans and IBM
+Plex Mono fonts (SIL Open Font License 1.1), each under its own licence, in
+docs/vendor/ and docs/assets/fonts/.

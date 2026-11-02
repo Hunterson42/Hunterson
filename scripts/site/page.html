@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>{{title}}</title>
+<meta name="description" content="{{description}}">
+<link rel="canonical" href="{{canonical}}">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Hunterson">
+<meta property="og:title" content="{{og_title}}">
+<meta property="og:description" content="{{description}}">
+<meta property="og:url" content="{{canonical}}">
+<meta property="og:image" content="{{og_image}}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="{{og_alt}}">
+<meta name="twitter:card" content="summary_large_image">
+{{robots}}<link rel="preload" href="{{root}}assets/fonts/ibm-plex-sans-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="{{root}}assets/site.css">
+</head>
+<body>
+<div class="wrap">
+<header class="site-head">
+  <a class="brand" href="{{home}}">{{product}}</a>
+  <nav aria-label="Site">
+    <a href="{{home}}"{{nav_current}}>Price</a>
+    <a href="{{methodology_url}}">Methodology</a>
+    <a href="{{census_url}}">Census</a>
+    <a href="{{root}}data/assessments.csv">Data</a>
+    <a href="{{about_url}}">About</a>
+  </nav>
+</header>
+{{notice}}
+<main>
+  <section class="fix" aria-labelledby="fix-h">
+    <div>
+      <h1 id="fix-h" class="visually-hidden">{{product}}, {{date_long}}</h1>
+      <p class="fix-date">{{date_line}}</p>
+      {{figure}}
+      <p class="fix-unit">{{unit_line}}</p>
+      {{change}}
+      {{cite}}
+    </div>
+    <dl class="record">
+{{record}}
+    </dl>
+  </section>
+
+  <section class="about" aria-label="What this figure is">
+    <p>{{about}}</p>
+    <p class="links"><a href="{{methodology_url}}">How the price is assessed</a><a href="#panel">The providers behind this figure</a><a href="{{evidence_url}}">The evidence</a></p>
+  </section>
+
+  {{challenger}}
+
+  <section class="block" id="history" aria-labelledby="hist-h">
+    <h2 id="hist-h">History</h2>
+    <div id="chart" class="chart"><p class="muted">The chart needs JavaScript. Every figure is in the table of recent assessments and in the <a href="{{root}}data/assessments.csv">full data</a>.</p></div>
+  </section>
+
+  <section class="block" id="panel" aria-labelledby="panel-h">
+    <h2 id="panel-h">{{panel_heading}}</h2>
+    <p>{{panel_intro}}</p>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th scope="col">Provider</th><th scope="col" class="r">Input</th><th scope="col" class="r">Output</th><th scope="col" class="res">Result</th></tr></thead>
+        <tbody>
+{{panel_rows}}
+        </tbody>
+      </table>
+    </div>
+    <p class="muted">Prices are what each provider's receipts show was paid, in US dollars per million tokens.</p>
+  </section>
+
+  <section class="block" id="recent" aria-labelledby="recent-h">
+    <h2 id="recent-h">Recent assessments</h2>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th scope="col">Date</th><th scope="col" class="r">Input</th><th scope="col" class="r">Output</th><th scope="col" class="r wide">Blended</th><th scope="col" class="r">Contributors</th></tr></thead>
+        <tbody>
+{{recent_rows}}
+        </tbody>
+      </table>
+    </div>
+    <p class="table-foot"><a href="{{root}}data/assessments.csv">Download every assessment (CSV)</a><a href="{{root}}data/assessments.json">The same as JSON</a></p>
+  </section>
+</main>
+
+<footer class="site-foot">
+  <p>{{product}} is published each weekday by 16:00 UTC under methodology version {{methodology_version}}. A published figure is never changed; a correction is published as a new, dated entry.</p>
+  <p>Free to use with credit: "Source: {{product}}, hunterson.org". Use in contracts, financial products or indices needs a free registration: <a href="{{base_url}}/licence/">hunterson.org/licence</a>.</p>
+  <p>Published by Malcolm Hunter (a pen name), trading as Hunterson. Contact <a href="mailto:{{contact}}">{{contact}}</a>.</p>
+  <p class="foot-links"><a href="{{about_url}}">About</a><a href="{{conflicts_url}}">Interests and conflicts</a><a href="{{continuity_url}}">Continuity</a><a href="{{iosco_url}}">IOSCO statement</a></p>
+  <p>{{permalink_line}}</p>
+</footer>
+</div>
+<script type="application/json" id="series-data">{{series_json}}</script>
+<script src="{{root}}assets/chart.js"></script>
+<script>
+(function () {
+  var data = JSON.parse(document.getElementById("series-data").textContent);
+  window.HuntersonChart.mount(document.getElementById("chart"), data);
+  var b = document.getElementById("copy-cite"), t = document.getElementById("cite-text");
+  if (!b || !t) return;
+  if (!navigator.clipboard) { b.hidden = true; return; }
+  b.addEventListener("click", function () {
+    navigator.clipboard.writeText(t.textContent).then(function () {
+      b.textContent = "Copied";
+      setTimeout(function () { b.textContent = "Copy"; }, 2000);
+    });
+  });
+})();
+</script>
+</body>
+</html>

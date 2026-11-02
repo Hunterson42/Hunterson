@@ -38,8 +38,9 @@ provider's listed discount removed.
 
 Writes one file per probed checkpoint per window, data/assessments/DATE/SLUG.json,
 in the form launch/sample.py sets out (roadmap Appendix D.5). A file is written
-once and never changed. These files stay private until go-live (decision D26).
-The assessor never reads data/offwindow/.
+once and never changed. These files are published from the launch date, each
+day once its page is built (decision D26, scripts/site/gate.py). The assessor
+never reads data/offwindow/.
 
 Usage:
     python3 scripts/assess.py
