@@ -60,7 +60,7 @@ openssl ts -reply -in data/hashes/probes/2026-10-20.sha256.tsr -text
 | `notes/selection.md` | Every rule and decision, dated, with the reasons |
 | `panel.json` | Settings for the probe, and the assessment's limits |
 | `prompt.txt` | The frozen test piece |
-| `scripts/` | The census, ranking, tracker, probe, assessor, site, post, fingerprints, timestamps and mirror. Python standard library only, except that the timestamps also use the OpenTimestamps client and OpenSSL |
+| `scripts/` | The census, ranking, tracker, probe, assessor, tripwires, site, post, fingerprints, timestamps and mirror. Python standard library only, except that the timestamps also use the OpenTimestamps client and OpenSSL |
 | `tests/` | Tests for the probe against a mock of OpenRouter, which need the raw census and so run in the private repository, and for the assessor, on made-up windows |
 | `docs/` | The site, built each weekday by `scripts/site/` |
 
