@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The evidence</title>
+<meta name="description" content="How to check that any Hunterson record existed when it was made and has not changed since.">
+<link rel="canonical" href="https://hunterson.org/evidence/">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../assets/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="alternate" type="application/atom+xml" title="Hunterson, the daily price" href="../feed.xml">
+<link rel="stylesheet" href="../assets/site.css">
+</head>
+<body>
+<div class="wrap">
+<header class="site-head">
+  <a class="brand" href="../">Hunterson Standard Inference, Europe</a>
+  <nav aria-label="Site">
+    <a href="../">Price</a>
+    <a href="../methodology/">Methodology</a>
+    <a href="../census/">Census</a>
+    <a href="../data/">Data</a>
+    <a href="../about/">About</a>
+  </nav>
+</header>
+<main class="prose doc">
+<h1>The evidence</h1>
+<p>Every record behind every figure is fingerprinted, and every fingerprint is timestamped by two independent services, when it is made and before anything is published. So anyone shown a record later can check that it existed then and has not changed since.</p>
+<ul>
+<li><a href="https://github.com/Hunterson42/Hunterson/tree/main/data/hashes">The fingerprints</a>, with their timestamp proofs beside them</li>
+<li><a href="https://github.com/Hunterson42/Hunterson/tree/main/data/assessments">The assessments</a>: every provider tested each day, what it was charged, and why any was excluded</li>
+<li><a href="https://github.com/Hunterson42/Hunterson/tree/main/data/stamps/certs">The timestamp authority's certificates</a>, kept so that a proof can be checked even if the service goes</li>
+</ul>
+<p>The rest of this page is the public repository's own explanation, as it stands in its README; "here" in it means the repository.</p>
+<h2 id="raw-files-and-fingerprints">Raw files and fingerprints</h2>
+<p>The raw files, meaning the census, the probe's listing snapshots and test records, and the rehearsals, are OpenRouter's responses. They are kept in a private repository and are not published here. The same holds for the GPU-hour price readings taken twice a day since October 2026 for the derived series, which are GPU clouds' responses; their sources are listed in <code>gpu_sources.json</code>. It holds too for the market data read once a day since October 2026 from OpenRouter's Data API, listed in <code>market_sources.json</code>: the data is licensed under CC BY 4.0, but is kept privately like the census, and figures derived from it are published with OpenRouter's citation.</p>
+<p>Each day's raw files are fingerprinted with SHA-256, and the fingerprints are published in <code>data/hashes/</code>, one file per day, in the format of <code>sha256sum</code>. A fingerprint file is written once. Anyone later shown a raw file can check, with <code>sha256sum -c</code> from the repository root, that it has not changed since its fingerprint was published.</p>
+<p>Each assessment is fingerprinted the same way when it is made, one fingerprint per file, in <code>data/hashes/assessments/</code>, and timestamped before it is published. From the first publication, 3 November 2026, the assessments themselves are published in <code>data/assessments/</code>, those of the shadow period with them, each later day once its page is built. A day on which publication was suspended (<code>CONTINUITY.md</code>) is never published; its fingerprint is.</p>
+<p><strong>Timestamps.</strong> Each fingerprint file is timestamped, when it is written, by two independent services: OpenTimestamps, which anchors it in the Bitcoin blockchain within a few hours, and FreeTSA, a timestamp authority that signs it within seconds under RFC 3161. The two proofs lie beside it, as <code>NAME.sha256.ots</code> and <code>NAME.sha256.tsr</code>. Only the fingerprint is sent to either service, never the records. FreeTSA's certificates are kept in <code>data/stamps/certs/</code>. Fingerprints already published when stamping began were stamped then; the moment is recorded in <code>data/hashes/stamping-began.txt</code>, and their proofs show existence from it.</p>
+<p>Everything else is kept here and updated automatically from the private repository.</p>
+<h2 id="how-to-check-a-fingerprint-and-its-timestamps">How to check a fingerprint and its timestamps</h2>
+<p><strong>First, check a record against its fingerprint.</strong> From the repository's root, <code>sha256sum -c data/hashes/probes/2026-10-20.sha256</code> checks every file the fingerprint lists. It needs the records themselves, which are private; anyone later shown a record can run it.</p>
+<p><strong>Then, when the fingerprint existed: OpenTimestamps.</strong> Download the fingerprint file and its <code>.ots</code> proof. Open <a href="https://opentimestamps.org">https://opentimestamps.org</a> in any browser and drop both files on the page. It names the Bitcoin block that holds the stamp, and that block's time. A proof less than a few hours old shows as pending. With a Bitcoin node, <code>ots verify NAME.sha256.ots</code> gives the same answer.</p>
+<p><strong>And the signed time: RFC 3161.</strong> With OpenSSL, from the repository's root:</p>
+<pre><code>openssl ts -verify -data data/hashes/probes/2026-10-20.sha256 -in data/hashes/probes/2026-10-20.sha256.tsr -CAfile data/stamps/certs/cacert.pem -untrusted data/stamps/certs/tsa.crt</code></pre>
+<p>It prints <code>Verification: OK</code>. OpenSSL may also warn that <code>tsa.crt</code> is not a CA certificate. That is expected: it is FreeTSA's signing certificate, passed with <code>-untrusted</code>, not the authority that vouches for it, which is <code>cacert.pem</code>. To see the time it records:</p>
+<pre><code>openssl ts -reply -in data/hashes/probes/2026-10-20.sha256.tsr -text</code></pre>
+</main>
+<footer class="site-foot">
+  <p>The same text is kept in the public repository as <a href="https://github.com/Hunterson42/Hunterson/blob/main/README.md">README.md</a>, with every change to it. Published by Malcolm Hunter (a pen name), trading as Hunterson. Contact <a href="mailto:malcolm@hunterson.org">malcolm@hunterson.org</a>.</p>
+  <p class="foot-links"><a href="../about/">About</a><a href="../methodology/">Methodology</a><a href="../evidence/">Evidence</a><a href="../conflicts/">Interests and conflicts</a><a href="../continuity/">Continuity</a><a href="../iosco/">IOSCO statement</a><a href="../licence/">Licence</a><a href="https://github.com/Hunterson42/Hunterson">Source code</a></p>
+</footer>
+</div>
+</body>
+</html>

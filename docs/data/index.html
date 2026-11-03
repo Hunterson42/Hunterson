@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Data</title>
+<meta name="description" content="Every Hunterson assessment, free to download: CSV, JSON, the latest figure and a feed, with what each column means and how to cite a figure.">
+<link rel="canonical" href="https://hunterson.org/data/">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../assets/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="alternate" type="application/atom+xml" title="Hunterson, the daily price" href="../feed.xml">
+<link rel="stylesheet" href="../assets/site.css">
+</head>
+<body>
+<div class="wrap">
+<header class="site-head">
+  <a class="brand" href="../">Hunterson Standard Inference, Europe</a>
+  <nav aria-label="Site">
+    <a href="../">Price</a>
+    <a href="../methodology/">Methodology</a>
+    <a href="../census/">Census</a>
+    <a href="../data/" aria-current="page">Data</a>
+    <a href="../about/">About</a>
+  </nav>
+</header>
+<main class="prose doc">
+<h1>Data</h1>
+<p>Every assessment Hunterson has published, with the shadow period before the first, is free to download and use with credit: "Source: Hunterson Standard Inference, Europe, hunterson.org". Using the figures to settle a contract, value a financial instrument, measure a fund or make up an index needs a free registration, so that everyone relying on them is told directly when the rules change (<a href="../licence/">the licence</a>).</p>
+<h2>The files</h2>
+<ul>
+<li><a href="assessments.csv">assessments.csv</a>: every day of every live grade, one row a day, with the columns below.</li>
+<li><a href="assessments.json">assessments.json</a>: the same, grouped by grade, with the unit, the blend and the licence.</li>
+<li><a href="latest.json">latest.json</a>: the latest assessment only, for programs.</li>
+<li><a href="../feed.xml">feed.xml</a>: an Atom feed of the latest 30 assessment days, for a feed reader.</li>
+<li><a href="https://github.com/Hunterson42/Hunterson/tree/main/data/assessments">The assessments themselves</a>, in the public repository: each day, every provider tested, what it was charged, and why any was excluded.</li>
+</ul>
+<h2>Units and rounding</h2>
+<p>Prices are in US dollars per million tokens, to four decimal places, rounded half up by the assessor and never re-rounded. The blended price weights input and output 16 to 1, the shape of the test job. A row whose status is "shadow" was produced before the grade's first assessment and is not an assessment.</p>
+<h2>What each column means</h2>
+<div class="table-scroll"><table>
+<thead><tr><th scope="col">Column</th><th scope="col">What it holds</th></tr></thead>
+<tbody>
+<tr><td><code>date</code></td><td>The assessment day, as YYYY-MM-DD.</td></tr>
+<tr><td><code>grade</code></td><td>The grade, such as standard.</td></tr>
+<tr><td><code>status</code></td><td>published; not_published, with the reason; or shadow, a day before the grade&#x27;s first assessment, which is not an assessment.</td></tr>
+<tr><td><code>reference</code></td><td>The grade&#x27;s reference model that day.</td></tr>
+<tr><td><code>output</code></td><td>The output price: US dollars per million output tokens. Blank on a day not published.</td></tr>
+<tr><td><code>input</code></td><td>The input price: US dollars per million input tokens.</td></tr>
+<tr><td><code>blended</code></td><td>Input and output blended 16 to 1, as the test job is: US dollars per million tokens.</td></tr>
+<tr><td><code>contributors</code></td><td>Providers that passed every test and contributed to the price.</td></tr>
+<tr><td><code>panel</code></td><td>Providers tested.</td></tr>
+<tr><td><code>reason</code></td><td>On a day not published, why.</td></tr>
+<tr><td><code>output_before_discounts</code></td><td>The output price at the providers&#x27; listed prices, before any discount.</td></tr>
+<tr><td><code>input_before_discounts</code></td><td>The input price before any discount.</td></tr>
+<tr><td><code>blended_before_discounts</code></td><td>The blended price before any discount.</td></tr>
+<tr><td><code>rollover_ratio</code></td><td>On the day the reference changes, the ratio for converting a price on the old reference to the new.</td></tr>
+<tr><td><code>url</code></td><td>The day&#x27;s permanent page, the address to cite.</td></tr>
+<tr><td><code>challenger</code></td><td>The leading challenger: of the other models tested in the grade, the one with the most providers. For information only.</td></tr>
+<tr><td><code>challenger_input</code></td><td>The challenger&#x27;s input price, assessed in the same way. Not an assessment of the grade.</td></tr>
+<tr><td><code>challenger_output</code></td><td>The challenger&#x27;s output price, assessed in the same way.</td></tr>
+<tr><td><code>challenger_contributors</code></td><td>The challenger&#x27;s contributors.</td></tr>
+<tr><td><code>challenger_panel</code></td><td>Providers tested for the challenger.</td></tr>
+<tr><td><code>challenger_output_ratio</code></td><td>The challenger&#x27;s output price divided by the reference&#x27;s, to four places.</td></tr>
+</tbody></table></div>
+<h2>How to cite a figure</h2>
+<p>Cite the day's permanent page. For example: <q>Hunterson Standard Inference, Europe, 3 November 2026: input $0.2246, output $0.9283 per million tokens. https://hunterson.org/standard/2026-11-03/</q> Each day's page has this line ready to copy.</p>
+
+</main>
+<footer class="site-foot">
+  <p>Published by Malcolm Hunter (a pen name), trading as Hunterson. Contact <a href="mailto:malcolm@hunterson.org">malcolm@hunterson.org</a>.</p>
+  <p class="foot-links"><a href="../about/">About</a><a href="../methodology/">Methodology</a><a href="../evidence/">Evidence</a><a href="../conflicts/">Interests and conflicts</a><a href="../continuity/">Continuity</a><a href="../iosco/">IOSCO statement</a><a href="../licence/">Licence</a><a href="https://github.com/Hunterson42/Hunterson">Source code</a></p>
+</footer>
+</div>
+</body>
+</html>

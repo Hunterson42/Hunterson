@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Methodology, version 1.0</title>
+<meta name="description" content="How each Hunterson figure is made: the product, the test, the rules for including a provider, and the calculation.">
+<link rel="canonical" href="https://hunterson.org/methodology/1.0/">
+<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../../assets/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="../../assets/apple-touch-icon.png">
+<link rel="alternate" type="application/atom+xml" title="Hunterson, the daily price" href="../../feed.xml">
+<link rel="stylesheet" href="../../assets/site.css">
+</head>
+<body>
+<!-- METHODOLOGY.md sha256:0a4601066309a0ac99dd051de145e2b37dd00be113f193e941f43fb828b96143 -->
+<div class="wrap">
+<header class="site-head">
+  <a class="brand" href="../../">Hunterson Standard Inference, Europe</a>
+  <nav aria-label="Site">
+    <a href="../../">Price</a>
+    <a href="../../methodology/" aria-current="page">Methodology</a>
+    <a href="../../census/">Census</a>
+    <a href="../../data/">Data</a>
+    <a href="../../about/">About</a>
+  </nav>
+</header>
+<main class="prose doc">
+<h1 id="hunterson-standard-inference-europe">Hunterson Standard Inference, Europe</h1>
+<h2 id="methodology">Methodology</h2>
+<p>Version 1.0, 30 October 2026.</p>
+<p>This document explains, in plain language, exactly how the Hunterson Standard Inference number is produced each weekday. Anyone with the data we publish and this document should be able to reproduce the number exactly, to the published precision. If they cannot, the document is wrong and we will fix it.</p>
+<p>The raw records behind each day's number include the venue's own responses, so they are kept privately. Every raw file is fingerprinted, and the fingerprints are published, so that any record produced later can be checked against them (section 8).</p>
+<p>This version was fixed on 30 October 2026. Version 0.9 had been public since 20 October 2026 and open for comment since 23 October; no comments were received. Every change from now on follows section 12, and comments remain welcome at any time, by email to <a href="mailto:malcolm@hunterson.org">malcolm@hunterson.org</a>. The changes from version 0.9 are listed in section 19.</p>
+<p class="notice note" role="note">Methodology version 1.0, as first published here. This page is never changed. The version in force now is at <a href="../">hunterson.org/methodology/</a>.</p>
+<nav class="contents" aria-label="Contents"><p class="contents-h">Contents</p><ul><li><a href="#1-what-this-is">1. What this is</a></li><li><a href="#2-words-you-need">2. Words you need</a></li><li><a href="#3-what-is-being-priced">3. What is being priced</a></li><li><a href="#4-which-model-and-how-it-is-chosen">4. Which model, and how it is chosen</a></li><li><a href="#5-who-is-included">5. Who is included</a></li><li><a href="#6-the-daily-test">6. The daily test</a></li><li><a href="#7-how-the-number-is-calculated">7. How the number is calculated</a></li><li><a href="#8-where-the-data-comes-from">8. Where the data comes from</a></li><li><a href="#9-when-we-do-not-publish">9. When we do not publish</a></li><li><a href="#10-what-is-published-and-where">10. What is published, and where</a></li><li><a href="#11-mistakes-and-complaints">11. Mistakes and complaints</a></li><li><a href="#12-changing-these-rules">12. Changing these rules</a></li><li><a href="#13-using-the-numbers">13. Using the numbers</a></li><li><a href="#14-who-produces-this-and-what-they-own">14. Who produces this, and what they own</a></li><li><a href="#15-who-can-change-the-number">15. Who can change the number</a></li><li><a href="#16-figures-published-alongside">16. Figures published alongside</a></li><li><a href="#17-standards-followed">17. Standards followed</a></li><li><a href="#18-what-this-number-is-not">18. What this number is not</a></li><li><a href="#19-version-history">19. Version history</a></li></ul></nav>
+<hr>
+<h2 id="1-what-this-is">1. What this is</h2>
+<p>Hunterson Standard Inference, Europe is a daily price for a defined quantity of AI model output, delivered to a defined standard, and bought on the open market by a buyer in London.</p>
+<p>It is one number, published every weekday, produced by the rules in this document and by nothing else.</p>
+<p>It is not a recommendation, not a comparison table, and not a forecast. It is a record of what the product cost on the day.</p>
+<p>"Europe" describes where the buyer is: a server in London, United Kingdom. It does not mean the providers are in Europe, or that the output was produced there. A provider may serve from anywhere.</p>
+<h2 id="2-words-you-need">2. Words you need</h2>
+<p><strong>Token.</strong> A chunk of text, about four characters. AI models read and write in tokens, and their output is priced in tokens. A thousand tokens is roughly 750 English words.</p>
+<p><strong>Input tokens</strong> are what you send to the model. <strong>Output tokens</strong> are what it writes back. Output usually costs more, because the model writes one token at a time.</p>
+<p><strong>Model.</strong> The AI program itself, a very large set of numbers called weights.</p>
+<p><strong>Open-weight model.</strong> A model whose weights the maker has published for anyone to download and run. Because many companies can run the same file, there is a market with many sellers, and therefore a market price.</p>
+<p><strong>Checkpoint.</strong> One exact version of a model, identified by where it is published and a code called a commit hash. A name like "DeepSeek V4.1-Flash" can be reused or changed; a hash cannot.</p>
+<p><strong>Provider.</strong> A company that runs a model on its own computers and sells access by the token.</p>
+<p><strong>Endpoint.</strong> One offer by one provider of one model, at one stated precision and price. A provider may list more than one endpoint for the same model.</p>
+<p><strong>Venue.</strong> The marketplace where the product is bought. Ours is OpenRouter, which lists many providers' endpoints side by side and lets a buyer choose exactly which endpoint answers a request.</p>
+<p><strong>Precision.</strong> How many bits are used to store each number in the weights. A model can be shrunk to lower precision to run more cheaply, at some cost in quality. The maker publishes the weights at a stated precision, which we call <strong>native</strong>.</p>
+<p><strong>Listed price.</strong> The price the venue shows for an endpoint, in US dollars per million tokens, after any promotional discount open to every buyer.</p>
+<p><strong>Receipt.</strong> The cost the venue actually charges for a request, reported with the request, with the cost of input and of output stated separately.</p>
+<p><strong>Price paid.</strong> The receipt's cost of input, or of output, divided by the tokens counted. This is the price the assessment uses.</p>
+<p><strong>Window.</strong> The hour in which the product is bought: 14:00 to 15:00 UTC, Monday to Friday, except 25 December and 1 January. Every such weekday is a window, and each window is an <strong>assessment day</strong>.</p>
+<p><strong>Census.</strong> A copy of the venue's public listing of every model and endpoint, saved once a day, every day of the week.</p>
+<p><strong>Qualifying provider.</strong> A provider with at least one endpoint for a checkpoint at an accepted precision (section 5). A provider listing the same model twice counts once, and providers that sell from one source count once (section 5).</p>
+<p><strong>Contributor.</strong> A provider whose result enters the day's price, because it passed every test in section 7.</p>
+<h2 id="3-what-is-being-priced">3. What is being priced</h2>
+<p>The product is one million output tokens from the reference model, served at native precision with thinking switched off, delivered fast enough to be usable, and bought through the venue from a provider that actually answered when we asked.</p>
+<p>The full specification:</p>
+<div class="table-scroll"><table>
+<thead><tr><th scope="col">Item</th><th scope="col">Rule</th></tr></thead>
+<tbody>
+<tr><td>Model</td><td>The reference checkpoint named in section 4.7, identified by repository and commit hash</td></tr>
+<tr><td>Precision</td><td>Native, as published by the model's maker and read from its <code>config.json</code> file. The accepted provider tags are listed in section 4.7</td></tr>
+<tr><td>Thinking</td><td>Off. Only a model whose thinking can be switched off can be the reference. A reply containing hidden "thinking" is excluded</td></tr>
+<tr><td>Test request</td><td>A fixed, published prompt of about 7,600 input tokens. The reply is stopped at 500 output tokens</td></tr>
+<tr><td>Venue</td><td>OpenRouter. Each request is sent to one named endpoint, with automatic fallback to any other provider switched off</td></tr>
+<tr><td>Where from</td><td>A server in DigitalOcean's London data centre, United Kingdom</td></tr>
+<tr><td>When</td><td>Between 14:00 and 15:00 UTC, Monday to Friday, except 25 December and 1 January. The window is set in UTC and does not move with British Summer Time</td></tr>
+<tr><td>Speed</td><td>At least 30 output tokens per second, and the first token within 3 seconds, each taken as the median of the provider's completed requests</td></tr>
+<tr><td>Correctness</td><td>Both check answers right, as the first two lines of every completed request, ignoring letter case</td></tr>
+<tr><td>Completeness</td><td>The full 500 tokens, ended by the length limit</td></tr>
+<tr><td>Price used</td><td>The price paid, taken from the receipt. The listed price for the endpoint, in force at the moment of the request, is the check: a receipt more than one per cent away from it excludes the provider that day. Promotional discounts open to every buyer are included, because they are what is paid. Volume and committed-use discounts are not included</td></tr>
+<tr><td>Unit</td><td>US dollars per million output tokens, to four decimal places. The input price is published alongside, and a blended price at 16 input tokens to 1 output token</td></tr>
+</tbody></table></div>
+<p><strong>Why this hour.</strong> European and American business hours overlap between 14:00 and 15:00 UTC, so the test meets providers under ordinary daytime demand, and the hour leaves time to publish by 16:00 UTC. Some providers charge different prices at different hours; the receipt check uses the price in force at the moment of each request (section 7).</p>
+<p><strong>The length of the test job.</strong> The test job, about 7,600 input tokens and 500 output, is shorter than much of the market's traffic: on 28 October 2026, requests of 1,000 to 10,000 tokens carried about 8 per cent of the tokens bought through the venue (Source: OpenRouter (openrouter.ai/rankings), as of 29 October 2026. Licensed under CC BY 4.0). No provider in the panel charges a different price per token for longer requests, so the price paid per token is also what a longer request pays for its fresh tokens. Where a provider sets a different price above some length of request, the assessed price is the price below that threshold, and every weekday the listings are checked for such prices. What a short test does not show is the price of stored (cached) input, which long requests mostly use, or delivery on long requests; both are measured separately, for research (section 16).</p>
+<h2 id="4-which-model-and-how-it-is-chosen">4. Which model, and how it is chosen</h2>
+<h3 id="41-one-model-at-a-time">4.1 One model at a time</h3>
+<p>Standard Inference prices exactly one model at a time, called the reference. It is not an average across models. Mixing models would mix products, and the number would stop meaning anything.</p>
+<p>Other classes of model are, or will be, priced as separate products with their own reference. Each product has one reference.</p>
+<h3 id="42-the-grade">4.2 The grade</h3>
+<p>Models are sorted into grades by size, using the number of <strong>active parameters</strong> stated on the model's own published page. Active parameters are the part of the model that does the work for each token, and they are what determines cost and speed.</p>
+<p>Standard is the grade for models with 30 billion active parameters or fewer.</p>
+<p>Where a model's page states two active figures, for example one while reading input and another while writing output, the larger governs.</p>
+<p>The boundary sits in the gap between the two clusters of models found in the market, so that no model sits on the line. It is reviewed once a year, and whenever a model appears within 20 per cent of it, between 24 and 36 billion. Kimi K2.6, at 32 billion, sits inside that band, so the review is on the record from the start.</p>
+<p>Two larger grades are tracked: Heavy, above 30 billion active parameters, and Frontier, provisionally above 70 billion. Neither is priced yet. Each launches only when it meets the rules in section 4.6.</p>
+<h3 id="43-the-selection-rule">4.3 The selection rule</h3>
+<p>The reference is chosen as the eligible open-weight model in the Standard grade with the most qualifying providers. It then changes only under the rules in section 4.5.</p>
+<p>A model is <strong>eligible</strong> only if its thinking can be switched off. This is read each day from the venue's listing. A model that must think on every request cannot be the reference, because thinking tokens are billed as output, and would make the same job cost an unpredictable amount more from one provider to the next.</p>
+<p>We count providers, not endpoints. A provider offering the model twice counts once. Providers that sell from one source count once (section 5).</p>
+<p>We count every day, from the census described in section 8.</p>
+<h3 id="44-why-the-count-matters">4.4 Why the count matters</h3>
+<p>More providers means more competition, which means the price is more likely to be a real market price and less likely to be one company's opinion.</p>
+<p>It also means the number is harder for any one provider to move by changing its price.</p>
+<h3 id="45-when-the-reference-changes">4.5 When the reference changes</h3>
+<p>Models are replaced quickly in this market. The rules below stop the reference from jumping around, and give anyone using the number time to adjust.</p>
+<p><strong>Stickiness.</strong> The reference changes only if another eligible Standard-grade model leads it on 20 census days in a row. One day, or ten, is not enough.</p>
+<p>A model <strong>leads</strong> on a census day if it has more qualifying providers than the reference, or the same number and at least 1.5 times the reference's tokens bought through the venue over the previous seven days, as the venue's published market data shows (section 8). If those figures are not available that day, a tie breaks the run. Volume decides only ties, and is never the main test, because it can move within a day with a few large buyers' default settings. The tie rule applies from the census of 31 October 2026. It is the only place in these rules where the venue's market data is used.</p>
+<p>A run under way when the first publication is made continues. If it reaches its twentieth day after the first publication, the rules for after the first publication apply.</p>
+<p><strong>Before the first publication.</strong> Nobody relies on the number yet, so the challenger becomes the reference on the twentieth day, with no parallel period and no conversion ratio.</p>
+<p><strong>After the first publication:</strong></p>
+<ol>
+<li><strong>Parallel period.</strong> Both the old and the new reference are tested and published side by side for 30 assessment days. On each of those days we publish the ratio between the two prices.</li>
+<li><strong>Switch.</strong> After 30 assessment days, the new model becomes the reference. The average ratio over the period is published, so that anyone who wrote something against the old reference can convert it.</li>
+<li><strong>Emergency.</strong> If the old reference has fewer than five contributors on five assessment days in a row during the parallel period, the parallel period ends on its tenth assessment day, or at once if that day has passed.</li>
+</ol>
+<p><strong>A stale reference.</strong> A note is published on the site, with the figures, on any day when the leading eligible challenger's tokens bought through the venue have exceeded twice the reference's on 20 census days in a row, or when the reference's discount depth (section 7) is 10 points or more above its average over the previous 20 assessment days. The note changes nothing in the figure. It says that the reference may be losing its buyers, which a change of reference under the rules above may later follow.</p>
+<p><strong>What counts as a new version.</strong> The reference is pinned to a commit hash. If the maker changes the model's weights, or changes the chat template that wraps prompts before the model sees them, that is a new checkpoint. It is handled as a change of reference under the rules above.</p>
+<p>Changes to documentation, evaluation results, or labels, and changes to the maker's own example code for running or loading the model, are recorded and change nothing. Providers serve the model with their own software, so that code is not part of the product.</p>
+<p><strong>A new release of the same model</strong> is a new checkpoint, not a change to the reference. It becomes the reference only by the stickiness rule. DeepSeek V4.1-Flash-1017, released on 17 October 2026, is such a challenger, and is tested alongside the reference from 19 October 2026 so that its own record of tests builds up before any change could come.</p>
+<h3 id="46-launching-and-withdrawing-a-grade">4.6 Launching and withdrawing a grade</h3>
+<p>A grade is first published only when both of these hold:</p>
+<ol>
+<li><strong>Breadth.</strong> On each of the last 20 census days, the model that is its reference has had at least 10 qualifying providers, and at least as many as every other eligible model in the grade. The days count whether or not the model was the reference on them. This test counts providers alone; the tie rule in section 4.5 decides which model is the reference, not whether a grade can launch.</li>
+<li><strong>Shadow period.</strong> The daily test has run for the grade, unpublished, until five assessment days in a row have each produced a figure, with nobody intervening in the test or the calculation.</li>
+</ol>
+<p>During the shadow period each day's assessment is produced in full and kept privately. None is published, and none is changed afterwards.</p>
+<p>Once published, a grade is withdrawn if it has fewer than five contributors on 20 assessment days in a row. It must then qualify again under this section.</p>
+<p>These rules depend on the list of candidate models being complete. Every model seen in the census with five or more providers at one declared precision is placed in a grade, or recorded as not relevant, within ten working days.</p>
+<h3 id="47-the-current-reference">4.7 The current reference</h3>
+<div class="table-scroll"><table>
+<thead><tr><th scope="col">Item</th><th scope="col">Detail</th></tr></thead>
+<tbody>
+<tr><td>Model</td><td>DeepSeek V4.1-Flash</td></tr>
+<tr><td>Repository</td><td><a href="https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash">https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash</a></td></tr>
+<tr><td>Commit hash</td><td><code>5254448103b6254fc646dacbca1cbbf20e9216c1</code></td></tr>
+<tr><td>Name on the venue</td><td><code>deepseek/deepseek-v4.1-flash</code></td></tr>
+<tr><td>Active parameters</td><td>16 billion while writing output, 8 billion while reading input. The larger governs</td></tr>
+<tr><td>Native precision</td><td>8-bit floating point, with the expert layers at 4 bits, as stated in <code>config.json</code></td></tr>
+<tr><td>Accepted provider tag</td><td><code>fp8</code>. Providers tagged <code>fp4</code> are excluded unless they confirm in writing that they serve the published form</td></tr>
+<tr><td>Thinking</td><td>Can be switched off</td></tr>
+<tr><td>Reference since</td><td>14 October 2026</td></tr>
+</tbody></table></div>
+<p>DeepSeek V4.1-Flash became the reference before any figure was published, when the previous candidate, GLM-5.3-Flash, was found to require thinking on every request.</p>
+<h2 id="5-who-is-included">5. Who is included</h2>
+<p>Each assessment day's panel is read from the venue's listing, saved at the start of the window. A provider is in the panel if it has at least one endpoint for the reference checkpoint at an accepted precision.</p>
+<p>Each provider gives one observation: its endpoint of standard priority with the lowest listed output price at an accepted precision.</p>
+<p><strong>Service classes.</strong> Some providers sell the same model, at the same precision, in more than one service class: a cheaper tier that gives way to other traffic and may be queued or refused when the provider is busy, such as a "flex" tier, and a dearer tier that is served first. Such a tier is a different product from the one assessed, and is not observed, in the same way that an assessment of firm supply does not average in interruptible prices. The provider is observed through its standard endpoint; a provider that lists only such tiers at an accepted precision gives no observation that day. Each tier that is not observed is listed in <code>panel.json</code>, under <code>service_tiers</code>, with the provider's own description of it and the date from which it applies. The first is DeepInfra's: its flex tier is billed at 0.8 times its standard price and, when the model is busy, waits up to ten minutes for capacity; its priority tier is billed at 1.5 times and served first.</p>
+<p>Nobody is invited and nobody can opt out. A provider that appears on the venue at an accepted precision joins the panel that day.</p>
+<p>Being in the panel is not enough to count. A provider contributes to the day's price only if it passes every test in section 7. The reliability test means a newcomer contributes from its ninth assessment day at the earliest.</p>
+<p><strong>Precision is read from the maker's files, not from labels.</strong> The native precision comes from the <code>quantization_config</code> field of the model's <code>config.json</code> file. Labels on the model's web page are sometimes inferred, and wrong.</p>
+<p><strong>Which provider tags count.</strong> Where a maker publishes a checkpoint in exactly one compressed format, a provider tag that names only the number of bits is treated as that format. Where a maker publishes in more than one format, only the exact tag counts.</p>
+<p>The accepted tags for the reference are listed in section 4.7. They change only under section 12.</p>
+<p>A provider that does not state what precision it serves is not included. A price for an unstated product is not a price.</p>
+<p><strong>Independent sources, not names.</strong> Providers that resell inference served by another listed provider or by a common network, or that are under common control, form a group and count as one provider: once among the qualifying providers, once among the contributors, and once in the price. In the price the group gives one observation: that of its member with the lowest output price paid, with that member's input price, among the members that pass every test. The other members are shown in the day's table, counted with that member.</p>
+<p>Providers that rent computers from the same cloud, or run the same serving software, are not a group: each runs and prices its own service.</p>
+<p>Groups are recorded on public evidence only: the provider's or network's own pages, documentation or terms, or a public record of ownership. Each group is published, with its evidence and the day it applies from, in the register <code>affiliations.json</code> in the public repository. A group applies from the census day after it is recorded and never backwards, so no published figure changes. A provider can ask for a review under section 11.</p>
+<p>This rule was written before any case arose, because once version 1.0 is fixed a new rule needs thirty days' notice, and a rule added after it changes a result looks like moving the goalposts. Without it, one source selling under several names would add several observations and could move both the count and the price.</p>
+<h2 id="6-the-daily-test">6. The daily test</h2>
+<p>Every assessment day, in the window, the London server first saves the venue's listing for the reference. It then buys the same test job from every provider in the panel, three times: in rounds starting at about 14:05, 14:20, and 14:35 UTC, in a different random order each round. Anything not reached by 14:55 UTC is recorded as not reached. Each request may take at most two minutes.</p>
+<p>Each request is bought through the venue and sent to one named endpoint, with fallback switched off, thinking switched off, and the sampling temperature set to zero.</p>
+<p>The request is a fixed passage of about 7,600 tokens, Act 1 Scene 2 and the opening of Act 2 Scene 1 of Shakespeare's The Tempest, with instructions to:</p>
+<ol>
+<li><strong>First line: who was the rightful Duke of Milan,</strong> which the passage establishes near its start. The expected line is <code>ISLAND DUKE Prospero</code>.</li>
+<li><strong>Second line: who speaks the final line of the passage.</strong> The expected line is <code>LAST SPEAKER Sebastian</code>.</li>
+<li><strong>Then a continuous account in plain prose, until stopped.</strong></li>
+</ol>
+<p>The prompt file is published, and its SHA-256 hash is <code>140afc12e0c154fd2cb843197da5d3bc673c9e1cea6e0585236b2f41a2a8b24a</code>. It never changes. A day on which a different prompt was sent is not an assessment day.</p>
+<p>Only the first line differs between requests. It is a unique code, so that no provider can serve a stored copy. Any reply reporting stored (cached) input tokens is excluded. Some providers have been seen to report most of the prompt as cached even so, and to charge less for it; their replies are excluded, and the number excluded for this reason is recorded each day. If cached replies exclude more than a quarter of any probed panel in five windows in a row, a new test piece, with unique text throughout, will be proposed under section 12. Changing the test piece before it is needed was considered and rejected: the cause of the caching is not confirmed, and a new test piece would break comparison with the days before it.</p>
+<p>We record everything, and keep it privately:</p>
+<ul>
+<li>the listing;</li>
+<li>the request;</li>
+<li>every piece of the reply, and when it arrived;</li>
+<li>the provider's own count of tokens;</li>
+<li>the cost charged;</li>
+<li>how the reply ended;</li>
+<li>which provider the venue says answered.</li>
+</ul>
+<p><strong>The two questions are the correctness check.</strong> If either answer is wrong, the provider did not deliver the product that day. A wrong first answer means the model did not read the prompt properly. A wrong second answer can mean the long input was cut short, or that the model was degraded.</p>
+<p><strong>The prose is the length check.</strong> It is designed to run past 500 tokens, so the reply is stopped at 500. That proves the full quantity was delivered, and lets us measure speed on the same quantity every time.</p>
+<p><strong>Three tries.</strong> Speed and first-token time are taken as the median of the provider's completed requests, so one slow moment does not disqualify a provider and one fast moment does not flatter it.</p>
+<p><strong>Switching thinking off.</strong> The request uses the venue's own switch for thinking. Some providers have been seen to ignore it and return only thinking; they are excluded on each day they do. Adding the model maker's own form of the switch was tested on 23 October 2026, on all 43 endpoints then at an accepted precision: 42 gave the same reply either way, one could not be compared because of a rate limit, and the provider that returns only thinking did so either way. The request therefore carries only the venue's switch.</p>
+<p><strong>A known limitation.</strong> The prompt is published and sent at a fixed hour, so a provider could recognise it and give it special treatment. Buying through the venue hides who is asking, but not what is asked. We therefore also run the same test outside the window, at weekends and at a randomly chosen hour each day, and once a quarter we send an unannounced request with a different passage; we compare the speeds, and record the result. These readings are for research only and never enter the assessment.</p>
+<h2 id="7-how-the-number-is-calculated">7. How the number is calculated</h2>
+<p>A request is <strong>completed</strong> when it returns a reply with the provider's count of tokens.</p>
+<p>For each provider in the panel, the tests below are applied in this order. The first test it fails is recorded as the reason, and the provider is excluded for the day.</p>
+<ol>
+<li><strong>Listed.</strong> It is at an accepted precision in the listing saved at the start of the window, and was bought through an endpoint of standard priority (section 5).</li>
+<li><strong>Reliable.</strong> It completed at least one request in at least 8 of the previous 10 windows. A window in which the test did not run, or did not finish, counts as a failure for every provider.</li>
+<li><strong>Complete.</strong> At least two of its three requests today completed.</li>
+<li><strong>Correct.</strong> Every completed request gave both correct answers as its first two lines, ignoring letter case, and was stopped by the 500-token limit.</li>
+<li><strong>Clean.</strong> No completed request reported thinking tokens, returned thinking text, or reported stored input tokens.</li>
+<li><strong>Fast enough.</strong> The median first-token time was within 3 seconds, and the median speed, measured from the first token, was at least 30 tokens per second. With two completed requests, the median is the average of the two.</li>
+<li><strong>Same input.</strong> Its count of input tokens was within one per cent of the median count across the panel. A different count means a different tokeniser or template, and so a different product.</li>
+<li><strong>Receipt matches.</strong> The receipt states the cost of input and of output separately, and the total charged was within one per cent of the listed prices multiplied by the tokens counted. The listed prices used are those in force at the moment of the request: some providers charge more at certain hours of the day, and the listing says so.</li>
+</ol>
+<p>Every provider that passes all eight is a contributor. Each contributor gives its output price paid and its input price paid for the day, each the median across its completed requests. Where providers form a group (section 5), the group gives one contribution.</p>
+<p>Then, across all contributors:</p>
+<ol>
+<li><strong>Count.</strong> If there are fewer than five, no price is published (section 9).</li>
+<li><strong>Sort.</strong> Sort the output prices paid from lowest to highest.</li>
+<li><strong>Trim.</strong> Drop a quarter of the count, rounded down, from each end.</li>
+<li><strong>Average.</strong> Take the average of what remains. That is the Standard Inference price.</li>
+<li><strong>Input.</strong> Do the same, separately, for the input prices paid.</li>
+<li><strong>Blend.</strong> The blended price is 16 times the input price plus the output price, divided by 17, using the results of steps 4 and 5.</li>
+</ol>
+<p>The same calculation is repeated with each provider's listed discount removed, and the results are published alongside. The gap between the two shows how hard providers are discounting.</p>
+<p><strong>Rounding.</strong> Prices paid are worked out per token from the receipt, with no rounding along the way. Each result is converted to US dollars per million tokens and rounded to four decimal places, with halves rounded up.</p>
+<h3 id="worked-example">Worked example</h3>
+<p>Seven providers are contributors. Their output prices paid are:</p>
+<p>0.30, 0.40, 0.45, 0.50, 0.55, 0.70, 1.50</p>
+<p>A quarter of seven is one and three quarters, which rounds down to one. Drop the lowest one (0.30) and the highest one (1.50). Five remain:</p>
+<p>0.40, 0.45, 0.50, 0.55, 0.70</p>
+<p>Add them: 2.60. Divide by five: <strong>0.5200</strong>.</p>
+<p>Standard Inference for the day is $0.5200 per million output tokens.</p>
+<p>The provider at 1.50 and the provider at 0.30 both delivered the product, and both appear in the published table for the day. They simply do not move the number.</p>
+<p>This is deliberate. One provider's promotion or premium should not move a market price.</p>
+<h3 id="the-blended-price">The blended price</h3>
+<p>Most real uses send far more input than output. The blended price weights input 16 to 1 against output, close to the shape of the test request. If the input price is 0.1200 and the output price is 0.5200:</p>
+<p>(16 × 0.1200 + 0.5200) ÷ 17 = (1.9200 + 0.5200) ÷ 17 = 2.4400 ÷ 17 = <strong>0.1435</strong> per million blended tokens.</p>
+<p>The 16 to 1 ratio is a convention, not a claim about anyone's actual usage.</p>
+<h3 id="who-delivered-decides-the-number">Who delivered decides the number</h3>
+<p>The price is the price paid to the providers that delivered the product in the window. It can move when providers fail to deliver, without any provider's listed price moving. In the shadow period this was seen directly: on one day the cheapest providers were slow or turned away requests together, and the figure rose by more than a quarter; the next day they delivered again and it returned.</p>
+<p>This is the number working as intended, not an error. A price for a product that was not delivered is not a price for the product. The trim in step 3 protects against one provider's unusual price; it does not, and should not, hide a day on which much of the market failed to deliver. The table published each day shows which providers delivered and which did not, and why. No further rule is applied. In the shadow period, from 15 to 29 October 2026, the figure moved by more than a tenth from one window to the next on four of ten occasions, mostly because of which providers delivered. Any rule that steadied it would publish, for some day, a price that was not paid that day. Users who need a steadier figure, for instance to settle a contract, can average the daily figures over a period; the published history makes that exact. This is reviewed at the first quarterly review, with three months of published figures.</p>
+<h2 id="8-where-the-data-comes-from">8. Where the data comes from</h2>
+<p><strong>The census.</strong> Every day, the venue's public listing of models and endpoints is saved in full, privately. Since 18 September 2026, each day's copy has been written once and never overwritten. The census is used to choose and watch the reference, to count qualifying providers, and to check eligibility. It is not the source of the price.</p>
+<p><strong>The listing snapshot.</strong> At the start of each window, the venue's listing for the reference is saved again. That copy is the day's price evidence, and the day's panel is read from it.</p>
+<p><strong>Receipts.</strong> The cost the venue charges for each request, recorded with the request. The receipt is the source of the price.</p>
+<p><strong>Delivery and speed.</strong> Our own test, described in section 6.</p>
+<p><strong>The reference model's identity, size, and native precision.</strong> The model's own published page and its <code>config.json</code> file.</p>
+<p><strong>The venue.</strong> OpenRouter. Every observation is bought through OpenRouter's API, as any customer buys. The census also reads OpenRouter's full public listing of models and endpoints by script once a day. OpenRouter has said that its support team cannot give permission for this, that permission can be given only in writing by its sales team, and that the absence of an objection is not consent. Written permission for the daily reading, and for publishing figures derived from it, was requested from that team on 15 October 2026, and the request was renewed with this document on 23 October. When this version was fixed, on 30 October 2026, no permission had been given and no reply received. The venue's raw responses are therefore not published; only their fingerprints are. If OpenRouter refuses, or asks us to stop, the full daily reading stops within a week. The price continues, since it is built from the test's own purchases and the listings the test needs in order to buy; changes of reference are suspended, and the counts for grades not yet priced stop, until another source of provider counts is in place, announced under section 12. The position on any later day is stated on the site.</p>
+<p><strong>Dependence on one venue.</strong> Every observation comes through one venue. If it stopped selling, stopped reporting what it charges, or ended our access, the assessment as defined here could not be made. The control group below is a second route, and is being widened so that it could carry a figure.</p>
+<p><strong>The venue's market data.</strong> OpenRouter publishes data on the tokens bought through it, by model, under the Creative Commons Attribution 4.0 licence. It is read once a day, kept privately and cited as: Source: OpenRouter (openrouter.ai/rankings), as of the date given. Licensed under CC BY 4.0. It describes the venue's own customers, not the whole market, and it enters these rules only in the tie rule of section 4.5.</p>
+<p><strong>What the price leaves out.</strong> The venue charges a fee when credit is bought, and UK VAT is charged on the credit and the fee. Neither is part of the price, which is quoted per token, as prices are normally quoted. At the time of writing, the fee on a $10 purchase was $0.80, and VAT was 20 per cent.</p>
+<p><strong>A check on the venue.</strong> A control group of providers is bought directly from their own services, rather than through the venue, in the same window and with the same test, from 20 October 2026. Its results are reported separately, and never enter the price while the venue serves. The group is being widened, so that it could carry a figure if the venue were lost; its size is not fixed by this document.</p>
+<p><strong>A monthly check.</strong> Once a month we compare a sample of providers' own published prices with the venue's listing, and record any differences. A difference is not an error. The price assessed is the price paid through the venue, confirmed by the receipt.</p>
+<p><strong>What we keep.</strong> Records fall into three classes:</p>
+<ol>
+<li><strong>Collected.</strong> The census, the listing snapshots, the test records, and the readings taken outside the window. Written once, never changed, and kept permanently and privately, and in any case for at least five years. They are made available to any market authority entitled to them by law. A SHA-256 fingerprint of every file is published each day, one file per day, and is itself written once. Anyone later shown a record can check it against its fingerprint.</li>
+<li><strong>Derived.</strong> The tracking and ranking pages. Rebuilt from the collected records whenever needed, with their history kept.</li>
+<li><strong>Published.</strong> Each day's assessment. Written once and never recalculated, even if a later method would give a different figure. Mistakes are corrected under section 11.</li>
+</ol>
+<p><strong>Timestamps.</strong> When a fingerprint file is written, it is sent at once to two independent timestamping services: OpenTimestamps, which records it in the Bitcoin blockchain within a few hours, and FreeTSA, a timestamp authority that signs it within seconds under the international standard RFC 3161. Only the fingerprint is sent, never the records. Both proofs are published beside the fingerprint. Together they show that the records existed, unchanged, no later than the time stamped, without anyone having to trust us or the place the files are kept.</p>
+<p>Each day's assessment is fingerprinted and stamped in the same way when it is made, which is before it is published, with one fingerprint for each file. Until the first publication only the fingerprints and their proofs are published, so that anyone can check, once the shadow period's assessments are released, that none was changed.</p>
+<p>A proof that cannot be obtained is requested again on the next run, and its absence is recorded. It never delays publication.</p>
+<p>Fingerprints already published when stamping began were stamped then, and prove existence from that moment, not from the day of their records. The moment is recorded in <code>data/hashes/stamping-began.txt</code>.</p>
+<p>How to check a fingerprint and its proofs is set out in the repository's README.</p>
+<p>We never use another price assessment as an input.</p>
+<h2 id="9-when-we-do-not-publish">9. When we do not publish</h2>
+<p>If fewer than five providers are contributors, no price is published. Instead we publish the count, the reason for each exclusion, and the words "not published".</p>
+<p>Five is the minimum for the number to be a market price rather than a few companies' opinions.</p>
+<p>If the test does not run, the day is marked "not published", with the reason. That day counts against every provider's reliability (section 7).</p>
+<p>If a grade has fewer than five contributors on 20 assessment days in a row, it is withdrawn (section 4.6).</p>
+<p>There is no assessment at weekends, on 25 December, or on 1 January.</p>
+<h2 id="10-what-is-published-and-where">10. What is published, and where</h2>
+<p>Every assessment day by 16:00 UTC, at a web address containing the grade and the date that never changes, in the form <code>https://hunterson.org/standard/YYYY-MM-DD/</code>:</p>
+<ul>
+<li>the price, the input price, and the blended price;</li>
+<li>the same three with discounts removed;</li>
+<li>the number of contributors, and the number of providers tested;</li>
+<li>a table of every provider tested, showing its prices paid, its listed discount, its measured speed and first-token time, and whether it was included or excluded, and why;</li>
+<li>the fingerprints of the day's raw records and of the day's assessment;</li>
+<li>the two timestamp proofs for each of those fingerprints (section 8);</li>
+<li>the version of this document in force that day.</li>
+</ul>
+<p>Before the first publication, nothing is published: the shadow period's assessments are kept privately (section 4.6).</p>
+<p>For the Heavy and Frontier grades, which are not yet priced, we publish the daily count of qualifying providers for each grade's reference, and the reason no price is given.</p>
+<p>The full history is available as a single downloadable file, with a column for the grade.</p>
+<p>A published page is never changed. See section 11.</p>
+<h2 id="11-mistakes-and-complaints">11. Mistakes and complaints</h2>
+<p>If we discover an error in a published number, we do not change the page. We publish a correction on a new page, dated, stating what was wrong, what the correct figure is, and why it happened.</p>
+<p>Where a correction exists, a notice linking to it is shown with the original page, drawn from the list of corrections. The original page itself stays as published.</p>
+<p>Errors we find ourselves and errors reported to us are treated the same way.</p>
+<p><strong>Complaints.</strong> Anyone may complain about a published figure, or about how these rules have been applied, by email to <a href="mailto:malcolm@hunterson.org">malcolm@hunterson.org</a>. We acknowledge a complaint within five working days, and reply in writing within twenty. Where a complaint leads to a correction, the outcome is published with it. Records of each complaint and its handling are kept for at least five years.</p>
+<h2 id="12-changing-these-rules">12. Changing these rules</h2>
+<p>Any change to this document is announced at least 30 days before it takes effect, with the reason. During those 30 days anyone can comment. The change, the comments, and the response are published.</p>
+<p>This includes the accepted provider tags in section 4.7, because changing them changes who is in the panel.</p>
+<p>Each version of this document is numbered and kept. The version in force on any day is recorded on that day's page.</p>
+<p>The whole document is reviewed at least once a year against the market it describes, and the outcome of each review is published, whether or not it leads to a change.</p>
+<p>A change of reference model follows section 4.5 and is not a change to these rules.</p>
+<h2 id="13-using-the-numbers">13. Using the numbers</h2>
+<p>The figures are free to view, copy, quote and chart, and free to use in research, teaching, journalism and any organisation's own analysis, with credit to Hunterson.</p>
+<p>Using a figure to set an amount paid under a contract, to value or settle a financial instrument, or to measure a fund or make up an index needs a registration. Registration is free, takes effect when the email is sent, and means the user is told directly of every change to these rules, every change of reference with its conversion ratio, every correction, and every day with no price. A use registered before any fee is announced stays free for as long as it lasts.</p>
+<p>Distributing the figures as a data service, or joining their history to another series, needs an agreement.</p>
+<p>The full terms are the Hunterson Data Licence, at <a href="https://hunterson.org/licence/">https://hunterson.org/licence/</a> and in <code>LICENCE-DATA.md</code> in the public repository.</p>
+<p>The fingerprints and timestamp proofs are dedicated to the public domain under CC0 1.0, so that anyone may keep copies anywhere.</p>
+<p>The raw records, meaning the census, the listing snapshots, and the test records, include the venue's own responses. They remain OpenRouter's material, under its terms. They are kept privately, and are neither published nor licensed by us.</p>
+<p>This document is released under the Creative Commons Attribution 4.0 licence.</p>
+<h2 id="14-who-produces-this-and-what-they-own">14. Who produces this, and what they own</h2>
+<p>Hunterson Standard Inference is produced by Malcolm Hunter (a pen name), trading as Hunterson, in the United Kingdom.</p>
+<p>The producer holds no shares, tokens, or other interest in any provider tested, in any company that makes a model tested, in any GPU cloud or listed inference provider, in compute futures, or in any financial product whose value depends on this number.</p>
+<p>The producer holds no tokens of, and accepts no payment, airdrop, or advisory role from, any network that sells AI inference or GPU compute.</p>
+<p>Holdings through broadly diversified funds and pensions, where the producer does not choose the investments, are excepted. Holdings unrelated to this sector are not listed.</p>
+<p>The producer accepts no payment from any provider or model maker. This statement is updated whenever it changes, and the date of the last change is shown.</p>
+<h2 id="15-who-can-change-the-number">15. Who can change the number</h2>
+<p>Nobody can change a day's number. It is produced by the published rules from the published data. There is no panel, no override, and no discretion over any day's figure.</p>
+<p>Three kinds of decision do involve judgement:</p>
+<ol>
+<li><strong>Placing a model in a grade,</strong> under section 4.2.</li>
+<li><strong>Deciding which provider tags count as a model's native form,</strong> under section 5.</li>
+<li><strong>Recording that providers form a group,</strong> under section 5, on public evidence only.</li>
+</ol>
+<p>All three are recorded, with the reasons, in the public selection record or the published register before they take effect: <a href="https://github.com/Hunterson42/Hunterson/blob/main/notes/selection.md">https://github.com/Hunterson42/Hunterson/blob/main/notes/selection.md</a> and <a href="https://github.com/Hunterson42/Hunterson/blob/main/affiliations.json">https://github.com/Hunterson42/Hunterson/blob/main/affiliations.json</a>. All can be challenged under section 11.</p>
+<p>If the rules produce a number that looks wrong, the right response is to check the data and, if the rules are at fault, to change them through section 12.</p>
+<h2 id="16-figures-published-alongside">16. Figures published alongside</h2>
+<p>These are published with the daily price, and never change it:</p>
+<ol>
+<li><strong>The price without discounts,</strong> and the gap between the two (section 7).</li>
+<li><strong>The control group:</strong> the same test bought directly from providers' own services, set beside the venue's result for the same providers (section 8).</li>
+<li><strong>Provider counts for grades not yet priced</strong> (section 10).</li>
+<li><strong>The leading challenger.</strong> The figure for the leading eligible challenger in the grade, assessed in the same way, with its contributors and the ratio between its price and the reference's. It is published for information, and is not an assessment of the grade.</li>
+</ol>
+<p>Further figures are planned from January 2027, once a month of history exists, such as the output a graphics processor must deliver each hour to cover its rental at the assessed price; the change in price paid among the providers that contributed on both of two consecutive assessment days, which separates a change in prices from a change in who delivered; and the price paid for stored (cached) input, bought by a separate test. Each will be defined in a published note, with its sources, before it is first published.</p>
+<h2 id="17-standards-followed">17. Standards followed</h2>
+<p>These rules are written with reference to the IOSCO Principles for Oil Price Reporting Agencies of 5 October 2012, adapted to a product that is bought and timed rather than traded.</p>
+<p>How each principle is met, met in another form, or not met, is set out principle by principle in a separate statement, <code>IOSCO.md</code> in the public repository, published with this version and reviewed each year. It is kept separate so that it can say so as soon as anything in it changes. Hunterson is produced by one person, so the principles that need a second person, a board or an independent auditor are not met as written; the statement says which they are, and what stands in their place.</p>
+<h2 id="18-what-this-number-is-not">18. What this number is not</h2>
+<p>It is not the price large buyers actually pay. Large customers negotiate discounts that are not public. This number is built from prices actually paid, by buying the product and keeping the receipt, checked against the listed price. It does not see private deals.</p>
+<p>It is not a price for closed models. Models like Claude, GPT, or Gemini each come from a single maker, and are sold only where that maker allows, so they have a list price but not a market price. Their listed prices are recorded separately as context, and never enter this number.</p>
+<p>It is not a quality rating. Two providers serving the same checkpoint at native precision are treated as delivering the same product. Differences in speed above the floor, or in reliability above the threshold, are published in the daily table but do not affect the price.</p>
+<p>It is not a list price. It moves with who delivered on the day, as well as with what they charged (section 7).</p>
+<p>It is not a price for output produced in Europe. See section 1.</p>
+<h2 id="19-version-history">19. Version history</h2>
+<div class="table-scroll"><table>
+<thead><tr><th scope="col">Version</th><th scope="col">Date</th><th scope="col">Change</th></tr></thead>
+<tbody>
+<tr><td>0.9</td><td>October 2026</td><td>Draft published for comment</td></tr>
+<tr><td>0.9, amended</td><td>October 2026</td><td>Sections 8 and 10: timestamps built, settling the square bracket in section 10</td></tr>
+<tr><td>0.9, amended</td><td>October 2026</td><td>Sections 5 and 7: tiers sold for lower or higher priority are not observed, settling the square bracket in section 5. Section 6: cached replies stay excluded, with a trigger for a new test piece, settling its square bracket</td></tr>
+<tr><td>0.9, amended</td><td>October 2026</td><td>Section 13: the figures under the Hunterson Data Licence in place of Creative Commons Attribution 4.0, before any figure was published</td></tr>
+<tr><td>1.0</td><td>30 October 2026</td><td>Fixed after comment; no comments were received. Every square bracket settled: the switch for thinking (section 6), days of failed delivery (section 7), the venue's position (section 8) and the IOSCO statement (section 17). Added: why this hour and the length of the test job (section 3); the tie rule, decided by the venue's volume, from 31 October 2026, and the stale-reference note (section 4.5); that the launch test counts providers alone (section 4.6); dependence on one venue, the venue's market data, and a control group of no fixed size (section 8); records kept for at least five years and made available to market authorities (sections 8 and 11); a yearly review (section 12); the leading challenger published alongside, and further planned figures (section 16)</td></tr>
+</tbody></table></div>
+<hr>
+<p>Questions, complaints, and reports of errors: <a href="mailto:malcolm@hunterson.org">malcolm@hunterson.org</a></p>
+</main>
+<footer class="site-foot">
+  <p>The same text is kept in the public repository as <a href="https://github.com/Hunterson42/Hunterson/blob/main/METHODOLOGY.md">METHODOLOGY.md</a>, with every change to it. Published by Malcolm Hunter (a pen name), trading as Hunterson. Contact <a href="mailto:malcolm@hunterson.org">malcolm@hunterson.org</a>.</p>
+  <p class="foot-links"><a href="../../about/">About</a><a href="../../methodology/">Methodology</a><a href="../../evidence/">Evidence</a><a href="../../conflicts/">Interests and conflicts</a><a href="../../continuity/">Continuity</a><a href="../../iosco/">IOSCO statement</a><a href="../../licence/">Licence</a><a href="https://github.com/Hunterson42/Hunterson">Source code</a></p>
+</footer>
+</div>
+</body>
+</html>

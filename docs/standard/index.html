@@ -16,6 +16,11 @@
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Hunterson Standard Inference, Europe, 3 November 2026: input $0.2246, output $0.9283 per million tokens">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="hunterson-record" content="sha256:c513ececafd3155bf72951636c7a96140b3b25802b95802ce544c59db737416d">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../assets/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="alternate" type="application/atom+xml" title="Hunterson, the daily price" href="../feed.xml">
 <link rel="preload" href="../assets/fonts/ibm-plex-sans-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="../assets/site.css">
 </head>
@@ -25,9 +30,9 @@
   <a class="brand" href="../">Hunterson Standard Inference, Europe</a>
   <nav aria-label="Site">
     <a href="../">Price</a>
-    <a href="https://github.com/Hunterson42/Hunterson/blob/main/METHODOLOGY.md">Methodology</a>
+    <a href="../methodology/">Methodology</a>
     <a href="../census/">Census</a>
-    <a href="../data/assessments.csv">Data</a>
+    <a href="../data/">Data</a>
     <a href="../about/">About</a>
   </nav>
 </header>
@@ -53,12 +58,12 @@
 
   <section class="about" aria-label="What this figure is">
     <p>The price of AI inference, measured by buying it. Each weekday between 14:00 and 15:00 UTC, from London, Hunterson buys the same test job from every provider serving DeepSeek V4.1-Flash through one marketplace, and keeps the receipts. The figures are the averages of what the middle half of qualifying providers charged, per million input and per million output tokens. Standard covers models that use 30 billion active parameters or fewer for each token. A token is about three quarters of a word.</p>
-    <p class="links"><a href="https://github.com/Hunterson42/Hunterson/blob/main/METHODOLOGY.md">How the price is assessed</a><a href="#panel">The providers behind this figure</a><a href="https://github.com/Hunterson42/Hunterson/tree/main/data/hashes">The evidence</a></p>
+    <p class="links"><a href="../methodology/">How the price is assessed</a><a href="#panel">The providers behind this figure</a><a href="../evidence/">The evidence</a></p>
   </section>
 
   <section class="block" id="challenger" aria-labelledby="ch-h">
     <h2 id="ch-h">The leading challenger</h2>
-    <p>DeepSeek V4.1-Flash-1017 has the most providers after the reference. Assessed in the same way today: input $0.2020, output $0.8169 per million tokens, from 9 of 15 contributors; its output price is 0.8800 times the reference's. Shown for information: it is not an assessment of the grade, and it does not change the figures above.</p>
+    <p>DeepSeek V4.1-Flash-1017 has the most providers after the reference. Assessed in the same way today: input $0.2020, output $0.8169 per million tokens, from 9 of 15 contributors; its output price is 0.88 times the reference's. Shown for information: it is not an assessment of the grade, and it does not change the figures above.</p>
   </section>
 
   <section class="block" id="history" aria-labelledby="hist-h">
@@ -105,15 +110,15 @@
         </tbody>
       </table>
     </div>
-    <p class="table-foot"><a href="../data/assessments.csv">Download every assessment (CSV)</a><a href="../data/assessments.json">The same as JSON</a></p>
+    <p class="table-foot"><a href="../standard/archive/">Every assessment</a><a href="../data/">The data, to download</a></p>
   </section>
 </main>
 
 <footer class="site-foot">
-  <p>Hunterson Standard Inference, Europe is published each weekday by 16:00 UTC under methodology version 1.0. A published figure is never changed; a correction is published as a new, dated entry.</p>
+  <p>Hunterson Standard Inference, Europe is published each weekday by 16:00 UTC under <a href="../methodology/1.0/">methodology version 1.0</a>. A published figure is never changed; a correction is published as a new, dated entry.</p>
   <p>Free to use with credit: "Source: Hunterson Standard Inference, Europe, hunterson.org". Use in contracts, financial products or indices needs a free registration: <a href="https://hunterson.org/licence/">hunterson.org/licence</a>.</p>
   <p>Published by Malcolm Hunter (a pen name), trading as Hunterson. Contact <a href="mailto:malcolm@hunterson.org">malcolm@hunterson.org</a>.</p>
-  <p class="foot-links"><a href="../about/">About</a><a href="https://github.com/Hunterson42/Hunterson/blob/main/CONFLICTS.md">Interests and conflicts</a><a href="https://github.com/Hunterson42/Hunterson/blob/main/CONTINUITY.md">Continuity</a><a href="https://github.com/Hunterson42/Hunterson/blob/main/IOSCO.md">IOSCO statement</a></p>
+  <p class="foot-links"><a href="../about/">About</a><a href="../methodology/">Methodology</a><a href="../evidence/">Evidence</a><a href="../conflicts/">Interests and conflicts</a><a href="../continuity/">Continuity</a><a href="../iosco/">IOSCO statement</a><a href="../licence/">Licence</a><a href="https://github.com/Hunterson42/Hunterson">Source code</a></p>
   <p>Permanent link for this assessment: <a href="https://hunterson.org/standard/2026-11-03/">https://hunterson.org/standard/2026-11-03/</a></p>
 </footer>
 </div>
