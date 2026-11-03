@@ -29,7 +29,15 @@ and once for the site:
     data/assessments.json       every day of every grade, for anyone to download
     data/assessments.csv        the same as CSV, with a grade column
     about/index.html            about Hunterson; rewritten daily
-    assets/                     styles, the chart script and the fonts
+    assets/                     styles, the chart script, the fonts and the icon
+and, through sitepages.py, the methodology and its versions, the statements,
+the licence, the evidence and data pages, each grade's archive, a page for
+addresses that do not exist, a feed, the latest figure as JSON and a sitemap.
+
+Day pages and cards are written once. Each carries the fingerprint of the record
+it shows, in a meta tag "hunterson-record": if the record is unchanged, a page
+already written is kept exactly as it was, even when the site's design has
+changed since; if the record would change, the build stops.
 
 While one grade is live, the home page is that grade's latest day. When a
 second grade goes live, the build stops until the home page table described
@@ -48,6 +56,7 @@ written once. Uses only the Python standard library.
 import argparse
 import csv
 import datetime as dt
+import hashlib
 import html
 import io
 import json
@@ -62,12 +71,13 @@ if HERE not in sys.path:
     sys.path.insert(0, HERE)        # for oversight.py, beside this file
 SHOW_SHADOW = True          # show the shadow period in the history, labelled; see README
 BLEND = "16 input tokens to 1 output token"
-METHODOLOGY_URL = "https://github.com/Hunterson42/Hunterson/blob/main/METHODOLOGY.md"
-EVIDENCE_URL = "https://github.com/Hunterson42/Hunterson/tree/main/data/hashes"
-REPO_URL = "https://github.com/Hunterson42/Hunterson/blob/main/"
-CONFLICTS_URL = REPO_URL + "CONFLICTS.md"
-CONTINUITY_URL = REPO_URL + "CONTINUITY.md"
-IOSCO_URL = REPO_URL + "IOSCO.md"
+REPO_HOME = "https://github.com/Hunterson42/Hunterson"
+DOCS_ROOT = os.path.dirname(os.path.dirname(HERE))      # the repository, for METHODOLOGY.md and the rest
+# The site's menu and footer links, the same on every page. Paths are from the site's root.
+NAV = [("", "Price"), ("methodology/", "Methodology"), ("census/", "Census"), ("data/", "Data"), ("about/", "About")]
+FOOT = [("about/", "About"), ("methodology/", "Methodology"), ("evidence/", "Evidence"),
+        ("conflicts/", "Interests and conflicts"), ("continuity/", "Continuity"), ("iosco/", "IOSCO statement"),
+        ("licence/", "Licence"), (REPO_HOME, "Source code")]
 MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August",
           "September", "October", "November", "December"]
 DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
@@ -367,8 +377,8 @@ def notice_text(opts, g):
     """The post announcing that publication is suspended (D50, CONTINUITY.md)."""
     text = ("%s\nPublication is suspended from %s: oversight of the figures has not been confirmed within %d days. "
             "No figure is published until it is.\n\nWhat happens when Hunterson cannot continue:\n%s"
-            % (g["product"], long_date(opts["suspended_since"]), opts.get("lapse_days") or 45, CONTINUITY_URL))
-    if len(text) - len(CONTINUITY_URL) + URL_WEIGHT > TWEET_LIMIT:
+            % (g["product"], long_date(opts["suspended_since"]), opts.get("lapse_days") or 45, opts["base_url"] + "/continuity/"))
+    if len(text) - len(opts["base_url"] + "/continuity/") + URL_WEIGHT > TWEET_LIMIT:
         raise ValueError("the suspension notice is over %d characters" % TWEET_LIMIT)
     return text
 
@@ -380,6 +390,55 @@ def fill(template, values):
     for k, v in values.items():
         out = out.replace("{{%s}}" % k, v)
     return out
+
+
+def href(root, path):
+    if "://" in path:
+        return path
+    return root + path if (root or path) else "./"
+
+
+def nav_html(root, current=None):
+    links = "\n".join('    <a href="%s"%s>%s</a>' % (e(href(root, p)), ' aria-current="page"' if t == current else "", t)
+                      for p, t in NAV)
+    return '  <nav aria-label="Site">\n%s\n  </nav>' % links
+
+
+def foot_links_html(root):
+    return "".join('<a href="%s">%s</a>' % (e(href(root, p)), t) for p, t in FOOT)
+
+
+def head_links(root):
+    return ('<link rel="icon" href="%sassets/favicon.svg" type="image/svg+xml">\n'
+            '<link rel="icon" href="%sassets/favicon-32.png" sizes="32x32" type="image/png">\n'
+            '<link rel="apple-touch-icon" href="%sassets/apple-touch-icon.png">\n'
+            '<link rel="alternate" type="application/atom+xml" title="Hunterson, the daily price" href="%sfeed.xml">\n'
+            % (root, root, root, root))
+
+
+def record_of(day, prev):
+    """The fingerprint of what a day's page and card show: its figures, its providers, the challenger
+    and the change from the previous published day. Not the design of the page."""
+    fields = {k: day.get(k) for k in ("date", "status", "reason", "name", "checkpoint", "price", "undiscounted",
+                                      "contributors", "panel", "published_utc", "methodology_version", "rollover",
+                                      "window", "suspended")}
+    fields["providers"] = [[q.get("provider"), q.get("result"), q.get("input"), q.get("output"), q.get("in_mean"),
+                            q.get("reason")] for q in day.get("providers") or []]
+    c = day.get("challenger") or {}
+    fields["challenger"] = [c.get("name") or c.get("checkpoint"), c.get("price"), c.get("contributors"), c.get("panel")] if c else None
+    fields["previous"] = [prev["date"], prev.get("price")] if prev else None
+    return "sha256:" + hashlib.sha256(json.dumps(fields, sort_keys=True).encode()).hexdigest()
+
+
+def record_meta(record):
+    return '<meta name="hunterson-record" content="%s">\n' % record
+
+
+def legacy_marks(day):
+    """What a page written before records were fingerprinted must still show, to be kept."""
+    if day.get("price"):
+        return [long_date(day["date"]), day["price"]["input"], day["price"]["output"]]
+    return [long_date(day["date"]), "Not published"]
 
 
 def figure_html(day, prev):
@@ -403,7 +462,8 @@ def challenger_html(day, g):
         text = ("%s has the most providers after the reference. Assessed in the same way today: input %s, output %s "
                 "per million tokens, from %d of %d contributors" % (name, e(money(c["price"]["input"])),
                                                                     e(money(c["price"]["output"])), c["contributors"], c["panel"]))
-        text += "; its output price is %s times the reference's." % e(r) if r else "."
+        text += ("; its output price is %s times the reference's." % e(Decimal(r).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP))
+                 if r else ".")
     else:
         text = ("%s has the most providers after the reference. Assessed in the same way today, it had %d of %d "
                 "contributors, fewer than the five needed for a figure." % (name, c["contributors"], c["panel"]))
@@ -426,6 +486,13 @@ def notes_html(notes, g, day_date, kind):
             continue
         out.append('<p class="notice note" role="note"><strong>%s.</strong> %s</p>' % (e(n.get("title", "Note")), e(n.get("text", ""))))
     return "\n".join(out)
+
+
+def methodology_line(version, root, opts):
+    """'methodology version N', linked to that version's page where the site has one."""
+    if version and version in opts.get("methodology_versions", ()):
+        return '<a href="%smethodology/%s/">methodology version %s</a>' % (root, e(version), e(version))
+    return "methodology version %s" % e(version or "")
 
 
 def page(days, idx, kind, opts, template, g):
@@ -464,7 +531,7 @@ def page(days, idx, kind, opts, template, g):
                    'confirmed on %s, so no figure has been published since %s; when it resumes, the gap will show as a '
                    'break in the series. The figures below are from the last assessment published. '
                    '<a href="%s">What happens when Hunterson cannot continue</a>.</p>'
-                   % (long_date(opts["last_confirmed"]), long_date(opts["suspended_since"]), CONTINUITY_URL))
+                   % (long_date(opts["last_confirmed"]), long_date(opts["suspended_since"]), root + "continuity/"))
     notes = notes_html(opts.get("notes"), g, day["date"], kind)
     if notes:
         notice += "\n" + notes
@@ -481,18 +548,17 @@ def page(days, idx, kind, opts, template, g):
         "og_image": e("%s/og/%s/%s.png" % (base, g["key"], day["date"])),
         "og_alt": e("%s, %s: %s" % (g["product"], long_date(day["date"]), title_fig)),
         "robots": '<meta name="robots" content="noindex">\n' if opts["preview"] else "",
-        "root": root, "home": root or "./", "nav_current": ' aria-current="page"' if kind == "home" else "",
-        "methodology_url": e(opts["methodology_url"]),
-        "census_url": e(opts["census_url"] if "://" in opts["census_url"] else root + opts["census_url"]),
-        "evidence_url": e(EVIDENCE_URL),
+        "root": root, "home": root or "./", "nav": nav_html(root, "Price" if kind == "home" else None),
+        "head_links": head_links(root), "record_meta": record_meta(record_of(day, prev)),
+        "methodology_url": e(root + "methodology/"), "evidence_url": e(root + "evidence/"),
+        "archive_url": e("%s%s/archive/" % (root, g["key"])), "foot_links": foot_links_html(root),
+        "methodology_line": methodology_line(day.get("methodology_version"), root, opts),
         "notice": notice, "date_long": e(long_date(day["date"])), "date_line": e(date_line),
         "figure": fig, "unit_line": unit, "change": change_html(day, prev, g).replace("{{root}}", root), "cite": cite,
         "record": record_html(day), "about": about, "challenger": challenger_html(day, g),
-        "about_url": root + "about/", "conflicts_url": CONFLICTS_URL, "continuity_url": CONTINUITY_URL,
-        "iosco_url": IOSCO_URL,
         "panel_heading": "The providers behind this figure", "panel_intro": e(intro), "panel_rows": panel_rows,
         "recent_rows": recent_html(days, idx, root, g), "series_json": series(days[:idx + 1]),
-        "methodology_version": e(day.get("methodology_version") or ""), "base_url": e(base), "contact": e(opts["contact"]),
+        "base_url": e(base), "contact": e(opts["contact"]),
         "permalink_line": 'Permanent link for this assessment: <a href="%s">%s</a>' % (e(permalink), e(permalink)),
     }
     out = fill(template, values)
@@ -525,6 +591,7 @@ def card(days, idx, opts, template, g):
         "url_short": e("%s/%s/%s/" % (opts["base_url"].replace("https://", ""), g["key"], day["date"])),
         "contributors_line": e(day["name"] if "<dl>" in side else "%d contributors. %s" % (day["contributors"], day["name"])),
         "stamp": '<span class="stamp">Illustrative</span>' if day.get("illustrative") else "",
+        "record_meta": record_meta(record_of(day, prev)),
         "series_json": series(chart_days),
     }
     out = fill(template, values)
@@ -585,11 +652,23 @@ def export_rows(days, base, g):
     return rows
 
 
-def write(path, text, once, preview):
+RECORD = re.compile(r'<meta name="hunterson-record" content="([^"]+)">')
+
+
+def write(path, text, once, preview, legacy=()):
+    """Write a file. A written-once file that exists is kept as it is: unchanged, or showing the same
+    record (the same "hunterson-record" fingerprint, or, if it was written before records were
+    fingerprinted, the same date and figures); anything else stops the build."""
     os.makedirs(os.path.dirname(path), exist_ok=True)
     if once and not preview and os.path.exists(path):
         with open(path) as f:
-            if f.read() != text:
+            old = f.read()
+        if old != text:
+            new = RECORD.search(text)
+            had = RECORD.search(old)
+            same = (new and had and had.group(1) == new.group(1)) or \
+                   (new and not had and legacy and all(m in old for m in legacy))
+            if not same:
                 raise WriteOnceError("%s already exists and would change; written-once files are never changed" % path)
         return False
     with open(path, "w") as f:
@@ -621,10 +700,11 @@ def apply_oversight(by_grade, st):
 
 
 def about_page(opts, template, g):
-    values = {"root": "../", "product": e(g["product"]), "methodology_url": e(opts["methodology_url"]),
+    values = {"root": "../", "product": e(g["product"]), "methodology_url": "../methodology/",
               "census_url": e(opts["census_url"] if "://" in opts["census_url"] else "../" + opts["census_url"]),
-              "evidence_url": e(EVIDENCE_URL), "conflicts_url": e(CONFLICTS_URL), "continuity_url": e(CONTINUITY_URL),
-              "iosco_url": e(IOSCO_URL), "base_url": e(opts["base_url"]), "contact": e(opts["contact"]),
+              "evidence_url": "../evidence/", "conflicts_url": "../conflicts/", "continuity_url": "../continuity/",
+              "iosco_url": "../iosco/", "base_url": e(opts["base_url"]), "contact": e(opts["contact"]),
+              "nav": nav_html("../", "About"), "head_links": head_links("../"), "foot_links": foot_links_html("../"),
               "robots": '<meta name="robots" content="noindex">\n' if opts["preview"] else ""}
     out = fill(template, values)
     if "{{" in out:
@@ -633,8 +713,10 @@ def about_page(opts, template, g):
 
 
 def build(assess_dir, out_dir, preview=False, base_url="https://hunterson.org",
-          census_url="census/", contact="malcolm@hunterson.org", methodology_url=METHODOLOGY_URL,
-          oversight_status=None, notes=None):
+          census_url="census/", contact="malcolm@hunterson.org", methodology_url=None,
+          oversight_status=None, notes=None, docs_root=None):
+    import sitepages
+    docs_root = docs_root or DOCS_ROOT
     by_grade = load(assess_dir)
     if not by_grade:
         raise ValueError("no reference assessments found in " + assess_dir)
@@ -654,6 +736,11 @@ def build(assess_dir, out_dir, preview=False, base_url="https://hunterson.org",
             "suspended_since": (oversight_status or {}).get("suspended_since"),
             "last_confirmed": (oversight_status or {}).get("last_confirmed"),
             "lapse_days": (oversight_status or {}).get("lapse_days")}
+    with open(os.path.join(docs_root, "METHODOLOGY.md"), encoding="utf-8") as f:
+        version = sitepages.methodology_version(f.read())[0]
+    mdir = os.path.join(out_dir, "methodology")
+    opts["methodology_versions"] = {version} | ({v for v in os.listdir(mdir) if os.path.isdir(os.path.join(mdir, v))}
+                                               if os.path.isdir(mdir) else set())
     with open(os.path.join(HERE, "page.html")) as f:
         page_t = f.read()
     with open(os.path.join(HERE, "card.html")) as f:
@@ -673,8 +760,10 @@ def build(assess_dir, out_dir, preview=False, base_url="https://hunterson.org",
         for i, d in enumerate(days):
             if d["status"] == "shadow" and not preview:
                 continue
-            write(os.path.join(out_dir, key, d["date"], "index.html"), page(days, i, "day", opts, page_t, g), True, preview)
-            write(os.path.join(out_dir, "card", key, d["date"] + ".html"), card(days, i, opts, card_t, g), True, preview)
+            write(os.path.join(out_dir, key, d["date"], "index.html"), page(days, i, "day", opts, page_t, g), True,
+                  preview, legacy_marks(d))
+            write(os.path.join(out_dir, "card", key, d["date"] + ".html"), card(days, i, opts, card_t, g), True,
+                  preview, legacy_marks(d))
             write(os.path.join(out_dir, "tweet", key, d["date"] + ".txt"),
                   tweet_text(d, previous_published(days, i), opts["base_url"], g), True, preview)
         built += len(days)
@@ -685,6 +774,10 @@ def build(assess_dir, out_dir, preview=False, base_url="https://hunterson.org",
     js, csv_text = exports(by_grade if preview else {k: v for k, v in by_grade.items() if k in live}, opts["base_url"])
     write(os.path.join(out_dir, "data", "assessments.json"), js, False, preview)
     write(os.path.join(out_dir, "data", "assessments.csv"), csv_text, False, preview)
+    public = by_grade if preview else {k: v for k, v in by_grade.items() if k in live}
+    opts["product"] = grade(home_key)["product"]
+    sitepages.build(sys.modules[__name__], opts, out_dir, docs_root, public, home_key,
+                    csv_text.split("\n", 1)[0].split(","))
     return built
 
 

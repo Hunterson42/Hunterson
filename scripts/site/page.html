@@ -16,20 +16,14 @@
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="{{og_alt}}">
 <meta name="twitter:card" content="summary_large_image">
-{{robots}}<link rel="preload" href="{{root}}assets/fonts/ibm-plex-sans-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin>
+{{robots}}{{record_meta}}{{head_links}}<link rel="preload" href="{{root}}assets/fonts/ibm-plex-sans-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="{{root}}assets/site.css">
 </head>
 <body>
 <div class="wrap">
 <header class="site-head">
   <a class="brand" href="{{home}}">{{product}}</a>
-  <nav aria-label="Site">
-    <a href="{{home}}"{{nav_current}}>Price</a>
-    <a href="{{methodology_url}}">Methodology</a>
-    <a href="{{census_url}}">Census</a>
-    <a href="{{root}}data/assessments.csv">Data</a>
-    <a href="{{about_url}}">About</a>
-  </nav>
+{{nav}}
 </header>
 {{notice}}
 <main>
@@ -83,15 +77,15 @@
         </tbody>
       </table>
     </div>
-    <p class="table-foot"><a href="{{root}}data/assessments.csv">Download every assessment (CSV)</a><a href="{{root}}data/assessments.json">The same as JSON</a></p>
+    <p class="table-foot"><a href="{{archive_url}}">Every assessment</a><a href="{{root}}data/">The data, to download</a></p>
   </section>
 </main>
 
 <footer class="site-foot">
-  <p>{{product}} is published each weekday by 16:00 UTC under methodology version {{methodology_version}}. A published figure is never changed; a correction is published as a new, dated entry.</p>
+  <p>{{product}} is published each weekday by 16:00 UTC under {{methodology_line}}. A published figure is never changed; a correction is published as a new, dated entry.</p>
   <p>Free to use with credit: "Source: {{product}}, hunterson.org". Use in contracts, financial products or indices needs a free registration: <a href="{{base_url}}/licence/">hunterson.org/licence</a>.</p>
   <p>Published by Malcolm Hunter (a pen name), trading as Hunterson. Contact <a href="mailto:{{contact}}">{{contact}}</a>.</p>
-  <p class="foot-links"><a href="{{about_url}}">About</a><a href="{{conflicts_url}}">Interests and conflicts</a><a href="{{continuity_url}}">Continuity</a><a href="{{iosco_url}}">IOSCO statement</a></p>
+  <p class="foot-links">{{foot_links}}</p>
   <p>{{permalink_line}}</p>
 </footer>
 </div>

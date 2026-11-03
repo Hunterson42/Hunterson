@@ -160,3 +160,31 @@ footer.site-foot .foot-links { display: flex; flex-wrap: wrap; gap: 6px 22px; }
   body { background: #fff; }
   .site-head nav, .chart-controls, .cite button { display: none; }
 }
+
+/* The documents: methodology, statements, licence, evidence, data and archive (sitepages.py). */
+.doc { gap: 12px; grid-template-columns: minmax(0, 1fr); }
+.doc p, .doc li { overflow-wrap: break-word; }
+.doc h1 { font-size: 30px; font-weight: 600; line-height: 1.2; }
+.doc h2 { font-size: 21px; font-weight: 600; margin-top: 18px; scroll-margin-top: 12px; }
+.doc h3 { font-size: 17px; font-weight: 600; margin-top: 8px; }
+.doc p, .doc li { font-size: 17px; color: var(--ink-2); }
+.doc ul, .doc ol { margin: 0; padding-left: 1.4em; display: grid; gap: 6px; }
+.doc hr { border: 0; border-top: 1px solid var(--rule-strong); margin: 12px 0; width: 100%; }
+.doc code { font-size: 0.92em; background: var(--surface); border: 1px solid var(--rule); border-radius: 3px; padding: 0 4px; overflow-wrap: anywhere; }
+.doc pre { margin: 0; background: var(--surface); border: 1px solid var(--rule); border-radius: 4px; padding: 12px 14px; overflow-x: auto; }
+.doc pre code { border: 0; padding: 0; background: none; overflow-wrap: normal; white-space: pre; }
+.doc .table-scroll { overflow-x: auto; margin: 4px 0; }
+.doc table { border-collapse: collapse; width: 100%; font-size: 15px; }
+.doc th, .doc td { text-align: left; vertical-align: top; padding: 8px 12px 8px 0; border-bottom: 1px solid var(--rule); }
+.doc thead th { color: var(--ink); font-weight: 600; border-bottom-color: var(--rule-strong); }
+.doc td { color: var(--ink-2); }
+.doc table.archive th[scope="row"] { font-weight: 400; white-space: nowrap; }
+.doc .r { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.doc .contents { border: 1px solid var(--rule); border-radius: 4px; padding: 12px 16px; background: var(--surface); }
+.doc .contents-h { font-weight: 600; color: var(--ink); margin-bottom: 6px; }
+.doc .contents ul { gap: 2px; list-style: none; padding-left: 0; }
+.doc .contents li { font-size: 15px; }
+.doc td code { overflow-wrap: normal; white-space: nowrap; }
+.doc tbody tr:last-child th { border-bottom: 0; }
+.doc q { quotes: "\201C" "\201D"; }
+.doc .notice { margin-top: 0; }
