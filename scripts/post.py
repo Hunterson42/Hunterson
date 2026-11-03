@@ -1,8 +1,9 @@
 """
 Posts the day's price to X, once, after the day's page and its image are live.
 
-Run by the Post workflow in the private repository at 16:05 UTC on weekdays,
-with a second attempt later, from the launch date in panel.json. For each grade
+Run by the Post workflow in the private repository straight after the Publish
+workflow, with backstops at 16:05 and 16:47 UTC on weekdays, from the launch
+date in panel.json. For each grade
 with a post written for today, docs/tweet/GRADE/DATE.txt, it waits until
 https://SITE_HOST/GRADE/DATE/ and its image https://SITE_HOST/og/GRADE/DATE.png
 are served, so that X shows the card under the post, then posts the text
@@ -36,7 +37,7 @@ import urllib.request
 
 API = "https://api.x.com/2"
 KEYS = ("X_API_KEY", "X_API_SECRET", "X_ACCESS_TOKEN", "X_ACCESS_TOKEN_SECRET")
-WAITS = [30] * 20                  # up to ten minutes for the page and the image
+WAITS = [30] * 40                  # up to twenty minutes for the mirror and GitHub Pages
 NOTICE_DAYS = 7
 UA = "hunterson-post/1.0 (+https://hunterson.org/)"
 

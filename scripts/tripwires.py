@@ -149,9 +149,12 @@ def check_6(recs, asof):
 
 
 def receipt_failures(r):
+    """(failures, panel, names): providers with at least one completed request whose
+    receipt did not match. One that completed nothing has no receipt to fail."""
     if not r or not r.get("panel"):
         return None
-    fails = [p["provider"] for p in r.get("providers") or [] if (p.get("tests") or {}).get("Receipt") is False]
+    fails = [p["provider"] for p in r.get("providers") or []
+             if (p.get("tests") or {}).get("Receipt") is False and (p.get("measured") or {}).get("completed")]
     return len(fails), r["panel"], fails
 
 

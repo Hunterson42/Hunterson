@@ -42,13 +42,17 @@ class Tree:
         with open(path, "w") as f:
             json.dump(obj, f)
 
-    def day(self, d, contributors=13, panel=16, receipt_fails=0, cached=0, reason=None, depth=16, ch_panel=15):
+    def day(self, d, contributors=13, panel=16, receipt_fails=0, cached=0, reason=None, depth=16, ch_panel=15,
+            unanswered=0):
         price = None
         if contributors >= 5 and not reason:
             und = "1.0000"
             price = {"output": "%.4f" % (1 - depth / 100), "input": "0.2000", "blended": "0.2400"}
-        providers = [{"provider": "P%d" % i, "result": "contributor", "tests": {"Receipt": i >= receipt_fails}}
+        providers = [{"provider": "P%d" % i, "result": "contributor", "tests": {"Receipt": i >= receipt_fails},
+                      "measured": {"completed": 0 if i >= panel - cached - unanswered else 3}}
                      for i in range(panel - cached)]
+        for p in providers[panel - cached - unanswered:]:
+            p.update(result="excluded", reason="Complete: 0 of 3 requests completed (HTTP 429)", tests={"Receipt": False})
         providers += [{"provider": "C%d" % i, "result": "excluded", "reason": "Clean: cached input tokens in the usage record",
                        "tests": {"Receipt": True}} for i in range(cached)]
         status = "shadow" if d.isoformat() < "2026-11-03" else ("published" if price else "not_published")
@@ -133,6 +137,16 @@ class TripwireTests(unittest.TestCase):
         self.assertEqual(self.t.run(days[14])[1], ["9"])
         self.fill(days[10:], receipt_fails=4)                  # a quarter exactly is not more than a quarter
         self.assertEqual(self.t.run(days[14])[1], [])
+
+    def test_9_never_counts_a_provider_that_completed_nothing(self):
+        days = weekdays(dt.date(2026, 10, 15), 15)
+        self.fill(days[:10])
+        self.fill(days[10:], unanswered=6)                     # rate-limited all day: no receipt to fail
+        text, newly, _ = self.t.run(days[14])
+        self.assertEqual(newly, [])
+        self.assertIn("0 of 16 failed today", text)
+        self.fill(days[10:], receipt_fails=2, unanswered=6)
+        self.assertIn("2 of 16 failed today (P0, P1)", self.t.run(days[14])[0])
 
     def test_11_trips_on_the_twentieth_day_above_twice(self):
         days = weekdays(dt.date(2026, 10, 15), 25)
