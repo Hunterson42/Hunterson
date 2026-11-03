@@ -1,0 +1,383 @@
+{
+ "schema": 1,
+ "date": "2026-10-28",
+ "checkpoint": "deepseek/deepseek-v4-flash-0731",
+ "name": "DeepSeek V4 Flash 0731",
+ "grade": "Standard",
+ "reference": false,
+ "status": "shadow",
+ "reason": null,
+ "methodology_version": "0.9",
+ "published_utc": null,
+ "assessed_utc": "2026-10-28T14:37:14Z",
+ "window": {
+  "start_utc": "2026-10-28T14:05:02.815726Z",
+  "end_utc": "2026-10-28T14:36:59.262936Z"
+ },
+ "panel": 10,
+ "contributors": 5,
+ "price": {
+  "output": "0.5113",
+  "input": "0.1860",
+  "blended": "0.2051"
+ },
+ "undiscounted": {
+  "output": "0.9733",
+  "input": "0.3400",
+  "blended": "0.3773"
+ },
+ "providers": [
+  {
+   "provider": "Baidu",
+   "result": "excluded",
+   "reason": "Receipt: charged 89.3 per cent below the listed price",
+   "measured": {
+    "tag": "baidu/fp8",
+    "requests": 3,
+    "completed": 3,
+    "discount": "0",
+    "reliability": "9 of 9",
+    "first_token_s": 0.79,
+    "tokens_per_second": 187.8,
+    "input_tokens": 7617,
+    "receipt_vs_listed_percent": "-89.30",
+    "paid_output": "1.3200",
+    "paid_input": "0.4400"
+   },
+   "tests": {
+    "Listed": true,
+    "Reliable": true,
+    "Complete": true,
+    "Correct": true,
+    "Clean": true,
+    "Fast enough": true,
+    "Same input": true,
+    "Receipt": false
+   }
+  },
+  {
+   "provider": "BaseTen",
+   "result": "excluded",
+   "reason": "Complete: 0 of 3 requests completed (HTTP 429)",
+   "measured": {
+    "tag": "baseten/fp8",
+    "requests": 3,
+    "completed": 0,
+    "discount": "0",
+    "reliability": "9 of 9"
+   },
+   "tests": {
+    "Listed": true,
+    "Reliable": true,
+    "Complete": false,
+    "Correct": false,
+    "Clean": true,
+    "Fast enough": false,
+    "Same input": false,
+    "Receipt": false
+   }
+  },
+  {
+   "provider": "CoreWeave",
+   "result": "contributor",
+   "in_mean": false,
+   "output": "0.2800",
+   "input": "0.1300",
+   "measured": {
+    "tag": "coreweave/fp8",
+    "requests": 3,
+    "completed": 3,
+    "discount": "0",
+    "reliability": "9 of 9",
+    "first_token_s": 1.1,
+    "tokens_per_second": 52.6,
+    "input_tokens": 7616,
+    "receipt_vs_listed_percent": "0.00",
+    "paid_output": "0.2800",
+    "paid_input": "0.1300"
+   },
+   "tests": {
+    "Listed": true,
+    "Reliable": true,
+    "Complete": true,
+    "Correct": true,
+    "Clean": true,
+    "Fast enough": true,
+    "Same input": true,
+    "Receipt": true
+   }
+  },
+  {
+   "provider": "DeepInfra",
+   "result": "excluded",
+   "reason": "Complete: 1 of 3 requests completed (HTTP 429)",
+   "measured": {
+    "tag": "deepinfra/fp8",
+    "requests": 3,
+    "completed": 1,
+    "discount": "0",
+    "reliability": "9 of 9",
+    "first_token_s": 0.91,
+    "tokens_per_second": 55.7,
+    "input_tokens": 7620,
+    "receipt_vs_listed_percent": "0.00",
+    "paid_output": "0.1800",
+    "paid_input": "0.0600"
+   },
+   "tests": {
+    "Listed": true,
+    "Reliable": true,
+    "Complete": false,
+    "Correct": true,
+    "Clean": true,
+    "Fast enough": true,
+    "Same input": true,
+    "Receipt": true
+   }
+  },
+  {
+   "provider": "GMICloud",
+   "result": "contributor",
+   "in_mean": true,
+   "output": "0.8580",
+   "input": "0.2860",
+   "measured": {
+    "tag": "gmicloud/fp8",
+    "requests": 3,
+    "completed": 3,
+    "discount": "0.35",
+    "reliability": "9 of 9",
+    "first_token_s": 2.63,
+    "tokens_per_second": 94.1,
+    "input_tokens": 7616,
+    "receipt_vs_listed_percent": "0.00",
+    "paid_output": "0.8580",
+    "paid_input": "0.2860"
+   },
+   "tests": {
+    "Listed": true,
+    "Reliable": true,
+    "Complete": true,
+    "Correct": true,
+    "Clean": true,
+    "Fast enough": true,
+    "Same input": true,
+    "Receipt": true
+   }
+  },
+  {
+   "provider": "Mancer 2",
+   "result": "excluded",
+   "reason": "Fast enough: median first token 3.83 seconds, limit 3.00",
+   "measured": {
+    "tag": "mancer/fp8",
+    "requests": 3,
+    "completed": 3,
+    "discount": "0",
+    "reliability": "9 of 9",
+    "first_token_s": 3.83,
+    "tokens_per_second": 38.8,
+    "input_tokens": 7614,
+    "receipt_vs_listed_percent": "-0.04",
+    "paid_output": "0.5999",
+    "paid_input": "0.2000"
+   },
+   "tests": {
+    "Listed": true,
+    "Reliable": true,
+    "Complete": true,
+    "Correct": true,
+    "Clean": true,
+    "Fast enough": false,
+    "Same input": true,
+    "Receipt": true
+   }
+  },
+  {
+   "provider": "Novita",
+   "result": "contributor",
+   "in_mean": false,
+   "output": "1.2276",
+   "input": "0.4092",
+   "measured": {
+    "tag": "novita/fp8",
+    "requests": 3,
+    "completed": 3,
+    "discount": "0.07",
+    "reliability": "9 of 9",
+    "first_token_s": 1.58,
+    "tokens_per_second": 71.6,
+    "input_tokens": 7617,
+    "receipt_vs_listed_percent": "0.00",
+    "paid_output": "1.2276",
+    "paid_input": "0.4092"
+   },
+   "tests": {
+    "Listed": true,
+    "Reliable": true,
+    "Complete": true,
+    "Correct": true,
+    "Clean": true,
+    "Fast enough": true,
+    "Same input": true,
+    "Receipt": true
+   }
+  },
+  {
+   "provider": "Parasail",
+   "result": "contributor",
+   "in_mean": true,
+   "output": "0.2800",
+   "input": "0.1400",
+   "measured": {
+    "tag": "parasail/fp8",
+    "requests": 3,
+    "completed": 3,
+    "discount": "0",
+    "reliability": "9 of 9",
+    "first_token_s": 0.77,
+    "tokens_per_second": 38.4,
+    "input_tokens": 7617,
+    "receipt_vs_listed_percent": "0.00",
+    "paid_output": "0.2800",
+    "paid_input": "0.1400"
+   },
+   "tests": {
+    "Listed": true,
+    "Reliable": true,
+    "Complete": true,
+    "Correct": true,
+    "Clean": true,
+    "Fast enough": true,
+    "Same input": true,
+    "Receipt": true
+   }
+  },
+  {
+   "provider": "SiliconFlow",
+   "result": "excluded",
+   "reason": "Fast enough: median first token 3.64 seconds, limit 3.00",
+   "measured": {
+    "tag": "siliconflow/fp8",
+    "requests": 3,
+    "completed": 3,
+    "discount": "0",
+    "reliability": "9 of 9",
+    "first_token_s": 3.64,
+    "tokens_per_second": 35.6,
+    "input_tokens": 7616,
+    "receipt_vs_listed_percent": "0.00",
+    "paid_output": "0.6600",
+    "paid_input": "0.2200"
+   },
+   "tests": {
+    "Listed": true,
+    "Reliable": true,
+    "Complete": true,
+    "Correct": true,
+    "Clean": true,
+    "Fast enough": false,
+    "Same input": true,
+    "Receipt": true
+   }
+  },
+  {
+   "provider": "StreamLake",
+   "result": "contributor",
+   "in_mean": true,
+   "output": "0.3960",
+   "input": "0.1320",
+   "measured": {
+    "tag": "streamlake/fp8",
+    "requests": 3,
+    "completed": 3,
+    "discount": "0.7",
+    "reliability": "9 of 9",
+    "first_token_s": 2.88,
+    "tokens_per_second": 33.7,
+    "input_tokens": 7616,
+    "receipt_vs_listed_percent": "0.00",
+    "paid_output": "0.3960",
+    "paid_input": "0.1320"
+   },
+   "tests": {
+    "Listed": true,
+    "Reliable": true,
+    "Complete": true,
+    "Correct": true,
+    "Clean": true,
+    "Fast enough": true,
+    "Same input": true,
+    "Receipt": true
+   }
+  }
+ ],
+ "rollover": null,
+ "limits": {
+  "max_first_token_seconds": 3.0,
+  "min_output_tokens_per_second": 30
+ },
+ "evidence": {
+  "probe_commit": "0d1193c66c9f07e6bd61ede0ca26a2678193182c",
+  "prompt_sha256": "140afc12e0c154fd2cb843197da5d3bc673c9e1cea6e0585236b2f41a2a8b24a",
+  "fingerprints": "data/hashes/probes/2026-10-28.sha256"
+ },
+ "control": [
+  {
+   "provider": "DeepInfra",
+   "route": "direct",
+   "result": "passed",
+   "reason": null,
+   "measured": {
+    "tag": null,
+    "requests": 3,
+    "completed": 3,
+    "first_token_s": 1.83,
+    "tokens_per_second": 32.0,
+    "input_tokens": 7612
+   }
+  },
+  {
+   "provider": "GMICloud",
+   "route": "direct",
+   "result": "passed",
+   "reason": null,
+   "measured": {
+    "tag": null,
+    "requests": 3,
+    "completed": 3,
+    "first_token_s": 2.66,
+    "tokens_per_second": 72.9,
+    "input_tokens": 7613
+   }
+  },
+  {
+   "provider": "Novita",
+   "route": "direct",
+   "result": "passed",
+   "reason": null,
+   "measured": {
+    "tag": null,
+    "requests": 3,
+    "completed": 3,
+    "first_token_s": 2.02,
+    "tokens_per_second": 69.8,
+    "input_tokens": 7612
+   }
+  },
+  {
+   "provider": "SiliconFlow",
+   "route": "direct",
+   "result": "passed",
+   "reason": null,
+   "measured": {
+    "tag": null,
+    "requests": 3,
+    "completed": 3,
+    "first_token_s": 1.95,
+    "tokens_per_second": 78.8,
+    "input_tokens": 7613
+   }
+  }
+ ]
+}

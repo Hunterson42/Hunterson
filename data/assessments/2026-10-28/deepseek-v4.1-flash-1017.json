@@ -1,0 +1,413 @@
+{
+ "schema": 1,
+ "date": "2026-10-28",
+ "checkpoint": "deepseek/deepseek-v4.1-flash-1017",
+ "name": "DeepSeek V4.1-Flash-1017",
+ "grade": "Standard",
+ "reference": false,
+ "status": "shadow",
+ "reason": "0 contributors, below the minimum of 5",
+ "methodology_version": "0.9",
+ "published_utc": null,
+ "assessed_utc": "2026-10-28T14:37:14Z",
+ "window": {
+  "start_utc": "2026-10-28T14:05:02.815726Z",
+  "end_utc": "2026-10-28T14:36:59.262936Z"
+ },
+ "panel": 13,
+ "contributors": 0,
+ "price": null,
+ "undiscounted": null,
+ "providers": [
+  {
+   "provider": "AtlasCloud",
+   "result": "excluded",
+   "reason": "Reliable: completed requests in 7 of the previous 9 windows, at least 8 of the last 10 needed",
+   "measured": {
+    "tag": "atlas-cloud/fp8",
+    "requests": 3,
+    "completed": 3,
+    "discount": "0",
+    "reliability": "7 of 9",
+    "first_token_s": 1.09,
+    "tokens_per_second": 88.9,
+    "input_tokens": 7620,
+    "receipt_vs_listed_percent": "0.00",
+    "paid_output": "0.5400",
+    "paid_input": "0.1350"
+   },
+   "tests": {
+    "Listed": true,
+    "Reliable": false,
+    "Complete": true,
+    "Correct": true,
+    "Clean": true,
+    "Fast enough": true,
+    "Same input": true,
+    "Receipt": true
+   }
+  },
+  {
+   "provider": "Baidu",
+   "result": "excluded",
+   "reason": "Reliable: completed requests in 4 of the previous 9 windows, at least 8 of the last 10 needed",
+   "measured": {
+    "tag": "baidu/fp8",
+    "requests": 3,
+    "completed": 3,
+    "discount": "0",
+    "reliability": "4 of 9",
+    "first_token_s": 1.21,
+    "tokens_per_second": 106.5,
+    "input_tokens": 7618,
+    "receipt_vs_listed_percent": "0.00",
+    "paid_output": "1.1300",
+    "paid_input": "0.2800"
+   },
+   "tests": {
+    "Listed": true,
+    "Reliable": false,
+    "Complete": true,
+    "Correct": true,
+    "Clean": true,
+    "Fast enough": true,
+    "Same input": true,
+    "Receipt": true
+   }
+  },
+  {
+   "provider": "Crusoe",
+   "result": "excluded",
+   "reason": "Reliable: completed requests in 7 of the previous 9 windows, at least 8 of the last 10 needed",
+   "measured": {
+    "tag": "crusoe/fp8",
+    "requests": 3,
+    "completed": 3,
+    "discount": "0",
+    "reliability": "7 of 9",
+    "first_token_s": 0.47,
+    "tokens_per_second": 92.5,
+    "input_tokens": 7617,
+    "receipt_vs_listed_percent": "0.00",
+    "paid_output": "1.2000",
+    "paid_input": "0.2900"
+   },
+   "tests": {
+    "Listed": true,
+    "Reliable": false,
+    "Complete": true,
+    "Correct": true,
+    "Clean": true,
+    "Fast enough": true,
+    "Same input": true,
+    "Receipt": true
+   }
+  },
+  {
+   "provider": "DeepInfra",
+   "result": "excluded",
+   "reason": "Reliable: completed requests in 7 of the previous 9 windows, at least 8 of the last 10 needed",
+   "measured": {
+    "tag": "deepinfra/fp8",
+    "requests": 3,
+    "completed": 3,
+    "discount": "0.51",
+    "reliability": "7 of 9",
+    "first_token_s": 1.01,
+    "tokens_per_second": 37.0,
+    "input_tokens": 7619,
+    "receipt_vs_listed_percent": "0.00",
+    "paid_output": "0.2940",
+    "paid_input": "0.0980"
+   },
+   "tests": {
+    "Listed": true,
+    "Reliable": false,
+    "Complete": true,
+    "Correct": true,
+    "Clean": true,
+    "Fast enough": true,
+    "Same input": true,
+    "Receipt": true
+   }
+  },
+  {
+   "provider": "GMICloud",
+   "result": "excluded",
+   "reason": "Reliable: completed requests in 6 of the previous 9 windows, at least 8 of the last 10 needed",
+   "measured": {
+    "tag": "gmicloud/fp8",
+    "requests": 3,
+    "completed": 3,
+    "discount": "0.4",
+    "reliability": "6 of 9",
+    "first_token_s": 1.99,
+    "tokens_per_second": 90.5,
+    "input_tokens": 7619,
+    "receipt_vs_listed_percent": "0.00",
+    "paid_output": "0.7200",
+    "paid_input": "0.1800"
+   },
+   "tests": {
+    "Listed": true,
+    "Reliable": false,
+    "Complete": true,
+    "Correct": true,
+    "Clean": true,
+    "Fast enough": true,
+    "Same input": true,
+    "Receipt": true
+   }
+  },
+  {
+   "provider": "InferenceNet",
+   "result": "excluded",
+   "reason": "Reliable: completed requests in 7 of the previous 9 windows, at least 8 of the last 10 needed",
+   "measured": {
+    "tag": "inference-net/us",
+    "requests": 3,
+    "completed": 3,
+    "discount": "0",
+    "reliability": "7 of 9",
+    "first_token_s": 0.52,
+    "tokens_per_second": 73.3,
+    "input_tokens": 7616,
+    "receipt_vs_listed_percent": "0.00",
+    "paid_output": "0.5500",
+    "paid_input": "0.0800"
+   },
+   "tests": {
+    "Listed": true,
+    "Reliable": false,
+    "Complete": true,
+    "Correct": true,
+    "Clean": true,
+    "Fast enough": true,
+    "Same input": true,
+    "Receipt": true
+   }
+  },
+  {
+   "provider": "Makora",
+   "result": "excluded",
+   "reason": "Reliable: completed requests in 4 of the previous 9 windows, at least 8 of the last 10 needed",
+   "measured": {
+    "tag": "makora/fp8",
+    "requests": 3,
+    "completed": 3,
+    "discount": "0",
+    "reliability": "4 of 9",
+    "first_token_s": 1.32,
+    "tokens_per_second": 146.0,
+    "input_tokens": 7617,
+    "receipt_vs_listed_percent": "0.00",
+    "paid_output": "1.2000",
+    "paid_input": "0.1500"
+   },
+   "tests": {
+    "Listed": true,
+    "Reliable": false,
+    "Complete": true,
+    "Correct": true,
+    "Clean": true,
+    "Fast enough": true,
+    "Same input": true,
+    "Receipt": true
+   }
+  },
+  {
+   "provider": "Morph",
+   "result": "excluded",
+   "reason": "Reliable: completed requests in 7 of the previous 9 windows, at least 8 of the last 10 needed",
+   "measured": {
+    "tag": "morph/fp8",
+    "requests": 3,
+    "completed": 3,
+    "discount": "0",
+    "reliability": "7 of 9",
+    "first_token_s": 0.58,
+    "tokens_per_second": 72.4,
+    "input_tokens": 7618,
+    "receipt_vs_listed_percent": "0.00",
+    "paid_output": "0.3830",
+    "paid_input": "0.0440"
+   },
+   "tests": {
+    "Listed": true,
+    "Reliable": false,
+    "Complete": true,
+    "Correct": true,
+    "Clean": true,
+    "Fast enough": true,
+    "Same input": true,
+    "Receipt": true
+   }
+  },
+  {
+   "provider": "Nebius",
+   "result": "excluded",
+   "reason": "Reliable: completed requests in 3 of the previous 9 windows, at least 8 of the last 10 needed",
+   "measured": {
+    "tag": "nebius/fp8",
+    "requests": 3,
+    "completed": 3,
+    "discount": "0",
+    "reliability": "3 of 9",
+    "first_token_s": 0.74,
+    "tokens_per_second": 155.9,
+    "input_tokens": 7618,
+    "receipt_vs_listed_percent": "0.00",
+    "paid_output": "1.2000",
+    "paid_input": "0.3000"
+   },
+   "tests": {
+    "Listed": true,
+    "Reliable": false,
+    "Complete": true,
+    "Correct": true,
+    "Clean": true,
+    "Fast enough": true,
+    "Same input": true,
+    "Receipt": true
+   }
+  },
+  {
+   "provider": "Novita",
+   "result": "excluded",
+   "reason": "Reliable: completed requests in 5 of the previous 9 windows, at least 8 of the last 10 needed",
+   "measured": {
+    "tag": "novita/fp8",
+    "requests": 3,
+    "completed": 3,
+    "discount": "0.35",
+    "reliability": "5 of 9",
+    "first_token_s": 1.95,
+    "tokens_per_second": 90.9,
+    "input_tokens": 7619,
+    "receipt_vs_listed_percent": "0.00",
+    "paid_output": "0.7800",
+    "paid_input": "0.1950"
+   },
+   "tests": {
+    "Listed": true,
+    "Reliable": false,
+    "Complete": true,
+    "Correct": true,
+    "Clean": true,
+    "Fast enough": true,
+    "Same input": true,
+    "Receipt": true
+   }
+  },
+  {
+   "provider": "Parasail",
+   "result": "excluded",
+   "reason": "Reliable: completed requests in 6 of the previous 9 windows, at least 8 of the last 10 needed",
+   "measured": {
+    "tag": "parasail/fp8",
+    "requests": 3,
+    "completed": 3,
+    "discount": "0",
+    "reliability": "6 of 9",
+    "first_token_s": 0.68,
+    "tokens_per_second": 129.7,
+    "input_tokens": 7618,
+    "receipt_vs_listed_percent": "0.00",
+    "paid_output": "1.2000",
+    "paid_input": "0.3000"
+   },
+   "tests": {
+    "Listed": true,
+    "Reliable": false,
+    "Complete": true,
+    "Correct": true,
+    "Clean": true,
+    "Fast enough": true,
+    "Same input": true,
+    "Receipt": true
+   }
+  },
+  {
+   "provider": "SiliconFlow",
+   "result": "excluded",
+   "reason": "Reliable: completed requests in 6 of the previous 9 windows, at least 8 of the last 10 needed",
+   "measured": {
+    "tag": "siliconflow/fp8",
+    "requests": 3,
+    "completed": 3,
+    "discount": "0",
+    "reliability": "6 of 9",
+    "first_token_s": 0.78,
+    "tokens_per_second": 147.3,
+    "input_tokens": 7621,
+    "receipt_vs_listed_percent": "0.00",
+    "paid_output": "1.2000",
+    "paid_input": "0.3000"
+   },
+   "tests": {
+    "Listed": true,
+    "Reliable": false,
+    "Complete": true,
+    "Correct": true,
+    "Clean": true,
+    "Fast enough": true,
+    "Same input": true,
+    "Receipt": true
+   }
+  },
+  {
+   "provider": "StreamLake",
+   "result": "excluded",
+   "reason": "Reliable: completed requests in 2 of the previous 9 windows, at least 8 of the last 10 needed",
+   "measured": {
+    "tag": "streamlake/fp8",
+    "requests": 3,
+    "completed": 3,
+    "discount": "0.5",
+    "reliability": "2 of 9",
+    "first_token_s": 1.16,
+    "tokens_per_second": 161.0,
+    "input_tokens": 7618,
+    "receipt_vs_listed_percent": "0.00",
+    "paid_output": "0.6000",
+    "paid_input": "0.1500"
+   },
+   "tests": {
+    "Listed": true,
+    "Reliable": false,
+    "Complete": true,
+    "Correct": true,
+    "Clean": true,
+    "Fast enough": true,
+    "Same input": true,
+    "Receipt": true
+   }
+  }
+ ],
+ "rollover": null,
+ "limits": {
+  "max_first_token_seconds": 3.0,
+  "min_output_tokens_per_second": 30
+ },
+ "evidence": {
+  "probe_commit": "0d1193c66c9f07e6bd61ede0ca26a2678193182c",
+  "prompt_sha256": "140afc12e0c154fd2cb843197da5d3bc673c9e1cea6e0585236b2f41a2a8b24a",
+  "fingerprints": "data/hashes/probes/2026-10-28.sha256"
+ },
+ "control": [
+  {
+   "provider": "DeepInfra",
+   "route": "direct",
+   "result": "passed",
+   "reason": null,
+   "measured": {
+    "tag": null,
+    "requests": 3,
+    "completed": 3,
+    "first_token_s": 0.99,
+    "tokens_per_second": 38.3,
+    "input_tokens": 7615
+   }
+  }
+ ]
+}
