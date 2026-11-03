@@ -3,9 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Hunterson Standard Inference</title>
+<title>Census of models and providers, Hunterson</title>
 <meta name="description" content="Daily census of open-weight AI inference providers, the evidence base for Hunterson Standard Inference, Europe.">
 <style>
+@font-face { font-family: "IBM Plex Sans"; font-weight: 400; font-style: normal; font-display: swap; src: url("../assets/fonts/ibm-plex-sans-latin-400-normal.woff2") format("woff2"); }
+@font-face { font-family: "IBM Plex Sans"; font-weight: 500; font-style: normal; font-display: swap; src: url("../assets/fonts/ibm-plex-sans-latin-500-normal.woff2") format("woff2"); }
+@font-face { font-family: "IBM Plex Sans"; font-weight: 600; font-style: normal; font-display: swap; src: url("../assets/fonts/ibm-plex-sans-latin-600-normal.woff2") format("woff2"); }
 @font-face { font-family: "IBM Plex Mono"; font-style: normal; font-weight: 400; font-display: swap; src: url("../vendor/fonts/ibm-plex-mono-latin-400-normal.woff2") format("woff2"); }
 @font-face { font-family: "IBM Plex Mono"; font-style: normal; font-weight: 500; font-display: swap; src: url("../vendor/fonts/ibm-plex-mono-latin-500-normal.woff2") format("woff2"); }
 :root {
@@ -24,7 +27,7 @@
   --warn-bg: #fff4d6;
   --warn-ink: #6a4a00;
   --s1: #2a78d6; --s2: #eb6834; --s3: #1baf7a; --s4: #eda100; --s5: #e87ba4; --s6: #008300;
-  --sans: Arial, "Helvetica Neue", Helvetica, sans-serif;
+  --sans: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
   --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
 }
 @media (prefers-color-scheme: dark) {
@@ -144,17 +147,35 @@ td .inelig { font-size: 11px; font-weight: 700; color: var(--ink-2); border: 1px
 .error, .nojs { background: var(--panel); border: 1px solid var(--rule-strong); border-radius: 6px; padding: 20px; }
 .nojs { display: grid; gap: 8px; }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+/* The site's header and footer links, as on the price pages (scripts/site/assets/site.css). */
+.site-head { width: 100%; max-width: 1040px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 8px 24px; padding: 22px 0 14px; border-bottom: 1px solid var(--rule-strong); font-family: var(--sans); }
+.site-head .home { font-size: 17px; font-weight: 600; color: var(--ink); text-decoration: none; }
+.site-head nav { display: flex; flex-wrap: wrap; gap: 4px 20px; font-size: 15px; }
+.site-head nav a { color: var(--ink-2); text-decoration: none; }
+.site-head nav a:hover, .site-head nav a[aria-current="page"] { color: var(--ink); text-decoration: underline; }
+.site-links { display: flex; flex-wrap: wrap; gap: 6px 22px; font-size: 14px; }
+.wrap > .site-head { max-width: none; }
+.wrap > .site-head + .mast { padding-top: 0; }
 </style>
 <noscript><style>#lastRun { display: none; }</style></noscript>
 </head>
 <body>
 <div class="wrap">
+<header class="site-head">
+  <a class="home" href="../">Hunterson Standard Inference, Europe</a>
+  <nav aria-label="Site">
+    <a href="../">Price</a>
+    <a href="https://github.com/Hunterson42/Hunterson/blob/main/METHODOLOGY.md">Methodology</a>
+    <a href="../census/" aria-current="page">Census</a>
+    <a href="../data/assessments.csv">Data</a>
+    <a href="../about/">About</a>
+  </nav>
+</header>
   <header class="mast">
-    <div class="brand">Hunterson</div>
-    <h1>Hunterson Standard Inference, Europe</h1>
+    <h1>Census of models and providers</h1>
     <div class="status">
-      <span class="pill">Census phase</span>
-      <span>No price is being assessed yet.</span>
+      <span class="pill">Daily since 11 September 2026</span>
+      <span>Which providers serve which open-weight models, at what precision and listed price: the evidence behind each grade's choice of reference. The price itself is on the <a href="../">front page</a>.</span>
       <span id="lastRun">Loading census data</span>
     </div>
     <div id="notices" style="display:grid;gap:8px"></div>
@@ -173,6 +194,7 @@ td .inelig { font-size: 11px; font-weight: 700; color: var(--ink-2); border: 1px
     <p class="fine" style="max-width:none">Every figure on this page comes from files in the public repository. The census is collected from OpenRouter's public model and endpoint listings once a day, at 06:15 UTC by the project's server in London, with GitHub as the backup from 06:41 UTC. The raw listings are OpenRouter's material, so they are kept privately. Each day's files are fingerprinted with SHA-256 and the fingerprints are published, so that any raw file shown later can be checked against them.</p>
     <ul class="links" id="evidenceLinks"></ul>
     <p class="fine">History is rebuilt from the saved census on every run, so a change to the grade configuration applies to past days. Changes are visible in the configuration history.</p>
+    <p class="site-links"><a href="../about/">About</a> <a href="https://github.com/Hunterson42/Hunterson/blob/main/CONFLICTS.md">Interests and conflicts</a> <a href="https://github.com/Hunterson42/Hunterson/blob/main/CONTINUITY.md">Continuity</a> <a href="https://github.com/Hunterson42/Hunterson/blob/main/IOSCO.md">IOSCO statement</a></p>
   </footer>
 </div>
 

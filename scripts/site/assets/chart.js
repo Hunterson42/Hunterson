@@ -213,8 +213,11 @@
       var shadowSeg = segs.filter(function (s) { return s.shadow && s.pts.length > 1; })[0];
       if (shadowSeg && !opts.card) {
         var p0 = shadowSeg.pts[0];
-        var sl = svg("text", { x: p0[0], y: H - m.b - 8, "class": "shadow-label" }, marks);
-        sl.textContent = "Shadow period, not assessments";
+        // About 6.6 pixels a character at 12.5 pixels: shorten, then right-align, so the label never runs off the edge.
+        var room = W - 4 - p0[0], text = room >= 205 ? "Shadow period, not assessments" : "Shadow period";
+        var sl = svg("text", room >= 90 ? { x: p0[0], y: H - m.b - 8, "class": "shadow-label" }
+                                        : { x: W - 4, y: H - m.b - 8, "text-anchor": "end", "class": "shadow-label" }, marks);
+        sl.textContent = text;
       }
 
       // The latest value, labelled at the end of the line.
