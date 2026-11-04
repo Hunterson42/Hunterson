@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en-GB" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="hunterson-record" content="sha256:e0ded696b41b2b90a8a81d0defe38f0cbf06b9f713b2252fc3cd9d3f0ed8f4fa">
+<title>Hunterson card standard 2026-11-04</title>
+<link rel="stylesheet" href="../../assets/site.css">
+<style>
+  html, body { margin: 0; padding: 0; width: 1200px; height: 630px; overflow: hidden; background: #ffffff; }
+  .card { width: 1200px; height: 630px; padding: 52px 64px 44px; display: grid; grid-template-rows: auto 1fr auto; gap: 18px; position: relative; }
+  .top { display: flex; justify-content: space-between; align-items: baseline; border-bottom: 2px solid var(--ink); padding-bottom: 14px; }
+  .top .name { font-size: 30px; font-weight: 600; }
+  .top .date { font-size: 28px; color: var(--ink-2); }
+  .body { display: grid; grid-template-columns: 1fr 470px; gap: 40px; align-items: center; }
+  .body.wide { grid-template-columns: 1fr; }
+  .fig { font-size: 150px; font-weight: 500; letter-spacing: -0.035em; line-height: 0.95; white-space: nowrap; }
+  .fig .cur { font-size: 0.5em; vertical-align: 0.62em; color: var(--ink-2); font-weight: 400; letter-spacing: 0; margin-right: 0.04em; }
+  .fig.closed { font-size: 96px; letter-spacing: -0.02em; }
+  .pair { display: grid; gap: 4px; }
+  .pair .lab { font-size: 26px; color: var(--ink-2); margin-top: 6px; }
+  .pair .fig { font-size: 100px; }
+  .unit { font-size: 30px; color: var(--ink-2); margin-top: 12px; }
+  .chg { font-size: 27px; margin-top: 14px; }
+  .chg .dir { color: var(--ink-2); margin-right: 10px; }
+  .side { display: grid; gap: 8px; }
+  .side .label { font-size: 20px; color: var(--muted); }
+  .side dl { margin: 0; display: grid; grid-template-columns: auto 1fr; font-size: 26px; }
+  .side dt, .side dd { padding: 10px 0; border-bottom: 1px solid var(--rule); }
+  .side dt { color: var(--ink-2); }
+  .side dd { margin: 0; text-align: right; }
+  .chart-box { border: 0; padding: 0; background: transparent; }
+  .tick { font-size: 17px; }
+  .end-label { font-size: 20px; }
+  .line { stroke-width: 3; }
+  .foot { display: flex; justify-content: space-between; font-size: 22px; color: var(--muted); }
+  .stamp { position: absolute; right: 64px; top: 112px; font-size: 22px; font-weight: 600; color: var(--notice-ink); background: var(--notice-bg); padding: 4px 12px; border-radius: 4px; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="top"><span class="name">Hunterson Standard Inference, Europe</span><span class="date">4 November 2026</span></div>
+  <div class="body">
+    <div>
+      <div class="pair"><div><p class="lab">Input</p><p class="fig"><span class="cur">$</span>0.1903</p></div><div><p class="lab">Output</p><p class="fig"><span class="cur">$</span>0.7854</p></div></div>
+      <p class="unit">per million tokens, input and output</p>
+      <p class="chg"><span class="dir" aria-hidden="true">&#9660;</span>Input down $0.0343, or 15.27%; <span class="dir" aria-hidden="true">&#9660;</span>output down $0.1429, or 15.39%, since 3 November</p>
+    </div>
+    <div class="side"><dl><dt>Blended</dt><dd>$0.2253</dd><dt>Contributors</dt><dd>11 of 16</dd></dl></div>
+  </div>
+  <div class="foot"><span>hunterson.org/standard/2026-11-04/</span><span>DeepSeek V4.1-Flash</span></div>
+  
+</div>
+<script type="application/json" id="series-data">[]</script>
+<script src="../../assets/chart.js"></script>
+<script>
+(function () {
+  var el = document.getElementById("chart");
+  if (!el) return;
+  var data = JSON.parse(document.getElementById("series-data").textContent);
+  window.HuntersonChart.mount(el, data, { card: true, height: 300 });
+})();
+</script>
+</body>
+</html>
