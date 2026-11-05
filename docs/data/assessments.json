@@ -357,6 +357,29 @@
      "challenger_contributors": 11,
      "challenger_panel": 16,
      "challenger_output_ratio": "1.1477"
+    },
+    {
+     "date": "2026-11-05",
+     "grade": "standard",
+     "status": "published",
+     "reference": "DeepSeek V4.1-Flash",
+     "output": "0.8241",
+     "input": "0.1924",
+     "blended": "0.2296",
+     "contributors": 15,
+     "panel": 16,
+     "reason": null,
+     "output_before_discounts": "1.0188",
+     "input_before_discounts": "0.2483",
+     "blended_before_discounts": "0.2936",
+     "rollover_ratio": null,
+     "url": "https://hunterson.org/standard/2026-11-05/",
+     "challenger": "DeepSeek V4.1-Flash-1017",
+     "challenger_input": "0.1833",
+     "challenger_output": "0.7433",
+     "challenger_contributors": 12,
+     "challenger_panel": 18,
+     "challenger_output_ratio": "0.9020"
     }
    ]
   }
