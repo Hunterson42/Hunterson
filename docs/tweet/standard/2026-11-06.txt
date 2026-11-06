@@ -1,0 +1,8 @@
+Hunterson Standard Inference, Europe
+6 November 2026
+
+Input $0.1935, output $0.8262 per million tokens
+Input up 0.57%, output up 0.25%
+Blended $0.2307. 15 contributors. DeepSeek V4.1-Flash.
+
+https://hunterson.org/standard/2026-11-06/
