@@ -48,9 +48,25 @@ class LicenceTests(unittest.TestCase):
             self.assertIn(re.sub(r"\s+", " ", line), page, "missing from the page: " + line)
 
     def test_page_has_a_title_and_works_without_external_files(self):
+        """No scripts, and everything the page loads is the site's own file.
+
+        Since pull request 33 the page shares the site's stylesheet, icons and
+        feed. Those are files in docs/, so the rule still holds: nothing is
+        fetched from anywhere else. The canonical link names the page's own
+        address and loads nothing."""
         page = read("docs/licence/index.html")
         self.assertIn("<title>Hunterson Data Licence</title>", page)
-        self.assertNotRegex(page, r"<(script|link)\b")
+        self.assertNotRegex(page, r"<script\b")
+        links = re.findall(r"<link\b[^>]*>", page)
+        self.assertIn('rel="stylesheet"', " ".join(links))
+        here = os.path.join(ROOT, "docs", "licence")
+        for tag in links:
+            href = re.search(r'\bhref="([^"]+)"', tag).group(1)
+            if 'rel="canonical"' in tag:
+                self.assertEqual(href, "https://hunterson.org/licence/")
+                continue
+            self.assertNotRegex(href, r"^(https?:)?//", "loaded from elsewhere: " + tag)
+            self.assertTrue(os.path.exists(os.path.normpath(os.path.join(here, href))), "missing: " + href)
 
     def test_methodology_points_to_the_licence(self):
         method = read("METHODOLOGY.md")
