@@ -18,7 +18,8 @@
       {"openrouter_id": "deepseek/deepseek-v4-flash", "name": "DeepSeek V4 Flash 0423", "native_precision": "fp8"},
       {"openrouter_id": "minimax/minimax-m3", "name": "MiniMax M3", "native_precision": "bf16"},
       {"openrouter_id": "xiaomi/mimo-v2.6-flash", "name": "MiMo-V2.6-Flash", "native_precision": "fp8"},
-      {"openrouter_id": "qwen/qwen3.5-397b-a17b", "name": "Qwen3.5 397B A17B", "native_precision": "fp8"}
+      {"openrouter_id": "qwen/qwen3.5-397b-a17b", "name": "Qwen3.5 397B A17B", "native_precision": "fp8"},
+      {"openrouter_id": "minimax/minimax-m3.1-flash", "name": "MiniMax M3.1 Flash", "native_precision": ["mxfp8", "fp8"]}
     ],
     "Heavy (above 30B active, not published)": [
       {"openrouter_id": "z-ai/glm-5.2", "native_precision": "fp8", "reference": true},
@@ -34,7 +35,8 @@
     ],
     "Frontier (not published)": [
       {"openrouter_id": "moonshotai/kimi-k3", "native_precision": ["mxfp4", "fp4"], "reference": true},
-      {"openrouter_id": "qwen/qwen3.8-2.4t-a95b", "native_precision": "fp8"}
+      {"openrouter_id": "qwen/qwen3.8-2.4t-a95b", "native_precision": "fp8"},
+      {"openrouter_id": "moonshotai/kimi-k3.1-pro", "name": "Kimi K3.1 Pro", "native_precision": ["mxfp4", "fp4"]}
     ],
     "Soft edge, monitoring only": [
       {"openrouter_id": "qwen/qwen3.8-27b", "native_precision": "fp8", "reference": true},

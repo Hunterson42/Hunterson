@@ -2,7 +2,7 @@
 
 Working record for choosing and monitoring the reference checkpoint for each grade. Kept in the repository so that every selection decision has a dated, public trail. Nothing here is published; the methodology is the published document.
 
-Last updated: 20 October 2026.
+Last updated: 6 November 2026.
 
 ---
 
@@ -242,7 +242,9 @@ at the earliest.
 **D7. Frontier.** Not probed in shadow for now. A grade is launched only after
 it has met the launch threshold and completed its own shadow period. Frontier
 shadow probing to be reconsidered in November if Kimi K3 still holds 10 or
-more. The same applies to Heavy.
+more. The same applies to Heavy. **Added 6 November:** Kimi K3.1 Pro, placed in
+Frontier, had 10 qualifying providers against K3's 11 and is gaining; the
+reconsideration covers both, and settles open item 12 first (rule 1.20).
 
 ### 1.8 A reference must allow thinking to be switched off
 
@@ -672,6 +674,23 @@ Recorded with methodology 1.0, fixed on 30 October 2026. Each is written into th
 - **D46. The control group is to be widened** until it could carry a figure if the venue were lost; the methodology no longer fixes its size (section 8)
 - **D47. The venue's market data enters the rules only through D40's tie rule (section 4.5).** Every other stream collected beside the price is never an input
 
+### 1.20 Two models placed, 6 November 2026
+
+Rule 1.7 (D3), and section 4.6 of the methodology, require every model seen in the census with five or more providers at one declared precision to be placed in a grade, or recorded as not relevant, within ten working days. On 6 November the tracker's watchlist held two models. Both are placed by active parameters under rule 1.1. Unlike the placements of 26 October, the precision, parameters and commit hash of each were read from its own repository on 6 November, so none is provisional:
+
+| Model | Active | Grade | Accepted tags | Qualifying, 6 Nov | Eligible under rule 1.8 |
+|---|---|---|---|---|---|
+| Kimi K3.1 Pro, `moonshotai/kimi-k3.1-pro` | 104B | Frontier | mxfp4, fp4 | 10 | yes, on the listing; see below |
+| MiniMax M3.1 Flash, `minimax/minimax-m3.1-flash` | 23B | Standard | mxfp8, fp8 | 3 | no, thinking mandatory |
+
+**Kimi K3.1 Pro, placed two weeks before the deadline.** The venue listed it from the census of 24 October, served by Moonshot alone. Its weights were first committed to Hugging Face on 2 November, and other providers took it up from the census of 5 November. It first had five providers at one declared precision on 6 November, five at mxfp4 and five at fp4, so the deadline was 20 November. Counted under rule 1.3 it had 8 qualifying providers on 5 November and 10 on 6 November, against Kimi K3's 11. It is a new release, not a new version of K3 (methodology section 4.5), so it can become Frontier's reference only by the stickiness rule. Frontier has never been published, so on our reading a change of reference there would follow the rule before the first publication, with no parallel period.
+
+**MiniMax M3.1 Flash cannot affect the Standard result.** It reached the watchlist only through five providers marked "unknown", which the rule does not count, as Qwen3.5 397B A17B and DeepSeek V3.2 did (rule 1.18). On the 15 census days on which it has been listed, to 6 November, it never had more than four providers at one declared precision, while the reference had 15 or 16 qualifying providers. Its thinking is mandatory on the listing, and its model card offers effort levels from low to max with no way to switch thinking off, so it cannot be chosen under rule 1.8 however many providers it gains. It is placed so that the list stays complete.
+
+**Thinking in the Kimi K3 family: the listing and the model maker disagree.** The listing marks both Kimi K3 and Kimi K3.1 Pro `mandatory: false`, with "none" among the supported efforts, so the tracker shows both as eligible. Moonshot's model cards say otherwise. K3's says "Kimi K3 always has thinking enabled"; K3.1 Pro's gives the thinking effort as "low", "high" or "max", with no setting that switches it off. Rule 1.8 reads eligibility from the listing, so neither placement changes. But providers have been seen to ignore the venue's switch and return only thinking, as Novita has on the Standard reference (methodology section 6). If thinking cannot in fact be switched off, every provider of either model would be excluded each day for returning thinking, Frontier could produce no figure, and it might have no eligible reference at all. One request to each through the venue, with thinking switched off, settles it before D7's reconsideration this month (open item 12).
+
+**Kimi K3's repository has moved on from its recorded hash.** Section 5.1 records `c5d1dd4`, the initial commit of 27 July. Since then the repository has added README changes and evaluation results, which change nothing, and on 20 August an update to `encoding_k3.py`, the file that formats prompts before the model sees them. Under section 4.5 of the methodology a change to the chat template is a new checkpoint. Frontier is not published, so nothing turns on it now; the change is to be read before Frontier is probed (open item 13).
+
 ---
 
 ## 2. Daily tracking
@@ -985,6 +1004,19 @@ Placed 26 October 2026 (rule 1.18).
 - Licence: Apache 2.0. Thinking on by default, switched off with `enable_thinking: false`
 - Census 26 Oct: 10 providers, 10 endpoints. unknown 6, fp8 4. **Qualifying: 4.** On the watchlist only through its unknown endpoints (rule 1.18)
 
+### 3.10 MiniMaxAI/MiniMax-M3.1-Flash
+
+Placed 6 November 2026 (rule 1.20).
+
+- OpenRouter id: `minimax/minimax-m3.1-flash`, created 19 October 2026. Hugging Face: `MiniMaxAI/MiniMax-M3.1-Flash`, first committed 23 October
+- Commit hash: `ce7f4df87d2e05262f5775f373dac4772f134041` (5 November, evaluation results added; read 6 November)
+- Parameters: about 428B total, 23B activated per token (model card). **Standard,** 23 per cent below the boundary, as MiniMax M3
+- Architecture: 60 layers, hidden 6144, 128 routed experts with 4 per token and 1 shared; MiniMax Sparse Attention throughout; a speculative decoding head included
+- **Native precision: mxfp8, with nvfp4 routed experts.** `config.json` gives quant_method "mxfp8", block size 32, and moe_quant_format "nvfp4-pack-quantized"; base dtype bfloat16. The tag follows the top-level format, as DeepSeek's fp8 with fp4 experts does (section 3.4). **Accepted tags: mxfp8, fp8,** under rule 1.3. Had the experts' format governed, the fp4 providers would count instead: never more than four on any day. Neither choice matters while its thinking is mandatory
+- Licence: MiniMax Community License, custom; free for non-commercial use, with conditions on commercial use. Read before relying on it
+- **Not eligible as a reference:** thinking is mandatory on the listing, and the model card offers effort levels from low to max with no off setting (rule 1.8)
+- Census 6 Nov: 12 providers, 13 endpoints. Providers: unknown 5, fp4 3, fp8 3, fp16 1. **Qualifying: 3**
+
 ---
 
 ## 4. Heavy grade candidates
@@ -1121,6 +1153,8 @@ Placed 26 October 2026 (rule 1.18).
   projections, lm_head, vision tower, mm projector
 - **Accepted tags: mxfp4, fp4**, under rule 1.3
 - Licence: kimi-k3 custom. Read it
+- Thinking: the model card says "Kimi K3 always has thinking enabled", with effort "low", "high" or "max"; the listing says it can be switched off (rule 1.20, open item 12)
+- The repository has moved on from the recorded hash: README changes and evaluation results, and an update to `encoding_k3.py` on 20 August (rule 1.20, open item 13)
 - The "8-bit precision" page tag is wrong; config.json governs
 - Closed premium evidence: the K3 report concedes K3 trails Claude Fable 5 and
   GPT-5.6 Sol while outperforming other open and proprietary models. The market
@@ -1131,6 +1165,19 @@ Placed 26 October 2026 (rule 1.18).
 - Census 17 Sep: 7 providers, 7 endpoints. unknown 5, fp8 1, fp4 1. **Largest single-precision group: 1**
 - All three price points identical at $6.00, which is unusual and worth understanding before this model is ever used
 
+
+### 5.3 moonshotai/Kimi-K3.1-Pro
+
+Placed 6 November 2026 (rule 1.20).
+
+- OpenRouter id: `moonshotai/kimi-k3.1-pro`, created 23 October 2026, canonical slug `moonshotai/kimi-k3.1-pro-20261023`. Hugging Face: `moonshotai/Kimi-K3.1-Pro`, first committed 2 November
+- Commit hash: `d9e99b0792a5e93b78ea9bea62a68167e36ddd9e` (5 November, an update to `encoding_k3.py` three days after the initial commit `6d0a020`; read 6 November)
+- Parameters: 2.8T total, 104B activated (model card). **Frontier.** Post-trained from Kimi K3; a new release, not a new version of K3 (methodology section 4.5)
+- Architecture: K3's experts unchanged (896 routed, 16 per token, 2 shared, 93 layers, hidden 7168), but K3's full-attention layers are replaced by 24 layers of gated DeepSeek Sparse Attention, for long contexts (model type `kimi_k31`). The weights hold about 179M more 16-bit parameters than K3's, and the same 4-bit expert weights
+- **Native precision: mxfp4.** `config.json` gives format "mxfp4-pack-quantized", type "float", num_bits 4, group_size 32, through compressed-tensors; base dtype bfloat16; routed experts only, as K3. **Accepted tags: mxfp4, fp4,** under rule 1.3. The page's "8-bit precision" tag is wrong, as on K3
+- Licence: Kimi K3.1-Pro License, word for word K3's apart from the name
+- Thinking: not mandatory on the listing, with "none" among the efforts; the model card gives effort "low", "high" or "max" only (rule 1.20, open item 12)
+- Census 6 Nov: 16 providers, 23 endpoints. Providers: fp4 5, mxfp4 5, unknown 4, bf16 1, fp8 1. **Qualifying: 10,** against K3's 11; 8 on 5 November
 ---
 
 ## 6. Closed models, for the premium series only
@@ -1184,6 +1231,13 @@ The ambiguity of bare `fp4` is a live problem for gpt-oss, whose native format i
 11. Confirm from `config.json` the native precision of the ten models placed on
     26 October, and read their commit hashes, before any is probed or could
     become a reference (rule 1.18)
+12. Before D7 is reconsidered in November: send one request each to Kimi K3
+    and Kimi K3.1 Pro through the venue with thinking switched off, and record
+    whether thinking comes back. The listing says it can be switched off;
+    Moonshot's model cards say it cannot (rule 1.20)
+13. Kimi K3's repository has changed since its recorded hash `c5d1dd4`,
+    including `encoding_k3.py` on 20 August. Read the change before Frontier is
+    probed, and re-pin if the chat template changed (rule 1.20)
 
 ---
 
