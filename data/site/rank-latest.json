@@ -1,24 +1,24 @@
 {
  "schema_version": 1,
- "date": "2026-11-06",
- "models_with_endpoints": 426,
+ "date": "2026-11-07",
+ "models_with_endpoints": 432,
  "models_with_five_plus_providers": 54,
  "rows": [
   {
    "rank": 1,
    "model": "deepseek/deepseek-v4.1-flash-1017",
    "providers": 40,
-   "endpoints": 50,
+   "endpoints": 49,
    "quantisation": {
-    "fp8": 21,
-    "unknown": 21,
-    "fp4": 6,
+    "fp8": 22,
+    "unknown": 20,
+    "fp4": 5,
     "mxfp4": 2
    },
    "output_usd_per_m": {
     "low": 0.15,
-    "median": 0.7,
-    "high": 3.6
+    "median": 0.66,
+    "high": 2.4
    }
   },
   {
@@ -33,8 +33,8 @@
     "nvfp4": 3
    },
    "output_usd_per_m": {
-    "low": 0.88,
-    "median": 3.74,
+    "low": 1.4,
+    "median": 4.2,
     "high": 8.8
    }
   },
@@ -46,8 +46,8 @@
    "quantisation": {
     "fp4": 15,
     "fp8": 12,
-    "unknown": 10,
-    "nvfp4": 5
+    "unknown": 9,
+    "nvfp4": 6
    },
    "output_usd_per_m": {
     "low": 0.0923,
@@ -61,14 +61,14 @@
    "providers": 30,
    "endpoints": 38,
    "quantisation": {
-    "fp8": 20,
-    "unknown": 14,
+    "fp8": 21,
+    "unknown": 13,
     "fp4": 2,
     "mxfp4": 2
    },
    "output_usd_per_m": {
-    "low": 0.336,
-    "median": 0.87,
+    "low": 0.2028,
+    "median": 0.84,
     "high": 1.8
    }
   },
@@ -78,15 +78,15 @@
    "providers": 25,
    "endpoints": 29,
    "quantisation": {
-    "fp8": 12,
-    "unknown": 8,
+    "fp8": 13,
+    "unknown": 7,
     "fp4": 5,
     "nvfp4": 2,
     "fp32": 1,
     "bf16": 1
    },
    "output_usd_per_m": {
-    "low": 0.18,
+    "low": 0.169,
     "median": 0.3,
     "high": 1.32
    }
@@ -104,7 +104,7 @@
     "fp16": 1
    },
    "output_usd_per_m": {
-    "low": 1.003,
+    "low": 0.675,
     "median": 2.3,
     "high": 3.2
    }
@@ -128,23 +128,6 @@
   },
   {
    "rank": 8,
-   "model": "deepseek/deepseek-v4-pro-0813",
-   "providers": 22,
-   "endpoints": 26,
-   "quantisation": {
-    "unknown": 10,
-    "fp8": 10,
-    "fp4": 4,
-    "mxfp4": 2
-   },
-   "output_usd_per_m": {
-    "low": 1.98,
-    "median": 3.96,
-    "high": 8.0
-   }
-  },
-  {
-   "rank": 9,
    "model": "openai/gpt-oss-120b",
    "providers": 22,
    "endpoints": 26,
@@ -157,19 +140,36 @@
     "fp16": 1
    },
    "output_usd_per_m": {
-    "low": 0.072,
+    "low": 0.044,
     "median": 0.5,
     "high": 0.95
+   }
+  },
+  {
+   "rank": 9,
+   "model": "deepseek/deepseek-v4-pro-0813",
+   "providers": 21,
+   "endpoints": 25,
+   "quantisation": {
+    "fp8": 10,
+    "unknown": 9,
+    "fp4": 4,
+    "mxfp4": 2
+   },
+   "output_usd_per_m": {
+    "low": 1.98,
+    "median": 3.96,
+    "high": 8.0
    }
   },
   {
    "rank": 10,
    "model": "moonshotai/kimi-k3",
    "providers": 21,
-   "endpoints": 31,
+   "endpoints": 30,
    "quantisation": {
     "fp4": 11,
-    "unknown": 11,
+    "unknown": 10,
     "mxfp4": 7,
     "fp8": 2
    },
@@ -181,6 +181,41 @@
   },
   {
    "rank": 11,
+   "model": "moonshotai/kimi-k3.1-pro",
+   "providers": 17,
+   "endpoints": 24,
+   "quantisation": {
+    "mxfp4": 10,
+    "fp4": 6,
+    "unknown": 6,
+    "bf16": 1,
+    "fp8": 1
+   },
+   "output_usd_per_m": {
+    "low": 8.115,
+    "median": 10.0,
+    "high": 20.0
+   }
+  },
+  {
+   "rank": 12,
+   "model": "google/gemma-4-31b-it",
+   "providers": 16,
+   "endpoints": 19,
+   "quantisation": {
+    "fp4": 7,
+    "unknown": 5,
+    "fp8": 5,
+    "bf16": 2
+   },
+   "output_usd_per_m": {
+    "low": 0.1,
+    "median": 0.4,
+    "high": 1.15
+   }
+  },
+  {
+   "rank": 13,
    "model": "moonshotai/kimi-k2.6",
    "providers": 16,
    "endpoints": 16,
@@ -192,44 +227,9 @@
     "bf16": 1
    },
    "output_usd_per_m": {
-    "low": 1.8,
+    "low": 1.64,
     "median": 3.5,
     "high": 4.6
-   }
-  },
-  {
-   "rank": 12,
-   "model": "moonshotai/kimi-k3.1-pro",
-   "providers": 16,
-   "endpoints": 23,
-   "quantisation": {
-    "mxfp4": 10,
-    "fp4": 6,
-    "unknown": 5,
-    "bf16": 1,
-    "fp8": 1
-   },
-   "output_usd_per_m": {
-    "low": 8.115,
-    "median": 10.0,
-    "high": 20.0
-   }
-  },
-  {
-   "rank": 13,
-   "model": "deepseek/deepseek-v4-flash",
-   "providers": 15,
-   "endpoints": 15,
-   "quantisation": {
-    "fp8": 8,
-    "unknown": 4,
-    "fp4": 2,
-    "mxfp4": 1
-   },
-   "output_usd_per_m": {
-    "low": 0.1652,
-    "median": 0.28,
-    "high": 0.56
    }
   },
   {
@@ -244,26 +244,26 @@
     "fp4": 1
    },
    "output_usd_per_m": {
-    "low": 0.072,
+    "low": 0.031,
     "median": 0.31,
     "high": 0.6
    }
   },
   {
    "rank": 15,
-   "model": "google/gemma-4-31b-it",
-   "providers": 15,
-   "endpoints": 18,
+   "model": "deepseek/deepseek-v4-flash",
+   "providers": 14,
+   "endpoints": 14,
    "quantisation": {
-    "fp8": 6,
-    "fp4": 6,
+    "fp8": 7,
     "unknown": 4,
-    "bf16": 2
+    "fp4": 2,
+    "mxfp4": 1
    },
    "output_usd_per_m": {
-    "low": 0.1,
-    "median": 0.4,
-    "high": 1.15
+    "low": 0.0885,
+    "median": 0.203,
+    "high": 0.56
    }
   },
   {
@@ -278,7 +278,7 @@
    },
    "output_usd_per_m": {
     "low": 1.5,
-    "median": 2.976,
+    "median": 2.716,
     "high": 3.83
    }
   },
@@ -316,22 +316,6 @@
   },
   {
    "rank": 19,
-   "model": "minimax/minimax-m3",
-   "providers": 11,
-   "endpoints": 13,
-   "quantisation": {
-    "fp8": 10,
-    "unknown": 2,
-    "fp4": 1
-   },
-   "output_usd_per_m": {
-    "low": 0.88,
-    "median": 1.2,
-    "high": 1.8
-   }
-  },
-  {
-   "rank": 20,
    "model": "qwen/qwen3.6-35b-a3b",
    "providers": 11,
    "endpoints": 11,
@@ -341,8 +325,24 @@
     "fp4": 1
    },
    "output_usd_per_m": {
-    "low": 0.095,
+    "low": 0.128,
     "median": 0.95,
+    "high": 1.8
+   }
+  },
+  {
+   "rank": 20,
+   "model": "minimax/minimax-m3",
+   "providers": 10,
+   "endpoints": 12,
+   "quantisation": {
+    "fp8": 10,
+    "fp4": 1,
+    "unknown": 1
+   },
+   "output_usd_per_m": {
+    "low": 0.88,
+    "median": 1.2,
     "high": 1.8
    }
   },
@@ -364,6 +364,23 @@
   },
   {
    "rank": 22,
+   "model": "nvidia/nemotron-3.5-super-vl",
+   "providers": 10,
+   "endpoints": 10,
+   "quantisation": {
+    "nvfp4": 4,
+    "fp4": 3,
+    "bf16": 2,
+    "unknown": 1
+   },
+   "output_usd_per_m": {
+    "low": 0.35,
+    "median": 0.5,
+    "high": 0.9
+   }
+  },
+  {
+   "rank": 23,
    "model": "openai/gpt-oss-20b",
    "providers": 10,
    "endpoints": 11,
@@ -380,7 +397,7 @@
    }
   },
   {
-   "rank": 23,
+   "rank": 24,
    "model": "qwen/qwen3.5-397b-a17b",
    "providers": 10,
    "endpoints": 10,
@@ -392,23 +409,6 @@
     "low": 2.34,
     "median": 3.55,
     "high": 4.5
-   }
-  },
-  {
-   "rank": 24,
-   "model": "nvidia/nemotron-3.5-super-vl",
-   "providers": 9,
-   "endpoints": 9,
-   "quantisation": {
-    "nvfp4": 3,
-    "fp4": 3,
-    "bf16": 2,
-    "unknown": 1
-   },
-   "output_usd_per_m": {
-    "low": 0.35,
-    "median": 0.5,
-    "high": 0.9
    }
   },
   {
@@ -429,6 +429,22 @@
   },
   {
    "rank": 26,
+   "model": "xiaomi/mimo-v2.6-flash",
+   "providers": 8,
+   "endpoints": 8,
+   "quantisation": {
+    "fp8": 6,
+    "fp4": 1,
+    "bf16": 1
+   },
+   "output_usd_per_m": {
+    "low": 0.224,
+    "median": 0.28,
+    "high": 0.4
+   }
+  },
+  {
+   "rank": 27,
    "model": "z-ai/glm-5",
    "providers": 8,
    "endpoints": 9,
@@ -443,7 +459,7 @@
    }
   },
   {
-   "rank": 27,
+   "rank": 28,
    "model": "deepseek/deepseek-v3.2",
    "providers": 7,
    "endpoints": 7,
@@ -459,7 +475,7 @@
    }
   },
   {
-   "rank": 28,
+   "rank": 29,
    "model": "qwen/qwen3.5-35b-a3b",
    "providers": 7,
    "endpoints": 7,
@@ -475,7 +491,7 @@
    }
   },
   {
-   "rank": 29,
+   "rank": 30,
    "model": "qwen/qwen3.6-27b",
    "providers": 7,
    "endpoints": 7,
@@ -490,37 +506,20 @@
    }
   },
   {
-   "rank": 30,
+   "rank": 31,
    "model": "tencent/hy4-preview",
    "providers": 7,
    "endpoints": 7,
    "quantisation": {
     "fp8": 4,
     "bf16": 1,
-    "unknown": 1,
+    "mxfp4": 1,
     "fp4": 1
    },
    "output_usd_per_m": {
     "low": 2.501,
     "median": 2.501,
     "high": 2.501
-   }
-  },
-  {
-   "rank": 31,
-   "model": "xiaomi/mimo-v2.6-flash",
-   "providers": 7,
-   "endpoints": 7,
-   "quantisation": {
-    "fp8": 4,
-    "fp4": 1,
-    "bf16": 1,
-    "unknown": 1
-   },
-   "output_usd_per_m": {
-    "low": 0.224,
-    "median": 0.28,
-    "high": 0.35
    }
   },
   {
@@ -581,7 +580,7 @@
     "unknown": 1
    },
    "output_usd_per_m": {
-    "low": 0.117,
+    "low": 0.049,
     "median": 0.15,
     "high": 0.25
    }
