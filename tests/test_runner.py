@@ -25,7 +25,8 @@ STUB_PROBE = r'''
 import datetime as dt, json, os, sys
 now = dt.datetime.fromisoformat(os.environ["RUNNER_NOW"])
 if "--offwindow" in sys.argv:
-    out = os.path.join("data", "offwindow", now.strftime("%Y-%m-%d-%H%M"))
+    out = os.path.join("data", "offwindow", now.strftime("%Y-%m-%d-%H%M")
+                       + ("-thinking" if "thinking" in sys.argv else ""))
 else:
     out = os.path.join("data", "probes", now.strftime("%Y-%m-%d"))
 os.makedirs(os.path.join(out, "requests"), exist_ok=True)
@@ -236,6 +237,12 @@ class RunnerTests(unittest.TestCase):
         self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
         self.assertIn("Off-window 2026-10-24-1405, weekend (server)", self.remote_log())
         self.assertTrue(self.remote_has("data/offwindow/2026-10-24-1405/manifest.json"))
+        # Then the reference once more with thinking on, pushed on its own (D52).
+        self.assertIn("Off-window 2026-10-24-1405-thinking, thinking (server)", self.remote_log())
+        self.assertTrue(self.remote_has("data/offwindow/2026-10-24-1405-thinking/manifest.json"))
+        self.assertEqual(self.remote_log().splitlines()[:2],
+                         ["Off-window 2026-10-24-1405-thinking, thinking (server)",
+                          "Off-window 2026-10-24-1405, weekend (server)"])
         self.assertFalse(self.remote_has("data/probes"))
         weekday = self.run_job("weekend", "2026-10-26T14:05:00")
         self.assertIn("not a weekend day", weekday.stdout)

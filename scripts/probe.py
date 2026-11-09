@@ -44,6 +44,15 @@ Usage:
                                            for research only (decision D28),
                                            written to data/offwindow/DATE-HHMM/.
                                            Never read by the assessor.
+    python3 scripts/probe.py --offwindow thinking
+                                           the reference only, one request per
+                                           provider at each of two efforts with
+                                           thinking left on, for research only
+                                           (decision D52, roadmap step 63),
+                                           written to
+                                           data/offwindow/DATE-HHMM-thinking/.
+                                           Never read by the assessor; read it
+                                           with scripts/thinking.py
 
 Each request has a total time limit (timeout_seconds in panel.json), as well as
 a limit on any one wait for data (read_timeout_seconds), so a stalled or
@@ -382,6 +391,89 @@ def summarise(record):
     return "\n".join(lines)
 
 
+# Research readings with thinking left on (decision D52, roadmap step 63). The
+# reference is bought once from each provider at each effort, through the venue
+# and pinned to the endpoint the daily run would buy, to learn whether the price
+# per token is the same as with thinking off, how many more tokens the job takes,
+# and which providers honour the effort. The test piece asks for writing until it
+# is stopped, so the cap, not the job, sets the total: it is set high enough for
+# the thinking and the start of the answer. Control-group accounts are left out:
+# each needs its own switch.
+THINKING_EFFORTS = ["low", "high"]
+THINKING_MAX_TOKENS = 6000            # at 30 tokens a second, the speed floor, done in 200 s
+THINKING_TIMEOUT = 300           # seconds for the whole request
+THINKING_READ_TIMEOUT = 180      # seconds for any one wait for data
+THINKING_MAX_MINUTES = 40        # no request starts after this
+
+
+def reference_checkpoint(candidates):
+    """The checkpoint marked as the reference in candidates.json."""
+    for entries in candidates["grades"].values():
+        for e in entries:
+            if e.get("reference"):
+                return e["openrouter_id"]
+    raise SystemExit("No checkpoint is marked as the reference in candidates.json")
+
+
+def thinking_reading(panel, candidates, prompt_body, prompt_sha256, start, out_dir):
+    day = start.strftime("%Y-%m-%d")
+    checkpoint = reference_checkpoint(candidates)
+    accepted = accepted_precisions(candidates, checkpoint)
+    listing = fetch_listing(checkpoint)
+    listing["accepted_precisions"] = accepted
+    write_json(os.path.join(out_dir, "listing", slug(checkpoint) + ".json"), listing)
+    targets = venue_targets(listing, accepted, panel.get("service_tiers"), day)
+    jobs = [(dict(t, extra={"reasoning": {"effort": effort}}), effort)
+            for t in targets for effort in THINKING_EFFORTS]
+    random.shuffle(jobs)
+    deadline = start + datetime.timedelta(minutes=THINKING_MAX_MINUTES)
+    lock = threading.Lock()
+    done, failed, not_reached = 0, 0, []
+
+    def one(job):
+        nonlocal done, failed
+        t, effort = job
+        if utc_now() >= deadline:
+            with lock:
+                not_reached.append({"target": target_id(t), "effort": effort, "reason": "deadline"})
+            return
+        rec = run_request(t, prompt_body, 1, day, THINKING_MAX_TOKENS, THINKING_TIMEOUT, THINKING_READ_TIMEOUT)
+        rec["effort"] = effort
+        write_json(os.path.join(out_dir, "requests", f"{target_id(t)}__{effort}.json"), rec)
+        with lock:
+            done += 1
+            failed += 1 if rec["error"] else 0
+
+    with concurrent.futures.ThreadPoolExecutor(max_workers=int(panel.get("concurrency", 4))) as pool:
+        list(pool.map(one, jobs))
+    end = utc_now()
+    manifest = {
+        "mode": "offwindow",
+        "offwindow_kind": "thinking",
+        "day": day,
+        "started_utc": iso(start),
+        "finished_utc": iso(end),
+        "deadline_utc": iso(deadline),
+        "script_commit": script_commit(),
+        "prompt_sha256": prompt_sha256,
+        "checkpoint": checkpoint,
+        "efforts": THINKING_EFFORTS,
+        "max_output_tokens": THINKING_MAX_TOKENS,
+        "timeout_seconds": THINKING_TIMEOUT,
+        "read_timeout_seconds": THINKING_READ_TIMEOUT,
+        "accept_line_1": panel.get("accept_line_1"),
+        "accept_line_2": panel.get("accept_line_2"),
+        "targets": [target_id(t) for t in targets],
+        "requests_made": done,
+        "requests_with_error": failed,
+        "not_reached": not_reached,
+    }
+    write_json(os.path.join(out_dir, "manifest.json"), manifest)
+    print(f"thinking {day}: {len(targets)} providers, {done} requests, {failed} with errors, "
+          f"{len(not_reached)} not reached. Saved to {out_dir}.")
+    return 0
+
+
 # The ways providers are known to accept a switch for thinking, tried in turn by
 # --try-switches. The first is no switch at all, which is the default behaviour.
 THINKING_SWITCHES = [
@@ -630,8 +722,8 @@ def main(argv):
         mode = "offwindow"
         i = argv.index("--offwindow")
         offwindow_kind = argv[i + 1] if i + 1 < len(argv) else None
-        if offwindow_kind not in ("weekend", "random"):
-            print("--offwindow needs a kind: weekend or random")
+        if offwindow_kind not in ("weekend", "random", "thinking"):
+            print("--offwindow needs a kind: weekend, random or thinking")
             return 2
 
     panel = load_json("panel.json")
@@ -654,12 +746,15 @@ def main(argv):
     elif mode == "rehearsal":
         out_dir = os.path.join("data", "rehearsals", start.strftime("%Y-%m-%d-%H%M"))
     elif mode == "offwindow":
-        out_dir = os.path.join("data", "offwindow", start.strftime("%Y-%m-%d-%H%M"))
+        out_dir = os.path.join("data", "offwindow", start.strftime("%Y-%m-%d-%H%M")
+                               + ("-thinking" if offwindow_kind == "thinking" else ""))
     else:
         out_dir = None
     if out_dir and os.path.exists(os.path.join(out_dir, "manifest.json")):
         print(f"{out_dir} already has a manifest; not overwriting.")
         return 0
+    if offwindow_kind == "thinking":
+        return thinking_reading(panel, candidates, prompt_body, prompt_sha256, start, out_dir)
 
     max_tokens = int(panel.get("max_output_tokens", 500))
     timeout = int(panel.get("timeout_seconds", 120))

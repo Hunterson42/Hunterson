@@ -351,6 +351,32 @@ class ProbeTests(unittest.TestCase):
         self.assertFalse(os.path.exists(os.path.join(self.dir, "data", "probes")),
                          "an off-window reading must never land among the windows")
 
+    def test_thinking_reading_buys_the_reference_at_each_effort(self):
+        cands = load(os.path.join(ROOT, "candidates.json"))
+        ref = next(e["openrouter_id"] for g in cands["grades"].values() for e in g if e.get("reference"))
+        r = self.run_probe("--offwindow", "thinking")
+        self.assertEqual(r.returncode, 0, r.stderr)
+        out = glob.glob(os.path.join(self.dir, "data", "offwindow", "*"))
+        self.assertEqual(len(out), 1)
+        self.assertRegex(os.path.basename(out[0]), r"^\d{4}-\d{2}-\d{2}-\d{4}-thinking$")
+        manifest = load(os.path.join(out[0], "manifest.json"))
+        self.assertEqual((manifest["mode"], manifest["offwindow_kind"], manifest["checkpoint"]),
+                         ("offwindow", "thinking", ref))
+        self.assertEqual(manifest["efforts"], ["low", "high"])
+        self.assertGreaterEqual(len(manifest["targets"]), 5)
+        self.assertTrue(all("__openrouter__" in t for t in manifest["targets"]), "the venue only, no direct accounts")
+        self.assertEqual(manifest["requests_made"], 2 * len(manifest["targets"]))
+        self.assertEqual(len(mock_openrouter.SEEN), 2 * len(manifest["targets"]))
+        self.assertTrue(all(b["model"] == ref and b["max_tokens"] == 6000 and len(b["provider"]["only"]) == 1
+                            for b in mock_openrouter.SEEN))
+        efforts = sorted(b["reasoning"]["effort"] for b in mock_openrouter.SEEN)
+        self.assertEqual(efforts, ["high"] * len(manifest["targets"]) + ["low"] * len(manifest["targets"]))
+        recs = [load(p) for p in glob.glob(os.path.join(out[0], "requests", "*.json"))]
+        self.assertEqual(sorted(rec["effort"] for rec in recs), efforts)
+        self.assertEqual(len(glob.glob(os.path.join(out[0], "listing", "*.json"))), 1, "the reference's listing only")
+        self.assertFalse(os.path.exists(os.path.join(self.dir, "data", "probes")),
+                         "a thinking reading must never land among the windows")
+
     def test_offwindow_needs_a_kind(self):
         r = self.run_probe("--offwindow")
         self.assertEqual(r.returncode, 2)

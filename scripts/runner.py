@@ -46,7 +46,9 @@ What it guarantees.
   alarm no longer depends on GitHub's run.
 - Readings outside the window go to data/offwindow/DATE-HHMM/, which the
   assessor never reads. The random hour is never 13:00 or 14:00 UTC, so a
-  reading cannot overlap the window.
+  reading cannot overlap the window. After each weekend reading, the
+  reference is bought once more with thinking left on, into
+  data/offwindow/DATE-HHMM-thinking/ (decision D52), pushed separately.
 - GPU-hour prices (scripts/gpuprices.py, decision D36) are read after the
   census, as the "morning" reading, and after the window's files are pushed,
   as the "window" reading, into data/gpu/DATE-HHMM/, and pushed separately.
@@ -412,7 +414,11 @@ def job_weekend(keys):
     if utc_now().weekday() < 5:
         log("not a weekend day; nothing to do")
         return 0
-    return job_offwindow(keys, "weekend")
+    code = job_offwindow(keys, "weekend")
+    # Then the reference once more with thinking left on, research only (decision
+    # D52, roadmap step 63). It follows the weekend reading, so never overlaps it.
+    thinking = job_offwindow(keys, "thinking")
+    return code or thinking
 
 
 def choose_random(now, rng=None):
