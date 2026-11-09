@@ -1,6 +1,6 @@
 {
  "schema_version": 1,
- "date": "2026-11-08",
+ "date": "2026-11-09",
  "models_with_endpoints": 433,
  "models_with_five_plus_providers": 54,
  "rows": [
@@ -8,38 +8,21 @@
    "rank": 1,
    "model": "deepseek/deepseek-v4.1-flash-1017",
    "providers": 40,
-   "endpoints": 51,
+   "endpoints": 50,
    "quantisation": {
     "fp8": 22,
-    "unknown": 21,
+    "unknown": 20,
     "fp4": 6,
     "mxfp4": 2
    },
    "output_usd_per_m": {
     "low": 0.15,
-    "median": 0.68,
-    "high": 9.6
+    "median": 0.7,
+    "high": 2.4
    }
   },
   {
    "rank": 2,
-   "model": "z-ai/glm-5.3",
-   "providers": 36,
-   "endpoints": 47,
-   "quantisation": {
-    "unknown": 16,
-    "fp4": 14,
-    "fp8": 14,
-    "nvfp4": 3
-   },
-   "output_usd_per_m": {
-    "low": 1.4,
-    "median": 4.2,
-    "high": 8.8
-   }
-  },
-  {
-   "rank": 3,
    "model": "z-ai/glm-5.3-flash",
    "providers": 36,
    "endpoints": 41,
@@ -56,6 +39,23 @@
    }
   },
   {
+   "rank": 3,
+   "model": "z-ai/glm-5.3",
+   "providers": 34,
+   "endpoints": 45,
+   "quantisation": {
+    "unknown": 16,
+    "fp4": 13,
+    "fp8": 13,
+    "nvfp4": 3
+   },
+   "output_usd_per_m": {
+    "low": 1.4,
+    "median": 4.2,
+    "high": 8.8
+   }
+  },
+  {
    "rank": 4,
    "model": "deepseek/deepseek-v4.1-flash",
    "providers": 30,
@@ -67,50 +67,32 @@
     "mxfp4": 2
    },
    "output_usd_per_m": {
-    "low": 0.2028,
-    "median": 0.84,
+    "low": 0.336,
+    "median": 0.9,
     "high": 1.8
    }
   },
   {
    "rank": 5,
    "model": "deepseek/deepseek-v4-flash-0731",
-   "providers": 25,
-   "endpoints": 29,
+   "providers": 26,
+   "endpoints": 30,
    "quantisation": {
     "fp8": 13,
     "unknown": 7,
-    "fp4": 5,
+    "fp4": 6,
     "nvfp4": 2,
     "fp32": 1,
     "bf16": 1
    },
    "output_usd_per_m": {
-    "low": 0.1333,
-    "median": 0.3,
+    "low": 0.14,
+    "median": 0.348,
     "high": 1.32
    }
   },
   {
    "rank": 6,
-   "model": "qwen/qwen3.8-27b",
-   "providers": 24,
-   "endpoints": 24,
-   "quantisation": {
-    "fp8": 12,
-    "unknown": 7,
-    "fp4": 3,
-    "bf16": 1,
-    "fp16": 1
-   },
-   "output_usd_per_m": {
-    "low": 0.286,
-    "median": 2.3,
-    "high": 3.2
-   }
-  },
-  {
-   "rank": 7,
    "model": "z-ai/glm-5.2",
    "providers": 24,
    "endpoints": 33,
@@ -121,9 +103,27 @@
     "nvfp4": 1
    },
    "output_usd_per_m": {
-    "low": 0.594,
+    "low": 1.44,
     "median": 4.4,
     "high": 8.0
+   }
+  },
+  {
+   "rank": 7,
+   "model": "qwen/qwen3.8-27b",
+   "providers": 23,
+   "endpoints": 23,
+   "quantisation": {
+    "fp8": 11,
+    "unknown": 7,
+    "fp4": 3,
+    "bf16": 1,
+    "fp16": 1
+   },
+   "output_usd_per_m": {
+    "low": 1.05,
+    "median": 2.3,
+    "high": 3.2
    }
   },
   {
@@ -140,7 +140,7 @@
     "fp16": 1
    },
    "output_usd_per_m": {
-    "low": 0.087,
+    "low": 0.079,
     "median": 0.5,
     "high": 0.95
    }
@@ -157,7 +157,7 @@
     "mxfp4": 2
    },
    "output_usd_per_m": {
-    "low": 1.976,
+    "low": 1.98,
     "median": 3.96,
     "high": 8.0
    }
@@ -188,11 +188,11 @@
     "mxfp4": 10,
     "fp4": 6,
     "unknown": 6,
-    "bf16": 1,
-    "fp8": 1
+    "fp8": 1,
+    "bf16": 1
    },
    "output_usd_per_m": {
-    "low": 7.9515,
+    "low": 9.0,
     "median": 10.0,
     "high": 20.0
    }
@@ -227,7 +227,7 @@
     "bf16": 1
    },
    "output_usd_per_m": {
-    "low": 1.64,
+    "low": 1.8,
     "median": 3.5,
     "high": 4.6
    }
@@ -244,8 +244,8 @@
     "fp4": 1
    },
    "output_usd_per_m": {
-    "low": 0.072,
-    "median": 0.31,
+    "low": 0.06,
+    "median": 0.3,
     "high": 0.6
    }
   },
@@ -261,8 +261,8 @@
     "mxfp4": 1
    },
    "output_usd_per_m": {
-    "low": 0.0871,
-    "median": 0.203,
+    "low": 0.1652,
+    "median": 0.245,
     "high": 0.56
    }
   },
@@ -277,8 +277,8 @@
     "fp4": 2
    },
    "output_usd_per_m": {
-    "low": 0.7842,
-    "median": 2.716,
+    "low": 1.5,
+    "median": 2.976,
     "high": 3.83
    }
   },
@@ -292,8 +292,8 @@
     "unknown": 2
    },
    "output_usd_per_m": {
-    "low": 2.8248,
-    "median": 4.2,
+    "low": 2.9,
+    "median": 4.4,
     "high": 4.4044
    }
   },
@@ -325,7 +325,7 @@
     "fp4": 1
    },
    "output_usd_per_m": {
-    "low": 0.092,
+    "low": 0.101,
     "median": 0.95,
     "high": 1.8
    }
@@ -374,7 +374,7 @@
     "unknown": 1
    },
    "output_usd_per_m": {
-    "low": 0.35,
+    "low": 0.3,
     "median": 0.5,
     "high": 0.9
    }
@@ -391,7 +391,7 @@
     "bf16": 2
    },
    "output_usd_per_m": {
-    "low": 0.018,
+    "low": 0.04,
     "median": 0.14,
     "high": 0.3
    }
@@ -429,22 +429,6 @@
   },
   {
    "rank": 26,
-   "model": "xiaomi/mimo-v2.6-flash",
-   "providers": 8,
-   "endpoints": 8,
-   "quantisation": {
-    "fp8": 6,
-    "fp4": 1,
-    "bf16": 1
-   },
-   "output_usd_per_m": {
-    "low": 0.224,
-    "median": 0.28,
-    "high": 0.4
-   }
-  },
-  {
-   "rank": 27,
    "model": "z-ai/glm-5",
    "providers": 8,
    "endpoints": 9,
@@ -459,7 +443,7 @@
    }
   },
   {
-   "rank": 28,
+   "rank": 27,
    "model": "deepseek/deepseek-v3.2",
    "providers": 7,
    "endpoints": 7,
@@ -475,7 +459,7 @@
    }
   },
   {
-   "rank": 29,
+   "rank": 28,
    "model": "qwen/qwen3.5-35b-a3b",
    "providers": 7,
    "endpoints": 7,
@@ -491,7 +475,7 @@
    }
   },
   {
-   "rank": 30,
+   "rank": 29,
    "model": "qwen/qwen3.6-27b",
    "providers": 7,
    "endpoints": 7,
@@ -506,7 +490,7 @@
    }
   },
   {
-   "rank": 31,
+   "rank": 30,
    "model": "tencent/hy4-preview",
    "providers": 7,
    "endpoints": 7,
@@ -520,6 +504,22 @@
     "low": 2.501,
     "median": 2.501,
     "high": 2.501
+   }
+  },
+  {
+   "rank": 31,
+   "model": "xiaomi/mimo-v2.6-flash",
+   "providers": 7,
+   "endpoints": 7,
+   "quantisation": {
+    "fp8": 5,
+    "fp4": 1,
+    "bf16": 1
+   },
+   "output_usd_per_m": {
+    "low": 0.224,
+    "median": 0.28,
+    "high": 0.35
    }
   },
   {
@@ -580,7 +580,7 @@
     "unknown": 1
    },
    "output_usd_per_m": {
-    "low": 0.078,
+    "low": 0.13,
     "median": 0.15,
     "high": 0.25
    }
