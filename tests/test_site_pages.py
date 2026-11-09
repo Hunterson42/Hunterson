@@ -38,5 +38,28 @@ class CensusPageTests(unittest.TestCase):
             self.assertTrue(os.path.exists(os.path.join(ROOT, "scripts", "site", "assets", "fonts", font)), font)
 
 
+class SiteNotesTests(unittest.TestCase):
+    """site_notes.json is read by the Publish workflow each day, so a note added by
+    pull request must be complete, dated, and in the site's house style."""
+
+    def test_every_note_is_complete_and_shows_on_its_day(self):
+        import datetime as dt
+        import json
+        notes = json.loads(read("site_notes.json"))["notes"]
+        for n in notes:
+            self.assertEqual(set(n), {"date", "grade", "title", "text"}, n)
+            day = dt.date.fromisoformat(n["date"])
+            self.assertIn(n["grade"], ("standard",))
+            self.assertFalse(n["title"].endswith("."), "the page adds the full stop after the title")
+            self.assertTrue(n["text"].endswith("."))
+            self.assertNotRegex(n["title"] + n["text"], "[\u2013\u2014]")
+            grade = {"key": n["grade"]}
+            self.assertIn(n["title"], publish.notes_html(notes, grade, n["date"], "day"))
+            later = (day + dt.timedelta(days=30)).isoformat()
+            self.assertIn(n["title"], publish.notes_html(notes, grade, later, "latest"))
+            for other in ((day - dt.timedelta(days=1)).isoformat(), (day + dt.timedelta(days=31)).isoformat()):
+                self.assertNotIn(n["title"], publish.notes_html(notes, grade, other, "latest"))
+
+
 if __name__ == "__main__":
     unittest.main()
