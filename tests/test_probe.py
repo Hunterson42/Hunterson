@@ -277,6 +277,62 @@ class ProbeTests(unittest.TestCase):
         self.assertEqual(r.returncode, 2)
         self.assertIn("Not listed at an accepted precision today: Nobody", r.stdout)
 
+    def kimi_endpoints(self):
+        """Every endpoint of Kimi K3 at its accepted precisions in the saved census."""
+        path = os.path.join(CENSUS, "endpoints", "moonshotai__kimi-k3.json")
+        if not os.path.exists(path):
+            self.skipTest("Kimi K3 is not in the saved census")
+        return [e["tag"] for e in load(path)["data"]["endpoints"]
+                if e.get("quantization") in ("mxfp4", "fp4") and e.get("tag")]
+
+    def test_try_venue_switch_on_a_named_checkpoint_says_whether_thinking_switches_off(self):
+        tags = self.kimi_endpoints()
+        mock_openrouter.THINK_TAG = tags[0]
+        mock_openrouter.THINK_UNLESS = {"reasoning": {"effort": "none"}}
+        try:
+            r = self.run_probe("--try-venue-switch", "--checkpoint", "moonshotai/kimi-k3")
+        finally:
+            mock_openrouter.THINK_TAG = mock_openrouter.THINK_UNLESS = None
+        self.assertEqual(r.returncode, 0, r.stderr)
+        rows = [ln for ln in r.stdout.splitlines() if ln.startswith("kimi-k3 ")]
+        self.assertEqual(len(rows), len(tags), r.stdout)
+        self.assertEqual(len(mock_openrouter.SEEN), 3 * len(tags), "three forms on every endpoint")
+        self.assertTrue(all(b["model"] == "moonshotai/kimi-k3" and b["max_tokens"] == 60 for b in mock_openrouter.SEEN))
+        forms = [json.dumps({k: b.get(k) for k in ("reasoning", "thinking")}, sort_keys=True)
+                 for b in mock_openrouter.SEEN]
+        for form in ({"reasoning": {"enabled": False}, "thinking": None},
+                     {"reasoning": {"effort": "none"}, "thinking": None},
+                     {"reasoning": {"enabled": False}, "thinking": {"type": "disabled"}}):
+            self.assertEqual(forms.count(json.dumps(form, sort_keys=True)), len(tags), form)
+        self.assertTrue(any(tags[0] in ln and ln.endswith("OFF ONLY WITH B") for ln in rows), r.stdout)
+        self.assertTrue(all(ln.endswith("OFF AS SENT") for ln in rows if tags[0] not in ln
+                            and mock_openrouter.REFUSE_TAG not in ln and mock_openrouter.BREAK_TAG not in ln))
+        self.assertIn("kimi-k3: ", r.stdout)
+        self.assertFalse(os.path.exists(os.path.join(self.dir, "data")))
+
+    def test_try_venue_switch_reports_a_model_that_always_thinks(self):
+        tags = self.kimi_endpoints()
+        mock_openrouter.THINK_TAG = tags[0]
+        mock_openrouter.THINK_UNLESS = {"no such switch": True}
+        listing = load(os.path.join(CENSUS, "endpoints", "moonshotai__kimi-k3.json"))["data"]["endpoints"]
+        provider = next(e["provider_name"] for e in listing if e.get("tag") == tags[0])
+        try:
+            r = self.run_probe("--try-venue-switch", "--checkpoint", "moonshotai/kimi-k3", provider)
+        finally:
+            mock_openrouter.THINK_TAG = mock_openrouter.THINK_UNLESS = None
+        self.assertEqual(r.returncode, 0, r.stderr)
+        row = [ln for ln in r.stdout.splitlines() if tags[0] in ln and ln.startswith("kimi-k3 ")]
+        self.assertTrue(row and row[0].endswith("ALWAYS THINKS"), r.stdout)
+
+    def test_try_venue_switch_needs_a_checkpoint_in_the_candidates(self):
+        r = self.run_probe("--try-venue-switch", "--checkpoint")
+        self.assertEqual(r.returncode, 2)
+        self.assertIn("--checkpoint needs a checkpoint", r.stdout)
+        r = self.run_probe("--try-venue-switch", "--checkpoint", "nobody/no-model")
+        self.assertNotEqual(r.returncode, 0)
+        self.assertIn("is not in candidates.json", r.stderr)
+        self.assertFalse(mock_openrouter.SEEN)
+
     def test_try_switches_needs_a_known_account(self):
         r = self.run_probe("--try-switches", "Nobody")
         self.assertEqual(r.returncode, 2)

@@ -27,6 +27,15 @@ Usage:
                                            DeepSeek's own switch for thinking; one
                                            line each, writes nothing. Naming
                                            providers limits it to them
+    python3 scripts/probe.py --try-venue-switch --checkpoint ID [--checkpoint ID ...] [PROVIDER ...]
+                                           the same for any checkpoint in
+                                           candidates.json, probed or not, with
+                                           two more forms beside the request as
+                                           sent each day: the venue's effort
+                                           "none", and {"thinking":{"type":
+                                           "disabled"}}. Says for each endpoint
+                                           whether thinking can be switched off,
+                                           and with which form (decision D52)
     python3 scripts/probe.py --rehearsal   the whole daily run at once, without
                                            the waits between rounds, written to
                                            data/rehearsals/DATE-HHMM/
@@ -428,6 +437,12 @@ def try_switches(panel, names, prompt_body, day, timeout, read_timeout):
 # that worked on every Novita and GMI Cloud model bought direct (pull request 17).
 VENUE_EXTRA_SWITCH = {"thinking": {"type": "disabled"}}
 
+# With --checkpoint, the forms tried beside the request as sent each day: the
+# venue's effort of "none", which its listing offers for models such as Kimi K3
+# (it replaces the daily {"enabled": false}), and the field Moonshot's and
+# DeepSeek's own APIs read. Selection record, open item 12 (D52).
+OTHER_MODEL_SWITCHES = [{"reasoning": {"effort": "none"}}, {"thinking": {"type": "disabled"}}]
+
 
 def all_venue_endpoints(listing, accepted):
     """Every endpoint at an accepted precision, not only each provider's cheapest,
@@ -457,6 +472,9 @@ def switch_outcome(rec):
     first = lines[0] if lines else ""
     if thought(rec):
         return "thinking", ("thinking, then answer" if first else "thinking only"), first
+    if not first and ((rec.get("usage") or {}).get("completion_tokens") or 0) > 0:
+        # Output billed but nothing shown: thinking the provider neither sends nor counts.
+        return "thinking", "no text, output billed", ""
     return "answer", f"answer: {first or '(empty)'}"[:30], first
 
 
@@ -477,11 +495,32 @@ def switch_change(a, b):
     return "CHANGED"
 
 
-def try_venue_switch(panel, candidates, names, prompt_body, day, timeout, read_timeout, workers=4):
+def switch_verdict(outcomes):
+    """Whether thinking can be switched off on one endpoint, from the request as sent
+    each day (A) and the other forms tried (B, C...)."""
+    if outcomes[0][0] == "answer":
+        return "OFF AS SENT"
+    works = [chr(66 + i) for i, o in enumerate(outcomes[1:]) if o[0] == "answer"]
+    if works:
+        return "OFF ONLY WITH " + " OR ".join(works)
+    if any(o[0] == "rate limit" for o in outcomes):
+        return "INCONCLUSIVE, rate limit"
+    if any(o[0] == "thinking" for o in outcomes):
+        return "ALWAYS THINKS"
+    return "ERRORS"
+
+
+def try_venue_switch(panel, candidates, names, prompt_body, day, timeout, read_timeout, workers=4,
+                     checkpoints=None):
+    forms = OTHER_MODEL_SWITCHES if checkpoints else [VENUE_EXTRA_SWITCH]
     targets = []
-    for checkpoint in panel["probe"]:
+    for checkpoint in checkpoints or panel["probe"]:
+        accepted = accepted_precisions(candidates, checkpoint)
         listing = fetch_listing(checkpoint)
-        targets += all_venue_endpoints(listing, accepted_precisions(candidates, checkpoint))
+        if listing.get("response") is None:
+            print(f"No listing for {checkpoint} today ({listing.get('error')}).")
+            return 2
+        targets += all_venue_endpoints(listing, accepted)
     if names:
         known = {t["provider"] for t in targets}
         unknown = sorted(set(names) - known)
@@ -490,9 +529,12 @@ def try_venue_switch(panel, candidates, names, prompt_body, day, timeout, read_t
                   + ". Listed: " + ", ".join(sorted(known, key=str.lower)))
             return 2
         targets = [t for t in targets if t["provider"] in names]
-    print(f"{len(targets)} endpoints, two requests each, 60 output tokens, writing nothing.")
+    words = {1: "two", 2: "three"}[len(forms)]
+    print(f"{len(targets)} endpoints, {words} requests each, 60 output tokens, writing nothing.")
     print("A: the request as sent each day, with the venue's switch for thinking only.")
-    print("B: the same, also carrying " + json.dumps(VENUE_EXTRA_SWITCH, separators=(",", ":")) + ".\n")
+    for i, form in enumerate(forms):
+        print(f"{chr(66 + i)}: the same, also carrying " + json.dumps(form, separators=(",", ":")) + ".")
+    print()
 
     def attempt(t):
         # 60 tokens is enough to see whether the reply starts with thinking or the answer.
@@ -504,21 +546,28 @@ def try_venue_switch(panel, candidates, names, prompt_body, day, timeout, read_t
             rec = run_request(t, prompt_body, 0, day, 60, timeout, read_timeout)
         return rec
 
-    def pair(t):
-        a = switch_outcome(attempt(t))
-        b = switch_outcome(attempt(dict(t, extra=VENUE_EXTRA_SWITCH)))
-        return t, a, b
+    def tried(t):
+        return t, [switch_outcome(attempt(t))] + [switch_outcome(attempt(dict(t, extra=f))) for f in forms]
 
     with concurrent.futures.ThreadPoolExecutor(max_workers=workers) as pool:
-        results = list(pool.map(pair, targets))
-    counts, errors = {}, []
-    for t, a, b in results:
-        change = switch_change(a, b)
-        counts[change] = counts.get(change, 0) + 1
+        results = list(pool.map(tried, targets))
+    counts, by_checkpoint, errors = {}, {}, []
+    for t, outcomes in results:
         short = t["checkpoint"].split("/")[-1].replace("deepseek-", "")
-        print(f"{short:<15} {t['tag']:<24} A {a[1]:<30} B {b[1]:<30} {change}")
-        errors += [(short, t["tag"], form, o[2]) for form, o in (("A", a), ("B", b)) if o[0] == "error"]
-    print("\n" + ", ".join(f"{k}: {v}" for k, v in sorted(counts.items())))
+        change = switch_change(*outcomes) if len(forms) == 1 else switch_verdict(outcomes)
+        counts[change] = counts.get(change, 0) + 1
+        seen = by_checkpoint.setdefault(short, {})
+        seen[change] = seen.get(change, 0) + 1
+        w = 30 if len(forms) == 1 else 22                  # three forms must fit the web console
+        cells = " ".join(f"{chr(65 + i)} {o[1][:w]:<{w}}" for i, o in enumerate(outcomes))
+        print(f"{short:<15} {t['tag']:<24} {cells} {change}")
+        errors += [(short, t["tag"], chr(65 + i), o[2]) for i, o in enumerate(outcomes) if o[0] == "error"]
+    if len(forms) == 1:
+        print("\n" + ", ".join(f"{k}: {v}" for k, v in sorted(counts.items())))
+    else:
+        print()
+        for short, seen in by_checkpoint.items():
+            print(f"{short}: " + ", ".join(f"{k} {v}" for k, v in sorted(seen.items())))
     if errors:
         print("\nErrors in full:")
         for short, tag, form, detail in errors:
@@ -553,13 +602,24 @@ def main(argv):
         return try_switches(panel, names, prompt_body, utc_now().strftime("%Y-%m-%d"),
                             int(panel.get("timeout_seconds", 120)), int(panel.get("read_timeout_seconds", 60)))
     if "--try-venue-switch" in argv:
-        names = argv[argv.index("--try-venue-switch") + 1:]
+        rest = argv[argv.index("--try-venue-switch") + 1:]
+        names, checkpoints = [], []
+        while rest:
+            word = rest.pop(0)
+            if word == "--checkpoint":
+                if not rest:
+                    print("--checkpoint needs a checkpoint, as in candidates.json, such as moonshotai/kimi-k3")
+                    return 2
+                checkpoints.append(rest.pop(0))
+            else:
+                names.append(word)
         panel = load_json("panel.json")
         with open("prompt.txt") as f:
             prompt_body = f.read()
         return try_venue_switch(panel, load_json("candidates.json"), names, prompt_body,
                                 utc_now().strftime("%Y-%m-%d"), int(panel.get("timeout_seconds", 120)),
-                                int(panel.get("read_timeout_seconds", 60)), int(panel.get("concurrency", 4)))
+                                int(panel.get("read_timeout_seconds", 60)), int(panel.get("concurrency", 4)),
+                                checkpoints or None)
     if "--test-direct" in argv:
         mode, direct_only = "test", True
     elif "--test" in argv:
