@@ -399,7 +399,7 @@ def num(value):
 # the number of decimal places the documentation says, so it is not used; a
 # price outside PLAUSIBLE is reported as a problem, in case the scale changes.
 NOVITA_DIVISOR = 100_000
-HOURS_PER_MONTH = 730          # the hours in a month, as CME's compute futures count them
+HOURS_PER_MONTH = 730          # the hours in a month, as CME's proposed compute futures count them
 
 
 def parse_novita(obj, request):

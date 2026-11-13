@@ -2,7 +2,7 @@
 
 Working record for choosing and monitoring the reference checkpoint for each grade. Kept in the repository so that every selection decision has a dated, public trail. Nothing here is published; the methodology is the published document.
 
-Last updated: 6 November 2026.
+Last updated: 13 November 2026.
 
 ---
 
@@ -528,9 +528,9 @@ before the derived series is published because a history of GPU-hour prices
 from the first day of the assessment cannot be collected later.
 
 **What it is not.** It is not a GPU price index and is never published as one:
-Silicon Data's indices settle CME's compute futures, and Ornn's are to settle
-ICE's. It is a panel of list prices, shown as list prices. It does not replace
-the rule that Hunterson never derives its own assessment from another
+Silicon Data's indices are to settle CME's proposed compute futures, which
+the CFTC is still reviewing (section 9), and Ornn's are to settle ICE's. It is
+a panel of list prices, shown as list prices. It does not replace the rule that Hunterson never derives its own assessment from another
 assessor's number: the derived series uses these primary prices, and cites the
 exchange-settled indices only in commentary.
 
@@ -546,8 +546,8 @@ read 339000 on demand and 170000 spot on 23 October, which are $3.39 and $1.70
 an hour, the prices on its public page that day. The reply's "precision"
 field, 10, is not the number of decimal places, as the documentation says, and
 is not used. Its prepaid prices are per month, read as hourly rates at 730
-hours a month, the count CME's compute futures use: $2.76 an hour for twelve
-months that day. Any price outside $0.02 to $100 a GPU-hour is reported as a
+hours a month, the count CME's proposed compute futures use: $2.76 an hour
+for twelve months that day. Any price outside $0.02 to $100 a GPU-hour is reported as a
 problem, in case a provider's scale changes.
 
 **How it will be used, from January 2027.**
@@ -1243,25 +1243,41 @@ The ambiguity of bare `fp4` is a live problem for gpt-oss, whose native format i
 
 ## 9. GPU-hour futures
 
-Read 20 October 2026 (roadmap step 24), from CME's notice SER 9785 of
-11 August 2026, the exchange's filing with the CFTC (rulebook chapters 1045
-and 1047), and CME's settlements page.
+**Corrected 13 November 2026.** This section said, from 20 October, that the
+two contracts below had been "trading since 5 October 2026", and it recorded
+settlement prices for 19 October. Both were wrong. The contracts have never
+been listed. CME's revised notice, SER 9785R of 25 September 2026, says the
+Exchange will list them "pending all relevant CFTC regulatory review periods"
+and that it "will further advise regarding the specific effective date"; its
+table gives the initial listing as "TBD". NYMEX submitted them for approval
+under CFTC Regulation 40.3 (submission 26-370). The review was extended to
+9 November 2026, and on 4 November NYMEX consented, at the Commission's
+request, to a further 60-day extension, to 8 January 2027. A contract that has
+not been listed has no settlement prices, so the figures recorded for 19
+October were not CME settlements. Their source cannot now be traced; they are
+withdrawn and are not to be used, nor the reading drawn from them. The error
+was ours: the launch date announced in August was recorded as fact without
+checking that the listing had happened. Hunterson's own figures never relied
+on them: no assessment, published page or derived figure used these contracts.
+
+**What CME has proposed** (notice SER 9785 of 11 August 2026, revised by SER
+9785R of 25 September 2026, and NYMEX's filing with the CFTC):
 
 - **Contracts.** Silicon Data H100 Rental Index Futures (CME Globex code GPU1)
-  and Silicon Data B200 Rental Index Futures (GPU2), listed by NYMEX, trading
-  since 5 October 2026, monthly contracts listed 36 months ahead
+  and Silicon Data B200 Rental Index Futures (GPU2), to be listed by NYMEX once
+  the CFTC's review ends, monthly contracts listed 36 months ahead
 - **Underlying.** Silicon Data's daily on-demand rental index for each chip
 - **Unit.** 730 GPU-hours per contract; quoted in US dollars per GPU-hour;
   minimum price step $0.01, which is $7.30 per contract
 - **Settlement.** Cash, against the arithmetic average of the daily index over
-  every business day of the contract month. Trading ends on the month's last
-  business day
-- **Settlements, H100, trade date 19 October 2026** (CME, last updated
-  19 October, 23:55 Central time): November 2026 $2.810, December 2026 $2.760,
-  January 2027 $2.730, February 2027 $2.740, March 2027 $2.750 per GPU-hour.
-  Estimated volume 0; prior day open interest 0. The October 2026 contract was
-  not shown
-- **Reading.** Two weeks after launch nobody had traded the contracts; the
-  settlement prices followed the index. The curve slopes down into January,
-  which bears on break-even throughput in the derived series: a lower rental
-  rate lowers it even if the token price does not move
+  every business day of the contract month. Trading would end on the month's
+  last business day
+- **Status on 13 November 2026.** Not listed and not traded. The CFTC's review
+  runs to 8 January 2027; reports of the extension say its questions concern
+  how the underlying rental prices are formed and whether few participants
+  could move the index. Check CME's notices again after 8 January
+- **Why it matters here.** The question the review turns on, whether a price
+  formed in private deals can be checked from outside, is the one Hunterson's
+  receipts and fingerprints answer for the token. The derived series will cite
+  the contracts in commentary only once they list, as rule 1.16 already
+  provides
