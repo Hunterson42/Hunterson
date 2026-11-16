@@ -60,6 +60,17 @@ class SiteNotesTests(unittest.TestCase):
             for other in ((day - dt.timedelta(days=1)).isoformat(), (day + dt.timedelta(days=31)).isoformat()):
                 self.assertNotIn(n["title"], publish.notes_html(notes, grade, other, "latest"))
 
+    def test_every_note_is_dated_on_an_assessment_day(self):
+        """A note shows on a permanent page only if its date has one: never a weekend,
+        25 December or 1 January. A note about a past day is dated the next assessment
+        day, since a day's page, once written, is never changed (the 16 November gap)."""
+        import datetime as dt
+        import json
+        for n in json.loads(read("site_notes.json"))["notes"]:
+            day = dt.date.fromisoformat(n["date"])
+            self.assertLess(day.weekday(), 5, n["date"])
+            self.assertNotIn((day.month, day.day), ((12, 25), (1, 1)), n["date"])
+
 
 if __name__ == "__main__":
     unittest.main()
