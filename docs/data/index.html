@@ -54,14 +54,22 @@
 <tr><td><code>output_before_discounts</code></td><td>The output price at the providers&#x27; listed prices, before any discount.</td></tr>
 <tr><td><code>input_before_discounts</code></td><td>The input price before any discount.</td></tr>
 <tr><td><code>blended_before_discounts</code></td><td>The blended price before any discount.</td></tr>
-<tr><td><code>rollover_ratio</code></td><td>On the day the reference changes, the ratio for converting a price on the old reference to the new.</td></tr>
+<tr><td><code>rollover_ratio</code></td><td>On the day the reference changes, the output ratio for converting a price on the old reference to the new: the same as conversion_output_ratio.</td></tr>
 <tr><td><code>url</code></td><td>The day&#x27;s permanent page, the address to cite.</td></tr>
-<tr><td><code>challenger</code></td><td>The leading challenger: of the other models tested in the grade, the one with the most providers. For information only.</td></tr>
+<tr><td><code>challenger</code></td><td>The leading challenger: of the other models tested in the grade, the one with the most providers. For information only, except in a parallel period, when it is the incoming reference, published beside the reference.</td></tr>
 <tr><td><code>challenger_input</code></td><td>The challenger&#x27;s input price, assessed in the same way. Not an assessment of the grade.</td></tr>
 <tr><td><code>challenger_output</code></td><td>The challenger&#x27;s output price, assessed in the same way.</td></tr>
 <tr><td><code>challenger_contributors</code></td><td>The challenger&#x27;s contributors.</td></tr>
 <tr><td><code>challenger_panel</code></td><td>Providers tested for the challenger.</td></tr>
 <tr><td><code>challenger_output_ratio</code></td><td>The challenger&#x27;s output price divided by the reference&#x27;s, to four places.</td></tr>
+<tr><td><code>challenger_status</code></td><td>shadow when the challenger is shown for information; published or not_published in a parallel period, when it is the incoming reference.</td></tr>
+<tr><td><code>challenger_input_ratio</code></td><td>The challenger&#x27;s input price divided by the reference&#x27;s, to four places.</td></tr>
+<tr><td><code>challenger_blended_ratio</code></td><td>The challenger&#x27;s blended price divided by the reference&#x27;s, to four places.</td></tr>
+<tr><td><code>parallel_day</code></td><td>In a parallel period, when the old and the new reference are published side by side (methodology, section 4.5), the day of the period; blank otherwise.</td></tr>
+<tr><td><code>parallel_days</code></td><td>In a parallel period, how many assessment days it runs: 30, or fewer under the emergency rule.</td></tr>
+<tr><td><code>conversion_output_ratio</code></td><td>On the last day of a parallel period and on the day the reference changes: the average of the period&#x27;s daily output ratios, over the days on which both were published. Multiply a price on the old reference by it to convert it to the new.</td></tr>
+<tr><td><code>conversion_input_ratio</code></td><td>The same, for the input price.</td></tr>
+<tr><td><code>conversion_blended_ratio</code></td><td>The same, for the blended price.</td></tr>
 </tbody></table></div>
 <h2>How to cite a figure</h2>
 

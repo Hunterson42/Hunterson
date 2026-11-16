@@ -74,7 +74,8 @@ BLEND = "16 input tokens to 1 output token"
 REPO_HOME = "https://github.com/Hunterson42/Hunterson"
 DOCS_ROOT = os.path.dirname(os.path.dirname(HERE))      # the repository, for METHODOLOGY.md and the rest
 # The site's menu and footer links, the same on every page. Paths are from the site's root.
-NAV = [("", "Price"), ("methodology/", "Methodology"), ("census/", "Census"), ("data/", "Data"), ("about/", "About")]
+NAV = [("", "Price"), ("methodology/", "Methodology"), ("census/", "Census"), ("data/", "Data"), ("cite/", "Cite"),
+       ("about/", "About")]
 FOOT = [("about/", "About"), ("methodology/", "Methodology"), ("evidence/", "Evidence"),
         ("conflicts/", "Interests and conflicts"), ("continuity/", "Continuity"), ("iosco/", "IOSCO statement"),
         ("licence/", "Licence"), (REPO_HOME, "Source code")]
@@ -622,8 +623,8 @@ def page(days, idx, kind, opts, template, g):
     if day.get("price"):
         cite_text = "%s, %s: input %s, output %s per million tokens. %s" % (
             g["product"], long_date(day["date"]), money(day["price"]["input"]), money(day["price"]["output"]), permalink)
-        cite = ('<div class="cite"><p id="cite-text">%s</p><button type="button" id="copy-cite">Copy</button></div>'
-                % e(cite_text))
+        cite = ('<div class="cite"><p id="cite-text">%s</p><p class="cite-act"><button type="button" id="copy-cite">Copy</button>'
+                '<a href="%scite/">How to cite</a></p></div>' % (e(cite_text), root))
     intro, panel_rows = panel_html(day)
     if not day.get("price"):
         title_fig = "not published"

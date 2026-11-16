@@ -5,7 +5,7 @@
  "licence_terms": "Free to use with credit. Use in contracts, financial products or indices needs a free registration. Distribution as a data service needs an agreement.",
  "unit": "US dollars per million tokens",
  "blend": "16 input tokens to 1 output token",
- "note": "Rows with status 'shadow' were produced before a grade's first assessment and are not assessments. The challenger columns give the leading challenger's figures, for information; they are not assessments of the grade.",
+ "note": "Rows with status 'shadow' were produced before a grade's first assessment and are not assessments. The challenger columns give the leading challenger's figures, for information; they are not assessments of the grade, except in a parallel period (a parallel_day is given), when they give the incoming reference, published beside the reference (methodology, section 4.5).",
  "grades": [
   {
    "grade": "standard",
@@ -34,7 +34,15 @@
      "challenger_output": null,
      "challenger_contributors": 0,
      "challenger_panel": 10,
-     "challenger_output_ratio": null
+     "challenger_output_ratio": null,
+     "challenger_status": "shadow",
+     "challenger_input_ratio": null,
+     "challenger_blended_ratio": null,
+     "parallel_day": null,
+     "parallel_days": null,
+     "conversion_output_ratio": null,
+     "conversion_input_ratio": null,
+     "conversion_blended_ratio": null
     },
     {
      "date": "2026-10-16",
@@ -57,7 +65,15 @@
      "challenger_output": null,
      "challenger_contributors": 0,
      "challenger_panel": 10,
-     "challenger_output_ratio": null
+     "challenger_output_ratio": null,
+     "challenger_status": "shadow",
+     "challenger_input_ratio": null,
+     "challenger_blended_ratio": null,
+     "parallel_day": null,
+     "parallel_days": null,
+     "conversion_output_ratio": null,
+     "conversion_input_ratio": null,
+     "conversion_blended_ratio": null
     },
     {
      "date": "2026-10-19",
@@ -80,7 +96,15 @@
      "challenger_output": null,
      "challenger_contributors": 0,
      "challenger_panel": 10,
-     "challenger_output_ratio": null
+     "challenger_output_ratio": null,
+     "challenger_status": "shadow",
+     "challenger_input_ratio": null,
+     "challenger_blended_ratio": null,
+     "parallel_day": null,
+     "parallel_days": null,
+     "conversion_output_ratio": null,
+     "conversion_input_ratio": null,
+     "conversion_blended_ratio": null
     },
     {
      "date": "2026-10-20",
@@ -103,7 +127,15 @@
      "challenger_output": null,
      "challenger_contributors": 0,
      "challenger_panel": 10,
-     "challenger_output_ratio": null
+     "challenger_output_ratio": null,
+     "challenger_status": "shadow",
+     "challenger_input_ratio": null,
+     "challenger_blended_ratio": null,
+     "parallel_day": null,
+     "parallel_days": null,
+     "conversion_output_ratio": null,
+     "conversion_input_ratio": null,
+     "conversion_blended_ratio": null
     },
     {
      "date": "2026-10-21",
@@ -126,7 +158,15 @@
      "challenger_output": null,
      "challenger_contributors": 0,
      "challenger_panel": 10,
-     "challenger_output_ratio": null
+     "challenger_output_ratio": null,
+     "challenger_status": "shadow",
+     "challenger_input_ratio": null,
+     "challenger_blended_ratio": null,
+     "parallel_day": null,
+     "parallel_days": null,
+     "conversion_output_ratio": null,
+     "conversion_input_ratio": null,
+     "conversion_blended_ratio": null
     },
     {
      "date": "2026-10-22",
@@ -149,7 +189,15 @@
      "challenger_output": null,
      "challenger_contributors": 0,
      "challenger_panel": 11,
-     "challenger_output_ratio": null
+     "challenger_output_ratio": null,
+     "challenger_status": "shadow",
+     "challenger_input_ratio": null,
+     "challenger_blended_ratio": null,
+     "parallel_day": null,
+     "parallel_days": null,
+     "conversion_output_ratio": null,
+     "conversion_input_ratio": null,
+     "conversion_blended_ratio": null
     },
     {
      "date": "2026-10-23",
@@ -172,7 +220,15 @@
      "challenger_output": null,
      "challenger_contributors": 0,
      "challenger_panel": 12,
-     "challenger_output_ratio": null
+     "challenger_output_ratio": null,
+     "challenger_status": "shadow",
+     "challenger_input_ratio": null,
+     "challenger_blended_ratio": null,
+     "parallel_day": null,
+     "parallel_days": null,
+     "conversion_output_ratio": null,
+     "conversion_input_ratio": null,
+     "conversion_blended_ratio": null
     },
     {
      "date": "2026-10-26",
@@ -195,7 +251,15 @@
      "challenger_output": null,
      "challenger_contributors": 0,
      "challenger_panel": 13,
-     "challenger_output_ratio": null
+     "challenger_output_ratio": null,
+     "challenger_status": "shadow",
+     "challenger_input_ratio": null,
+     "challenger_blended_ratio": null,
+     "parallel_day": null,
+     "parallel_days": null,
+     "conversion_output_ratio": null,
+     "conversion_input_ratio": null,
+     "conversion_blended_ratio": null
     },
     {
      "date": "2026-10-27",
@@ -218,7 +282,15 @@
      "challenger_output": null,
      "challenger_contributors": 0,
      "challenger_panel": 13,
-     "challenger_output_ratio": null
+     "challenger_output_ratio": null,
+     "challenger_status": "shadow",
+     "challenger_input_ratio": null,
+     "challenger_blended_ratio": null,
+     "parallel_day": null,
+     "parallel_days": null,
+     "conversion_output_ratio": null,
+     "conversion_input_ratio": null,
+     "conversion_blended_ratio": null
     },
     {
      "date": "2026-10-28",
@@ -241,7 +313,15 @@
      "challenger_output": null,
      "challenger_contributors": 0,
      "challenger_panel": 13,
-     "challenger_output_ratio": null
+     "challenger_output_ratio": null,
+     "challenger_status": "shadow",
+     "challenger_input_ratio": null,
+     "challenger_blended_ratio": null,
+     "parallel_day": null,
+     "parallel_days": null,
+     "conversion_output_ratio": null,
+     "conversion_input_ratio": null,
+     "conversion_blended_ratio": null
     },
     {
      "date": "2026-10-29",
@@ -264,7 +344,15 @@
      "challenger_output": "0.5710",
      "challenger_contributors": 5,
      "challenger_panel": 15,
-     "challenger_output_ratio": "0.6851"
+     "challenger_output_ratio": "0.6851",
+     "challenger_status": "shadow",
+     "challenger_input_ratio": "0.6284",
+     "challenger_blended_ratio": "0.6406",
+     "parallel_day": null,
+     "parallel_days": null,
+     "conversion_output_ratio": null,
+     "conversion_input_ratio": null,
+     "conversion_blended_ratio": null
     },
     {
      "date": "2026-10-30",
@@ -287,7 +375,15 @@
      "challenger_output": "0.8125",
      "challenger_contributors": 8,
      "challenger_panel": 15,
-     "challenger_output_ratio": "0.9372"
+     "challenger_output_ratio": "0.9372",
+     "challenger_status": "shadow",
+     "challenger_input_ratio": "0.9200",
+     "challenger_blended_ratio": "0.9232",
+     "parallel_day": null,
+     "parallel_days": null,
+     "conversion_output_ratio": null,
+     "conversion_input_ratio": null,
+     "conversion_blended_ratio": null
     },
     {
      "date": "2026-11-02",
@@ -310,7 +406,15 @@
      "challenger_output": "0.9900",
      "challenger_contributors": 8,
      "challenger_panel": 16,
-     "challenger_output_ratio": "1.0722"
+     "challenger_output_ratio": "1.0722",
+     "challenger_status": "shadow",
+     "challenger_input_ratio": "1.1162",
+     "challenger_blended_ratio": "1.1069",
+     "parallel_day": null,
+     "parallel_days": null,
+     "conversion_output_ratio": null,
+     "conversion_input_ratio": null,
+     "conversion_blended_ratio": null
     },
     {
      "date": "2026-11-03",
@@ -333,7 +437,15 @@
      "challenger_output": "0.8169",
      "challenger_contributors": 9,
      "challenger_panel": 15,
-     "challenger_output_ratio": "0.8800"
+     "challenger_output_ratio": "0.8800",
+     "challenger_status": "shadow",
+     "challenger_input_ratio": "0.8994",
+     "challenger_blended_ratio": "0.8951",
+     "parallel_day": null,
+     "parallel_days": null,
+     "conversion_output_ratio": null,
+     "conversion_input_ratio": null,
+     "conversion_blended_ratio": null
     },
     {
      "date": "2026-11-04",
@@ -356,7 +468,15 @@
      "challenger_output": "0.9014",
      "challenger_contributors": 11,
      "challenger_panel": 16,
-     "challenger_output_ratio": "1.1477"
+     "challenger_output_ratio": "1.1477",
+     "challenger_status": "shadow",
+     "challenger_input_ratio": "1.0347",
+     "challenger_blended_ratio": "1.0577",
+     "parallel_day": null,
+     "parallel_days": null,
+     "conversion_output_ratio": null,
+     "conversion_input_ratio": null,
+     "conversion_blended_ratio": null
     },
     {
      "date": "2026-11-05",
@@ -379,7 +499,15 @@
      "challenger_output": "0.7433",
      "challenger_contributors": 12,
      "challenger_panel": 18,
-     "challenger_output_ratio": "0.9020"
+     "challenger_output_ratio": "0.9020",
+     "challenger_status": "shadow",
+     "challenger_input_ratio": "0.9527",
+     "challenger_blended_ratio": "0.9421",
+     "parallel_day": null,
+     "parallel_days": null,
+     "conversion_output_ratio": null,
+     "conversion_input_ratio": null,
+     "conversion_blended_ratio": null
     },
     {
      "date": "2026-11-06",
@@ -402,7 +530,15 @@
      "challenger_output": "0.7235",
      "challenger_contributors": 13,
      "challenger_panel": 18,
-     "challenger_output_ratio": "0.8757"
+     "challenger_output_ratio": "0.8757",
+     "challenger_status": "shadow",
+     "challenger_input_ratio": "0.9163",
+     "challenger_blended_ratio": "0.9077",
+     "parallel_day": null,
+     "parallel_days": null,
+     "conversion_output_ratio": null,
+     "conversion_input_ratio": null,
+     "conversion_blended_ratio": null
     },
     {
      "date": "2026-11-09",
@@ -425,7 +561,15 @@
      "challenger_output": "0.8400",
      "challenger_contributors": 12,
      "challenger_panel": 19,
-     "challenger_output_ratio": "0.9596"
+     "challenger_output_ratio": "0.9596",
+     "challenger_status": "shadow",
+     "challenger_input_ratio": "0.8748",
+     "challenger_blended_ratio": "0.8924",
+     "parallel_day": null,
+     "parallel_days": null,
+     "conversion_output_ratio": null,
+     "conversion_input_ratio": null,
+     "conversion_blended_ratio": null
     },
     {
      "date": "2026-11-10",
@@ -448,7 +592,15 @@
      "challenger_output": "0.8908",
      "challenger_contributors": 15,
      "challenger_panel": 19,
-     "challenger_output_ratio": "1.0362"
+     "challenger_output_ratio": "1.0362",
+     "challenger_status": "shadow",
+     "challenger_input_ratio": "1.0605",
+     "challenger_blended_ratio": "1.0555",
+     "parallel_day": null,
+     "parallel_days": null,
+     "conversion_output_ratio": null,
+     "conversion_input_ratio": null,
+     "conversion_blended_ratio": null
     },
     {
      "date": "2026-11-11",
@@ -471,7 +623,15 @@
      "challenger_output": "0.8355",
      "challenger_contributors": 15,
      "challenger_panel": 18,
-     "challenger_output_ratio": "1.0717"
+     "challenger_output_ratio": "1.0717",
+     "challenger_status": "shadow",
+     "challenger_input_ratio": "1.0878",
+     "challenger_blended_ratio": "1.0844",
+     "parallel_day": null,
+     "parallel_days": null,
+     "conversion_output_ratio": null,
+     "conversion_input_ratio": null,
+     "conversion_blended_ratio": null
     },
     {
      "date": "2026-11-12",
@@ -494,7 +654,15 @@
      "challenger_output": "0.8355",
      "challenger_contributors": 15,
      "challenger_panel": 18,
-     "challenger_output_ratio": "0.9300"
+     "challenger_output_ratio": "0.9300",
+     "challenger_status": "shadow",
+     "challenger_input_ratio": "0.9364",
+     "challenger_blended_ratio": "0.9350",
+     "parallel_day": null,
+     "parallel_days": null,
+     "conversion_output_ratio": null,
+     "conversion_input_ratio": null,
+     "conversion_blended_ratio": null
     },
     {
      "date": "2026-11-13",
@@ -517,7 +685,15 @@
      "challenger_output": "0.8355",
      "challenger_contributors": 15,
      "challenger_panel": 18,
-     "challenger_output_ratio": "1.0301"
+     "challenger_output_ratio": "1.0301",
+     "challenger_status": "shadow",
+     "challenger_input_ratio": "1.0493",
+     "challenger_blended_ratio": "1.0450",
+     "parallel_day": null,
+     "parallel_days": null,
+     "conversion_output_ratio": null,
+     "conversion_input_ratio": null,
+     "conversion_blended_ratio": null
     },
     {
      "date": "2026-11-16",
@@ -540,7 +716,15 @@
      "challenger_output": null,
      "challenger_contributors": 0,
      "challenger_panel": 18,
-     "challenger_output_ratio": null
+     "challenger_output_ratio": null,
+     "challenger_status": "shadow",
+     "challenger_input_ratio": null,
+     "challenger_blended_ratio": null,
+     "parallel_day": null,
+     "parallel_days": null,
+     "conversion_output_ratio": null,
+     "conversion_input_ratio": null,
+     "conversion_blended_ratio": null
     }
    ]
   }

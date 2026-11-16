@@ -12,6 +12,8 @@ beside the price pages, so that a reader never has to leave hunterson.org.
     data/                     what the downloads hold, and how to cite a figure
     GRADE/archive/            every assessment day of a live grade, by month
     404.html                  the page for an address that does not exist
+    cite/index.html           how to cite a figure: the line to paste, a reference for a paper, the
+                              addresses, the licence in one line, and the sign-up for the monthly report
     feed.xml                  an Atom feed of the latest 30 assessment days
     data/latest.json          the latest assessment, for programs
     sitemap.xml, robots.txt   for search engines
@@ -208,7 +210,8 @@ def data_page(P, opts, template, out_dir, columns, latest, g):
     cite = ""
     if latest and latest.get("price"):
         cite = ("<p>Cite the day's permanent page. For example: <q>%s, %s: input %s, output %s per million tokens. "
-                "%s/%s/%s/</q> Each day's page has this line ready to copy.</p>"
+                "%s/%s/%s/</q> Each day's page has this line ready to copy, and <a href=\"../cite/\">how to cite "
+                "Hunterson</a> gives a reference for a paper and the addresses.</p>"
                 % (e(g["product"]), e(P.long_date(latest["date"])), e(P.money(latest["price"]["input"])),
                    e(P.money(latest["price"]["output"])), e(opts["base_url"]), g["key"], latest["date"]))
     body = """<h1>Data</h1>
@@ -285,6 +288,85 @@ def not_found(P, opts, template, out_dir, g):
             False, opts["preview"])
 
 
+# Until a mailing list service is chosen, the sign-up is an email to the contact address, and the list
+# is kept in the project mailbox. To change to a service, set this to its sign-up page.
+SIGNUP_URL = None
+
+
+def cite_line(P, d, g, base):
+    """The line to paste for a day with a price: the same words as under the figure on the day's page."""
+    return "%s, %s: input %s, output %s per million tokens. %s/%s/%s/" % (
+        g["product"], P.long_date(d["date"]), P.money(d["price"]["input"]), P.money(d["price"]["output"]),
+        base, g["key"], d["date"])
+
+
+def cite_page(P, opts, template, out_dir, days, g):
+    """How to cite a figure, at one address (the citation kit, twelve-month strategy, phase 1)."""
+    base, contact = opts["base_url"], opts["contact"]
+    priced = [d for d in days if d["status"] == "published" and d.get("price")]
+    if not priced:
+        return []
+    d = priced[-1]
+    line = cite_line(P, d, g, base)
+    url = "%s/%s/%s/" % (base, g["key"], d["date"])
+    bib = ("@misc{hunterson-%s-%s,\n  author = {{Hunterson}},\n  title = {%s: assessment of %s},\n  year = {%s},\n"
+           "  howpublished = {\\url{%s}},\n  note = {Input \\$%s, output \\$%s per million tokens. Methodology version %s}\n}"
+           % (g["key"], d["date"], g["product"], P.long_date(d["date"]), d["date"][:4], url, d["price"]["input"],
+              d["price"]["output"], d.get("methodology_version") or ""))
+    if SIGNUP_URL:
+        signup = '<a href="%s">Sign up for Hunterson Monthly</a>.' % e(SIGNUP_URL)
+        keep = "Your address is held by the mailing list service, used only for these emails, and never shared."
+    else:
+        signup = ('To receive it, <a href="mailto:%s?subject=Subscribe%%20to%%20Hunterson%%20Monthly">email %s with '
+                  'the subject &ldquo;Subscribe&rdquo;</a>.' % (e(contact), e(contact)))
+        keep = ("Your address is kept in the project's mailbox, used only for these emails and never shared. Reply "
+                "&ldquo;Unsubscribe&rdquo; to any of them and it is deleted.")
+    body = """<h1>How to cite Hunterson</h1>
+<p>Every figure has a permanent address and a line ready to paste. Citing it is free and needs no permission; using it in a contract, a financial product or an index needs a free registration (<a href="../licence/">the licence</a>).</p>
+<h2>The line to paste</h2>
+<div class="cite"><p id="cite-text">%s</p><button type="button" id="copy-cite">Copy</button></div>
+<p>This is the line for the latest assessment, %s. Each day's page has its own, under the figure. On a day with no figure, the day's page says why; cite the last day that has one.</p>
+<h2>In a paper or report</h2>
+<p>Hunterson (%s). <cite>%s</cite>, assessment of %s. Published by Malcolm Hunter, trading as Hunterson. <a href="%s">%s</a>. Methodology version %s.</p>
+<p>As BibTeX:</p>
+<pre><code>%s</code></pre>
+<h2>The addresses</h2>
+<ul>
+<li>A day's assessment, the address to cite: <code>%s/%s/YYYY-MM-DD/</code>. It is written once and never changed.</li>
+<li>The latest assessment: <a href="../%s/">%s/%s/</a>, rewritten each weekday.</li>
+<li>A day's chart card, 1200 by 630 pixels, with its date on it: <code>%s/og/%s/YYYY-MM-DD.png</code>. The latest is <a href="../og/%s/%s.png">%s</a>.</li>
+<li>Every figure, to download: <a href="../data/assessments.csv">CSV</a> and <a href="../data/assessments.json">JSON</a>; the latest only, for programs: <a href="../data/latest.json">latest.json</a>; and a <a href="../feed.xml">feed</a>. What each column means is on the <a href="../data/">data page</a>.</li>
+</ul>
+<h2>The licence, in one line</h2>
+<p>Free to use with credit: &ldquo;Source: %s, hunterson.org&rdquo;. Use in contracts, financial products or indices needs a free registration: <a href="../licence/">hunterson.org/licence</a>.</p>
+<h2>The monthly report</h2>
+<p>Hunterson Monthly comes out on the first Tuesday of each month, from 1 December 2026: the month's delivered price, the receipt gap, the delivery rate, the reference and its challenger, one chart, and every correction and rule change. Notices of a change to the rules are sent with it, or sooner when one is announced. %s %s</p>
+<h2>Questions and corrections</h2>
+<p>Write to <a href="mailto:%s">%s</a>. A published figure is never changed; a correction is published as a new, dated entry (<a href="../methodology/">the methodology</a>).</p>
+<script>
+(function () {
+  var b = document.getElementById("copy-cite"), t = document.getElementById("cite-text");
+  if (!b || !t) return;
+  if (!navigator.clipboard) { b.hidden = true; return; }
+  b.addEventListener("click", function () {
+    navigator.clipboard.writeText(t.textContent).then(function () {
+      b.textContent = "Copied";
+      setTimeout(function () { b.textContent = "Copy"; }, 2000);
+    });
+  });
+})();
+</script>
+""" % (e(line), e(P.long_date(d["date"])), e(d["date"][:4]), e(g["product"]), e(P.long_date(d["date"])), e(url), e(url),
+       e(d.get("methodology_version") or ""), e(bib).replace("{{", "&#123;{").replace("}}", "}&#125;"), e(base), g["key"], g["key"], e(base.replace("https://", "")),
+       g["key"], e(base), g["key"], g["key"], d["date"], e(P.long_date(d["date"])), e(g["product"]), signup, keep,
+       e(contact), e(contact))
+    P.write(os.path.join(out_dir, "cite", "index.html"),
+            page(P, opts, template, "../", "How to cite Hunterson",
+                 "How to cite a Hunterson figure: the line to paste, a reference for a paper, the permanent addresses, "
+                 "the licence in one line, and the monthly report.", body, "cite/", "Cite"), False, opts["preview"])
+    return ["cite/"]
+
+
 def feed(P, opts, out_dir, days, g):
     shown = [d for d in days if d["status"] != "shadow"][-30:]
     base = opts["base_url"]
@@ -358,6 +440,7 @@ def build(P, opts, out_dir, docs_root, by_grade, home_key, columns):
     paths += evidence(P, opts, template, out_dir, docs_root)
     latest = latest_json(P, opts, out_dir, by_grade[home_key], g)
     paths += data_page(P, opts, template, out_dir, columns, latest, g)
+    paths += cite_page(P, opts, template, out_dir, by_grade[home_key], g)
     for key, days in by_grade.items():
         gk = P.grade(key)
         paths += archive(P, opts, template, out_dir, days, gk)
