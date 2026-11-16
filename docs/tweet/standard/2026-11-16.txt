@@ -1,0 +1,7 @@
+Hunterson Standard Inference, Europe
+16 November 2026
+
+Not published: 0 contributors, below the minimum of 5.
+Last assessment: input $0.1949, output $0.8111 per million tokens, 13 November.
+
+https://hunterson.org/standard/2026-11-16/

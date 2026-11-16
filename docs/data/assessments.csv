@@ -21,3 +21,4 @@ date,grade,status,reference,output,input,blended,contributors,panel,reason,outpu
 2026-11-11,standard,published,DeepSeek V4.1-Flash,0.7796,0.1880,0.2228,14,16,,0.9962,0.2497,0.2936,,https://hunterson.org/standard/2026-11-11/,DeepSeek V4.1-Flash-1017,0.2045,0.8355,15,18,1.0717
 2026-11-12,standard,published,DeepSeek V4.1-Flash,0.8984,0.2184,0.2584,13,16,,1.0528,0.2661,0.3123,,https://hunterson.org/standard/2026-11-12/,DeepSeek V4.1-Flash-1017,0.2045,0.8355,15,18,0.9300
 2026-11-13,standard,published,DeepSeek V4.1-Flash,0.8111,0.1949,0.2312,13,16,,1.0528,0.2661,0.3123,,https://hunterson.org/standard/2026-11-13/,DeepSeek V4.1-Flash-1017,0.2045,0.8355,15,18,1.0301
+2026-11-16,standard,not_published,DeepSeek V4.1-Flash,,,,0,15,"0 contributors, below the minimum of 5",,,,,https://hunterson.org/standard/2026-11-16/,DeepSeek V4.1-Flash-1017,,,0,18,
