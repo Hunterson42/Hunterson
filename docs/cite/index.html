@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>How to cite Hunterson</title>
+<meta name="description" content="How to cite a Hunterson figure: the line to paste, a reference for a paper, the permanent addresses, the licence in one line, and the monthly report.">
+<link rel="canonical" href="https://hunterson.org/cite/">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../assets/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="alternate" type="application/atom+xml" title="Hunterson, the daily price" href="../feed.xml">
+<link rel="stylesheet" href="../assets/site.css">
+</head>
+<body>
+<div class="wrap">
+<header class="site-head">
+  <a class="brand" href="../">Hunterson Standard Inference, Europe</a>
+  <nav aria-label="Site">
+    <a href="../">Price</a>
+    <a href="../methodology/">Methodology</a>
+    <a href="../census/">Census</a>
+    <a href="../data/">Data</a>
+    <a href="../cite/" aria-current="page">Cite</a>
+    <a href="../about/">About</a>
+  </nav>
+</header>
+<main class="prose doc">
+<h1>How to cite Hunterson</h1>
+<p>Every figure has a permanent address and a line ready to paste. Citing it is free and needs no permission; using it in a contract, a financial product or an index needs a free registration (<a href="../licence/">the licence</a>).</p>
+<h2>The line to paste</h2>
+<div class="cite"><p id="cite-text">Hunterson Standard Inference, Europe, 13 November 2026: input $0.1949, output $0.8111 per million tokens. https://hunterson.org/standard/2026-11-13/</p><button type="button" id="copy-cite">Copy</button></div>
+<p>This is the line for the latest assessment, 13 November 2026. Each day's page has its own, under the figure. On a day with no figure, the day's page says why; cite the last day that has one.</p>
+<h2>In a paper or report</h2>
+<p>Hunterson (2026). <cite>Hunterson Standard Inference, Europe</cite>, assessment of 13 November 2026. Published by Malcolm Hunter, trading as Hunterson. <a href="https://hunterson.org/standard/2026-11-13/">https://hunterson.org/standard/2026-11-13/</a>. Methodology version 1.0.</p>
+<p>As BibTeX:</p>
+<pre><code>@misc{hunterson-standard-2026-11-13,
+  author = &#123;{Hunterson}&#125;,
+  title = {Hunterson Standard Inference, Europe: assessment of 13 November 2026},
+  year = {2026},
+  howpublished = {\url{https://hunterson.org/standard/2026-11-13/}&#125;,
+  note = {Input \$0.1949, output \$0.8111 per million tokens. Methodology version 1.0}
+}</code></pre>
+<h2>The addresses</h2>
+<ul>
+<li>A day's assessment, the address to cite: <code>https://hunterson.org/standard/YYYY-MM-DD/</code>. It is written once and never changed.</li>
+<li>The latest assessment: <a href="../standard/">hunterson.org/standard/</a>, rewritten each weekday.</li>
+<li>A day's chart card, 1200 by 630 pixels, with its date on it: <code>https://hunterson.org/og/standard/YYYY-MM-DD.png</code>. The latest is <a href="../og/standard/2026-11-13.png">13 November 2026</a>.</li>
+<li>Every figure, to download: <a href="../data/assessments.csv">CSV</a> and <a href="../data/assessments.json">JSON</a>; the latest only, for programs: <a href="../data/latest.json">latest.json</a>; and a <a href="../feed.xml">feed</a>. What each column means is on the <a href="../data/">data page</a>.</li>
+</ul>
+<h2>The licence, in one line</h2>
+<p>Free to use with credit: &ldquo;Source: Hunterson Standard Inference, Europe, hunterson.org&rdquo;. Use in contracts, financial products or indices needs a free registration: <a href="../licence/">hunterson.org/licence</a>.</p>
+<h2>The monthly report</h2>
+<p>Hunterson Monthly comes out on the first Tuesday of each month, from 1 December 2026: the month's delivered price, the receipt gap, the delivery rate, the reference and its challenger, one chart, and every correction and rule change. Notices of a change to the rules are sent with it, or sooner when one is announced. To receive it, <a href="mailto:malcolm@hunterson.org?subject=Subscribe%20to%20Hunterson%20Monthly">email malcolm@hunterson.org with the subject &ldquo;Subscribe&rdquo;</a>. Your address is kept in the project's mailbox, used only for these emails and never shared. Reply &ldquo;Unsubscribe&rdquo; to any of them and it is deleted.</p>
+<h2>Questions and corrections</h2>
+<p>Write to <a href="mailto:malcolm@hunterson.org">malcolm@hunterson.org</a>. A published figure is never changed; a correction is published as a new, dated entry (<a href="../methodology/">the methodology</a>).</p>
+<script>
+(function () {
+  var b = document.getElementById("copy-cite"), t = document.getElementById("cite-text");
+  if (!b || !t) return;
+  if (!navigator.clipboard) { b.hidden = true; return; }
+  b.addEventListener("click", function () {
+    navigator.clipboard.writeText(t.textContent).then(function () {
+      b.textContent = "Copied";
+      setTimeout(function () { b.textContent = "Copy"; }, 2000);
+    });
+  });
+})();
+</script>
+
+</main>
+<footer class="site-foot">
+  <p>Published by Malcolm Hunter (a pen name), trading as Hunterson. Contact <a href="mailto:malcolm@hunterson.org">malcolm@hunterson.org</a>.</p>
+  <p class="foot-links"><a href="../about/">About</a><a href="../methodology/">Methodology</a><a href="../evidence/">Evidence</a><a href="../conflicts/">Interests and conflicts</a><a href="../continuity/">Continuity</a><a href="../iosco/">IOSCO statement</a><a href="../licence/">Licence</a><a href="https://github.com/Hunterson42/Hunterson">Source code</a></p>
+</footer>
+</div>
+</body>
+</html>
