@@ -691,6 +691,17 @@ Rule 1.7 (D3), and section 4.6 of the methodology, require every model seen in t
 
 **Kimi K3's repository has moved on from its recorded hash.** Section 5.1 records `c5d1dd4`, the initial commit of 27 July. Since then the repository has added README changes and evaluation results, which change nothing, and on 20 August an update to `encoding_k3.py`, the file that formats prompts before the model sees them. Under section 4.5 of the methodology a change to the chat template is a new checkpoint. Frontier is not published, so nothing turns on it now; the change is to be read before Frontier is probed (open item 13).
 
+### 1.21 How the parallel period is run, 16 November 2026
+
+Section 4.5 of the methodology sets the parallel period: after the first publication, a challenger that leads the reference on 20 census days in a row is tested and published beside it for 30 assessment days, with the ratio between the two prices each day; then it becomes the reference, and the average ratio over the period is published. Four points the section leaves open are settled here, before any period starts, so that none is decided with figures in view. None changes the test or the calculation of either price.
+
+- **How a period starts.** It is declared in `candidates.json`, under `changes`, by a pull request merged once the census shows the twentieth day of the run, and before the first day of the period, the next assessment day. The declaration names the outgoing and the incoming checkpoint, the first day, and the day the run was completed. The assessor never starts a period by itself.
+- **The ratio.** Each day, the incoming checkpoint's published price divided by the outgoing one's, to four places, halves up, for output, input and blended. A day on which either has no published price has no ratio. The average ratio is the average of the published daily ratios over the days that have one, to four places, with the number of those days given beside it; it is the ratio to multiply a price on the outgoing reference by, to convert it to the incoming one.
+- **When the switch happens.** The 30th assessment day is the last day of the period. Both are published that day, and the average ratio with them. The incoming checkpoint is the reference from the next assessment day, whose page gives the same average ratio as the conversion. For a period starting on Wednesday 25 November 2026, the last day is Thursday 7 January 2027 and the switch is on Friday 8 January.
+- **The emergency rule.** A day counts towards it when the outgoing reference has fewer than five contributors, for whatever reason, including a window that did not run. If the fifth such day in a row falls before the period's tenth day, the period ends on its tenth day; if on or after it, the period ends that day.
+
+During a period the incoming checkpoint is shown in the leading challenger's place, published rather than for information, with its own table of providers; the data files carry it in the challenger columns, with its status, the day of the period and the ratios. Built in pull request 42 (roadmap step 61).
+
 ---
 
 ## 2. Daily tracking

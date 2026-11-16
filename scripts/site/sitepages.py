@@ -61,14 +61,22 @@ COLUMNS = {
     "output_before_discounts": "The output price at the providers' listed prices, before any discount.",
     "input_before_discounts": "The input price before any discount.",
     "blended_before_discounts": "The blended price before any discount.",
-    "rollover_ratio": "On the day the reference changes, the ratio for converting a price on the old reference to the new.",
+    "rollover_ratio": "On the day the reference changes, the output ratio for converting a price on the old reference to the new: the same as conversion_output_ratio.",
     "url": "The day's permanent page, the address to cite.",
-    "challenger": "The leading challenger: of the other models tested in the grade, the one with the most providers. For information only.",
+    "challenger": "The leading challenger: of the other models tested in the grade, the one with the most providers. For information only, except in a parallel period, when it is the incoming reference, published beside the reference.",
     "challenger_input": "The challenger's input price, assessed in the same way. Not an assessment of the grade.",
     "challenger_output": "The challenger's output price, assessed in the same way.",
     "challenger_contributors": "The challenger's contributors.",
     "challenger_panel": "Providers tested for the challenger.",
     "challenger_output_ratio": "The challenger's output price divided by the reference's, to four places.",
+    "challenger_status": "shadow when the challenger is shown for information; published or not_published in a parallel period, when it is the incoming reference.",
+    "challenger_input_ratio": "The challenger's input price divided by the reference's, to four places.",
+    "challenger_blended_ratio": "The challenger's blended price divided by the reference's, to four places.",
+    "parallel_day": "In a parallel period, when the old and the new reference are published side by side (methodology, section 4.5), the day of the period; blank otherwise.",
+    "parallel_days": "In a parallel period, how many assessment days it runs: 30, or fewer under the emergency rule.",
+    "conversion_output_ratio": "On the last day of a parallel period and on the day the reference changes: the average of the period's daily output ratios, over the days on which both were published. Multiply a price on the old reference by it to convert it to the new.",
+    "conversion_input_ratio": "The same, for the input price.",
+    "conversion_blended_ratio": "The same, for the blended price.",
 }
 
 
@@ -317,6 +325,14 @@ def latest_json(P, opts, out_dir, days, g):
            "methodology_version": d.get("methodology_version"), "published_utc": d.get("published_utc"),
            "url": "%s/%s/%s/" % (opts["base_url"], g["key"], d["date"]), "unit": "US dollars per million tokens",
            "licence": opts["base_url"] + "/licence/"}
+    if d.get("incoming"):          # a parallel period (methodology, section 4.5)
+        i, r = d["incoming"], d["incoming"]["rollover"]
+        q = i.get("price") or {}
+        doc["parallel_period"] = {"incoming": i["name"], "status": i["status"], "input": q.get("input"),
+                                  "output": q.get("output"), "blended": q.get("blended"),
+                                  "contributors": i["contributors"], "panel": i["panel"], "day": r["day"],
+                                  "days": r["days"], "last_day": r["last_day"], "switch_day": r["switch_day"],
+                                  "ratio": r.get("daily_ratio"), "average_ratio": r.get("average")}
     P.write(os.path.join(out_dir, "data", "latest.json"), json.dumps(doc, indent=1) + "\n", False, opts["preview"])
     return d
 

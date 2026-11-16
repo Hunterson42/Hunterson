@@ -183,9 +183,22 @@ def leading(others):
                                          str(r.get("name") or r.get("checkpoint"))))[0]
 
 
+def parallel(rec):
+    """The record's parallel period, if it is in one (methodology section 4.5), else None."""
+    r = (rec or {}).get("rollover") or {}
+    return r if r.get("kind") == "parallel" else None
+
+
+def switch(rec):
+    """The record's change of reference, on the incoming checkpoint's first day as the reference, else None."""
+    r = (rec or {}).get("rollover") or {}
+    return r if r and r.get("kind") != "parallel" else None
+
+
 def load(assess_dir):
     """The reference assessment for each grade on each day: {grade key: [day, ...]} in date order.
-    Each day carries the leading challenger's assessment, if any, as day["challenger"]."""
+    Each day carries the leading challenger's assessment, if any, as day["challenger"]; in a parallel
+    period, the incoming reference's instead, as day["incoming"], and no challenger."""
     by_grade = {g["key"]: [] for g in GRADES}
     for name in sorted(os.listdir(assess_dir)):
         folder = os.path.join(assess_dir, name)
@@ -205,7 +218,13 @@ def load(assess_dir):
                 raise ValueError("%s: more than one %s file is marked as the reference" % (name, g["name"]))
             seen[g["key"]] = rec
         for key, rec in seen.items():
-            rec = dict(rec, challenger=leading(others.get(key)))
+            rest = others.get(key) or []
+            incoming = next((r for r in rest if parallel(r) and r.get("status") != "shadow"
+                             and parallel(r).get("to_checkpoint") == r.get("checkpoint")), None)
+            if incoming:
+                rec = dict(rec, incoming=incoming, challenger=None)
+            else:
+                rec = dict(rec, challenger=leading(rest))
             by_grade[key].append(rec)
     return {k: v for k, v in by_grade.items() if v}
 
@@ -248,10 +267,14 @@ def change_html(day, prev, g):
         return ('<p class="fix-change">The last assessment was input %s and output %s per million tokens, on '
                 '<a href="%s">%s</a>.</p>' % (money(prev["price"]["input"]), money(prev["price"]["output"]),
                                              "{{root}}%s/%s/" % (g["key"], prev["date"]), long_date(prev["date"])))
-    if day.get("rollover"):
-        r = day["rollover"]
-        return ('<p class="fix-change">The reference changed today, from %s to %s. Conversion ratio %s.</p>'
-                % (e(r["from"]), e(day["name"]), e(r["ratio"])))
+    if switch(day):
+        r = switch(day)
+        rs = r.get("ratios")
+        conv = (" To convert a price on %s, multiply it by %s for output, %s for input or %s blended, the averages over "
+                "the parallel period." % (e(r["from"]), e(rs["output"]), e(rs["input"]), e(rs["blended"])) if rs
+                else " Conversion ratio %s." % e(r["ratio"]) if r.get("ratio") else "")
+        return ('<p class="fix-change">The reference changed today, from %s to %s.%s</p>'
+                % (e(r["from"]), e(day["name"]), conv))
     if not prev:
         return '<p class="fix-change">The first assessment.</p>' if day["status"] == "published" else ""
     parts = changes(day, prev)
@@ -343,9 +366,38 @@ def recent_html(days, upto_idx, root, g):
     return "\n".join(rows)
 
 
+def parallel_tweet_body(day, short=False):
+    """The post's body in a parallel period: both references, the ratio and the day of the period."""
+    r = parallel(day)
+    inc = day.get("incoming") or {"name": r["to"], "contributors": 0, "price": None}
+
+    def line(rec, label):
+        if rec.get("price"):
+            return "%s: input %s, output %s" % (label, money(rec["price"]["input"]), money(rec["price"]["output"]))
+        return "%s: not published, %d contributors" % (label, rec["contributors"])
+    lines = ["Per million tokens:", line(day, "Reference" if short else day["name"]),
+             line(inc, "Incoming" if short else inc["name"])]
+    ratio_out = (r.get("daily_ratio") or {}).get("output")
+    if r["day"] == r["days"]:
+        avg = r.get("average")
+        lines.append("Last day side by side. Average ratio %s over %d days." % (avg["output"], avg["days"]) if avg
+                     else "Last day side by side.")
+    else:
+        lines.append(("Ratio %s. " % ratio_out if ratio_out else "No ratio today. ") +
+                     ("Day 1 of %d: the reference is changing." % r["days"] if r["day"] == 1
+                      else "Day %d of %d side by side." % (r["day"], r["days"])))
+    return "\n".join(lines) + "\n"
+
+
 def tweet_text(day, prev, base_url, g):
     url = "%s/%s/%s/" % (base_url, g["key"], day["date"])
     head = "%s\n%s\n\n" % (g["product"], long_date(day["date"]))
+    if parallel(day):
+        for short in (False, True):
+            text = head + parallel_tweet_body(day, short) + "\n" + url
+            if len(text) - len(url) + URL_WEIGHT <= TWEET_LIMIT:
+                return text
+        raise ValueError("post for %s is over %d characters" % (day["date"], TWEET_LIMIT))
     if not day.get("price"):
         body = "Not published: %s.\n" % (day.get("reason") or "too few contributors")
         if prev:
@@ -354,8 +406,8 @@ def tweet_text(day, prev, base_url, g):
     else:
         p = day["price"]
         lines = ["Input %s, output %s per million tokens" % (money(p["input"]), money(p["output"]))]
-        if day.get("rollover"):
-            lines.append("New reference, ratio %s" % day["rollover"]["ratio"])
+        if switch(day):
+            lines.append("New reference, ratio %s" % switch(day)["ratio"] if switch(day).get("ratio") else "New reference")
         elif prev:
             parts = changes(day, prev)
             if all(x[1] == "unchanged" for x in parts):
@@ -427,6 +479,11 @@ def record_of(day, prev):
     c = day.get("challenger") or {}
     fields["challenger"] = [c.get("name") or c.get("checkpoint"), c.get("price"), c.get("contributors"), c.get("panel")] if c else None
     fields["previous"] = [prev["date"], prev.get("price")] if prev else None
+    i = day.get("incoming")
+    if i:                       # only in a parallel period, so the records of other days are unchanged
+        fields["incoming"] = [i.get("name"), i.get("status"), i.get("price"), i.get("contributors"), i.get("panel"),
+                              i.get("rollover"), [[q.get("provider"), q.get("result"), q.get("input"), q.get("output"),
+                                                   q.get("in_mean"), q.get("reason")] for q in i.get("providers") or []]]
     return "sha256:" + hashlib.sha256(json.dumps(fields, sort_keys=True).encode()).hexdigest()
 
 
@@ -470,6 +527,64 @@ def challenger_html(day, g):
     text += " Shown for information: it is not an assessment of the grade, and it does not change the figures above."
     return ('<section class="block" id="challenger" aria-labelledby="ch-h">\n    <h2 id="ch-h">The leading challenger</h2>\n'
             '    <p>%s</p>\n  </section>' % text)
+
+
+def period_notice(day, root):
+    """In a parallel period, what is happening and until when (methodology section 4.5)."""
+    r = parallel(day)
+    if not r:
+        return ""
+    method = '<a href="%smethodology/">section 4.5 of the methodology</a>' % root
+    text = ("The reference is changing. %s, under %s, %s is published beside %s for %d assessment days, from %s to %s; "
+            "today is day %d. From %s, %s is the reference." % (
+                "From today" if r["day"] == 1 else "Since %s" % long_date(r["first_day"]), method, e(r["to"]), e(r["from"]),
+                r["days"], long_date(r["first_day"]), long_date(r["last_day"]), r["day"], weekday_date(r["switch_day"]),
+                e(r["to"])))
+    if r.get("emergency"):
+        text += (" The period was shortened under the emergency rule of the same section, because %s had fewer than "
+                 "five contributors on five assessment days in a row." % e(r["from"]))
+    if r["day"] == r["days"]:
+        avg = r.get("average")
+        if avg:
+            text += (" Today is the last day of the period. Over the %d days on which both were published, the average "
+                     "of the daily ratios is %s for output, %s for input and %s blended: multiply a price on %s by "
+                     "these to convert it to %s." % (avg["days"], e(avg["output"]), e(avg["input"]), e(avg["blended"]),
+                                                     e(r["from"]), e(r["to"])))
+        else:
+            text += " Today is the last day of the period. There was no day on which both were published, so there is no average ratio."
+    return '<p class="notice" role="note">%s</p>' % text
+
+
+def incoming_html(day):
+    """In a parallel period, the incoming reference, published beside the reference: its figures and the
+    ratio near the top of the page, and its providers below the reference's. Two pieces of HTML."""
+    c = day.get("incoming")
+    if not c:
+        return "", ""
+    r = parallel(c)
+    name, old = e(c["name"]), e(r["from"])
+    if c.get("price"):
+        p = c["price"]
+        text = ("Published beside %s in this period, assessed in the same way: input %s, output %s and blended %s "
+                "per million tokens, from %d of %d contributors." % (old, e(money(p["input"])), e(money(p["output"])),
+                                                                  e(money(p["blended"])), c["contributors"], c["panel"]))
+        dr = r.get("daily_ratio")
+        text += (" Its prices are %s times %s's for output, %s for input and %s blended." % (
+            e(dr["output"]), old, e(dr["input"]), e(dr["blended"])) if dr else
+            " %s has no price today, so there is no ratio." % old)
+    else:
+        text = ("Published beside %s in this period, assessed in the same way. Today it had %d of %d contributors, "
+                "fewer than the five needed for a price, so there is no ratio." % (old, c["contributors"], c["panel"]))
+    summary = ('<section class="block" id="incoming" aria-labelledby="in-h">\n    <h2 id="in-h">The incoming reference: %s</h2>\n'
+               '    <p>%s</p>\n    <p class="links"><a href="#incoming-panel">The providers behind its figure</a></p>\n'
+               '  </section>' % (name, text))
+    intro, rows = panel_html(c)
+    table = ('<section class="block" id="incoming-panel" aria-labelledby="inp-h">\n    <h2 id="inp-h">The providers behind %s</h2>\n'
+             '    <p>%s</p>\n    <div class="tablewrap">\n      <table>\n'
+             '        <thead><tr><th scope="col">Provider</th><th scope="col" class="r">Input</th><th scope="col" class="r">Output</th>'
+             '<th scope="col" class="res">Result</th></tr></thead>\n        <tbody>\n%s\n        </tbody>\n      </table>\n    </div>\n'
+             '  </section>' % (name, e(intro), rows))
+    return summary, table
 
 
 def notes_html(notes, g, day_date, kind):
@@ -532,6 +647,8 @@ def page(days, idx, kind, opts, template, g):
                    'break in the series. The figures below are from the last assessment published. '
                    '<a href="%s">What happens when Hunterson cannot continue</a>.</p>'
                    % (long_date(opts["last_confirmed"]), long_date(opts["suspended_since"]), root + "continuity/"))
+    if parallel(day):
+        notice += "\n" + period_notice(day, root)
     notes = notes_html(opts.get("notes"), g, day["date"], kind)
     if notes:
         notice += "\n" + notes
@@ -555,7 +672,9 @@ def page(days, idx, kind, opts, template, g):
         "methodology_line": methodology_line(day.get("methodology_version"), root, opts),
         "notice": notice, "date_long": e(long_date(day["date"])), "date_line": e(date_line),
         "figure": fig, "unit_line": unit, "change": change_html(day, prev, g).replace("{{root}}", root), "cite": cite,
-        "record": record_html(day), "about": about, "challenger": challenger_html(day, g),
+        "record": record_html(day), "about": about,
+        "challenger": incoming_html(day)[0] if day.get("incoming") else challenger_html(day, g),
+        "incoming_panel": incoming_html(day)[1],
         "panel_heading": "The providers behind this figure", "panel_intro": e(intro), "panel_rows": panel_rows,
         "recent_rows": recent_html(days, idx, root, g), "series_json": series(days[:idx + 1]),
         "base_url": e(base), "contact": e(opts["contact"]),
@@ -617,7 +736,8 @@ def exports(by_grade, base):
            "unit": "US dollars per million tokens", "blend": BLEND,
            "note": "Rows with status 'shadow' were produced before a grade's first assessment and are not assessments. "
                    "The challenger columns give the leading challenger's figures, for information; they are not "
-                   "assessments of the grade.",
+                   "assessments of the grade, except in a parallel period (a parallel_day is given), when they give "
+                   "the incoming reference, published beside the reference (methodology, section 4.5).",
            "grades": groups}
     buf = io.StringIO()
     w = csv.DictWriter(buf, fieldnames=list(rows[0].keys()) if rows else ["date"], lineterminator="\n")
@@ -642,12 +762,20 @@ def export_rows(days, base, g):
             "rollover_ratio": (d.get("rollover") or {}).get("ratio"),
             "url": "%s/%s/%s/" % (base, g["key"], d["date"]) if d["status"] != "shadow" else None,
         })
-        c = d.get("challenger") or {}
+        c = d.get("incoming") or d.get("challenger") or {}
         cp = c.get("price") or {}
+        par, sw = parallel(d) or {}, switch(d) or {}
+        conv = sw.get("ratios") or (par.get("average") if par.get("day") == par.get("days") else None) or {}
         rows[-1].update({
             "challenger": c.get("name") or c.get("checkpoint"), "challenger_input": cp.get("input"),
             "challenger_output": cp.get("output"), "challenger_contributors": c.get("contributors"),
             "challenger_panel": c.get("panel"), "challenger_output_ratio": ratio(cp.get("output"), p.get("output")),
+            "challenger_status": c.get("status"),
+            "challenger_input_ratio": ratio(cp.get("input"), p.get("input")),
+            "challenger_blended_ratio": ratio(cp.get("blended"), p.get("blended")),
+            "parallel_day": par.get("day"), "parallel_days": par.get("days"),
+            "conversion_output_ratio": conv.get("output"), "conversion_input_ratio": conv.get("input"),
+            "conversion_blended_ratio": conv.get("blended"),
         })
     return rows
 

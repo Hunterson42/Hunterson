@@ -36,6 +36,27 @@ worked from unrounded per-token prices and given in US dollars per million
 tokens to four decimal places, halves rounded up. The same is done with each
 provider's listed discount removed.
 
+A change of reference after the first publication (methodology section 4.5)
+is declared in candidates.json, under "changes", once the challenger's run of 20
+census days is complete:
+
+    "changes": [{"from": "deepseek/deepseek-v4.1-flash",
+                 "to": "deepseek/deepseek-v4.1-flash-1017",
+                 "first_day": "2026-11-25", "run_completed": "2026-11-24"}]
+
+From first_day, both are published side by side for 30 assessment days, the
+parallel period: the outgoing reference stays the reference, and the incoming
+one is published beside it, not as a shadow. Each of those days, both files
+carry "rollover": {"kind": "parallel", ...} with the day's number and the
+ratio of the incoming price to the outgoing, to four places, for output, input
+and blended. On the last day they also carry the average of the daily ratios,
+over the days on which both were published. If the outgoing reference has
+fewer than five contributors on five assessment days in a row, the period ends
+on its tenth day, or on the day that happens if later (the emergency rule).
+From the next assessment day the incoming checkpoint is the reference, and its
+first file as the reference carries "rollover": {"kind": "switch", "from": ...,
+"ratio": ...}, the average output ratio, with the input and blended ones.
+
 Writes one file per probed checkpoint per window, data/assessments/DATE/SLUG.json,
 in the form launch/sample.py sets out (roadmap Appendix D.5). A file is written
 once and never changed. These files are published from the launch date, each
@@ -83,6 +104,9 @@ DEFAULTS = {
     "receipt_tolerance": 0.01,
     "minimum_contributors": 5,
     "blend_input_weight": 16,
+    "parallel_days": 30,          # section 4.5: the parallel period, in assessment days
+    "emergency_low_days": 5,      # the outgoing reference below the minimum on this many days in a row...
+    "emergency_last_day": 10,     # ...ends the period on this day of it, or at once if that day has passed
 }
 
 
@@ -574,10 +598,144 @@ def context(root, panel, day, win, first, max_first_token=None):
 
 
 def status_for(info, panel, day, has_price):
+    """shadow before the launch date, and always for a checkpoint that is not published: one that is
+    neither the reference nor, in a parallel period, the incoming reference."""
     launch = panel.get("launch_date")
-    if not info["reference"] or not launch or day.isoformat() < launch:
+    if not info.get("publishes", info["reference"]) or not launch or day.isoformat() < launch:
         return "shadow"
     return "published" if has_price else "not_published"
+
+
+# The parallel period (methodology section 4.5) -----------------------------
+
+def ratio4(a, b):
+    """a / b to four places, halves up, as a string; None without both prices."""
+    if not a or not b or Decimal(b) == 0:
+        return None
+    return str((Decimal(a) / Decimal(b)).quantize(Q4, rounding=ROUND_HALF_UP))
+
+
+def price_ratios(new, old):
+    """The incoming price over the outgoing, for output, input and blended; None unless both have a price."""
+    pn, po = (new or {}).get("price"), (old or {}).get("price")
+    if not pn or not po:
+        return None
+    return {k: ratio4(pn[k], po[k]) for k in ("output", "input", "blended")}
+
+
+def average_ratios(daily):
+    """The average of the daily ratios, each as published, to four places; and how many days it covers."""
+    days = [r for r in daily if r]
+    if not days:
+        return None
+    out = {}
+    for k in ("output", "input", "blended"):
+        vals = [Decimal(r[k]) for r in days]
+        out[k] = str((sum(vals) / len(vals)).quantize(Q4, rounding=ROUND_HALF_UP))
+    out["days"] = len(days)
+    return out
+
+
+def declared_changes(candidates, info):
+    """The changes of reference declared in candidates.json, in date order, each checked."""
+    out = []
+    for c in candidates.get("changes") or []:
+        for k in ("from", "to", "first_day"):
+            if not c.get(k):
+                raise ValueError(f"candidates.json: a change of reference needs {k!r}: {c}")
+        f, t = c["from"], c["to"]
+        if f not in info or t not in info:
+            raise ValueError(f"candidates.json: a change of reference names a checkpoint it does not list: {c}")
+        if info[f]["grade"] != info[t]["grade"]:
+            raise ValueError(f"candidates.json: a change of reference must stay in one grade: {c}")
+        first = dt.date.fromisoformat(c["first_day"])
+        if not is_window(first):
+            raise ValueError(f"candidates.json: a parallel period must start on an assessment day: {c}")
+        out.append(dict(c, first=first))
+    return sorted(out, key=lambda c: c["first"])
+
+
+def existing(root, day, cp):
+    path = os.path.join(root, "data", "assessments", day.isoformat(), slug_of(cp) + ".json")
+    return load_json(path) if os.path.exists(path) else None
+
+
+def period_timeline(change, s, root, until, today=None):
+    """The period's planned days, its last day as known after `until`, and whether the emergency rule
+    ended it. A day counts as low when the outgoing reference had fewer than the minimum contributors,
+    read from its file; `today` is (day, low) for a day whose file is not written yet."""
+    first = change["first"]
+    days = windows_between(first, first + dt.timedelta(days=7 * s["parallel_days"]))[:s["parallel_days"]]
+    run = 0
+    for i, d in enumerate(days, 1):
+        if d > until:
+            break
+        if today and d == today[0]:
+            low = today[1]
+        else:
+            rec = existing(root, d, change["from"])
+            low = rec is None or int(rec.get("contributors") or 0) < s["minimum_contributors"]
+        run = run + 1 if low else 0
+        if run >= s["emergency_low_days"]:
+            return days, days[max(i, s["emergency_last_day"]) - 1], True
+    return days, days[-1], False
+
+
+def effective_info(info, changes, s, root, day):
+    """Who is the reference, and who is published, on `day`, under the declared changes; and, for each
+    change whose parallel period covers `day`, (change, days, last day as known so far)."""
+    eff = {cp: dict(v, publishes=v["reference"]) for cp, v in info.items()}
+    current = []
+    for c in changes:
+        if day < c["first"]:
+            continue
+        days, last, _ = period_timeline(c, s, root, day - dt.timedelta(days=1))
+        f, t = c["from"], c["to"]
+        if day <= last:
+            eff[f].update(reference=True, publishes=True)
+            eff[t].update(reference=False, publishes=True)
+            current.append((c, days, last))
+        else:
+            eff[f].update(reference=False, publishes=False)
+            eff[t].update(reference=True, publishes=True)
+    return eff, current
+
+
+def mark_rollover(day, recs, changes, eff_current, info, s, root):
+    """Add "rollover" to the records about to be written for `day`: the parallel period's day and ratios
+    on both checkpoints, the average on its last day, and the switch on the incoming checkpoint's first
+    day as the reference. recs: checkpoint -> record not yet written."""
+    for c, days, _ in eff_current:
+        f, t = c["from"], c["to"]
+        old = recs.get(f) or existing(root, day, f)
+        new = recs.get(t) or existing(root, day, t)
+        low = old is None or int(old.get("contributors") or 0) < s["minimum_contributors"]
+        _, last, emergency = period_timeline(c, s, root, day, today=(day, low))
+        roll = {"kind": "parallel", "from": info[f]["name"], "to": info[t]["name"], "from_checkpoint": f,
+                "to_checkpoint": t, "first_day": c["first"].isoformat(), "day": days.index(day) + 1,
+                "days": days.index(last) + 1, "last_day": last.isoformat(),
+                "switch_day": next(d for d in windows_between(last + dt.timedelta(days=1), last + dt.timedelta(days=14))).isoformat(),
+                "emergency": emergency, "daily_ratio": price_ratios(new, old), "average": None}
+        if day == last:
+            daily = [price_ratios(existing(root, d, t), existing(root, d, f)) for d in days if d < day]
+            roll["average"] = average_ratios(daily + [roll["daily_ratio"]])
+        for cp in (f, t):
+            if cp in recs:
+                recs[cp]["rollover"] = dict(roll)
+    for c in changes:
+        t = c["to"]
+        if t not in recs or day <= c["first"]:
+            continue
+        days, last, _ = period_timeline(c, s, root, day - dt.timedelta(days=1))
+        if day <= last or windows_between(last + dt.timedelta(days=1), day) != [day]:
+            continue
+        daily = [price_ratios(existing(root, d, t), existing(root, d, c["from"])) for d in days if d <= last]
+        avg = average_ratios(daily)
+        recs[t]["rollover"] = {"kind": "switch", "from": info[c["from"]]["name"], "from_checkpoint": c["from"],
+                               "ratio": avg["output"] if avg else None,
+                               "ratios": {k: avg[k] for k in ("output", "input", "blended")} if avg else None,
+                               "days": avg["days"] if avg else 0, "first_day": c["first"].isoformat(),
+                               "last_day": last.isoformat()}
 
 
 def record(cp, info, day, panel, s, result, problem, win, now):
@@ -636,7 +794,9 @@ def write_once(path, rec):
 
 def assess_all(root=".", today=None, now=None, verbose=True):
     panel = load_json(os.path.join(root, "panel.json"))
-    info = checkpoints_info(load_json(os.path.join(root, "candidates.json")))
+    candidates = load_json(os.path.join(root, "candidates.json"))
+    info = checkpoints_info(candidates)
+    changes = declared_changes(candidates, info)
     groups = affiliations.load(os.path.join(root, "affiliations.json"))
     s = settings(panel)
     first = dt.date.fromisoformat(s["first_window"])
@@ -649,11 +809,13 @@ def assess_all(root=".", today=None, now=None, verbose=True):
         problem = win.problem
         if problem and day >= today:
             continue                      # today's files may still be on their way
+        eff, current = effective_info(info, changes, s, root, day)
         probed = (win.manifest or {}).get("probe") if not problem else None
         if probed:
             cps = probed
         else:
-            cps = [cp for cp in panel["probe"] if info.get(cp, {}).get("reference")]
+            cps = [cp for cp in panel["probe"] if eff.get(cp, {}).get("publishes")]
+        recs, paths = {}, {}
         for cp in cps:
             if cp not in info:
                 print(f"{day}: {cp} is not in candidates.json; skipped")
@@ -666,7 +828,11 @@ def assess_all(root=".", today=None, now=None, verbose=True):
                 ctx = context(root, panel, day, win, first)
                 result = assess_checkpoint(cp, info[cp], win, day, ctx, groups)
                 result["control"] = control_results(cp, win, ctx)
-            rec = record(cp, info[cp], day, panel, s, result, problem, win, stamp)
+            recs[cp] = record(cp, eff[cp], day, panel, s, result, problem, win, stamp)
+            paths[cp] = path
+        mark_rollover(day, recs, changes, current, info, s, root)
+        for cp, rec in recs.items():
+            path = paths[cp]
             if write_once(path, rec):
                 written.append(path)
                 fig = rec["price"]["output"] if rec["price"] else "no price"
