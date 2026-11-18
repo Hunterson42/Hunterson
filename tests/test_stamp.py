@@ -142,15 +142,17 @@ class StampTests(unittest.TestCase):
         good = os.path.join(self.keys, "good")
         for name in ("tsa.crt", "cacert.pem"):
             write(os.path.join(self.priv, "data/stamps/certs", name), read(os.path.join(good, name)))
-        self.saved = (stamp.OTS, stamp.post_query, stamp.download)
+        self.saved = (stamp.OTS, stamp.post_query, stamp.download, stamp.pause)
         stamp.OTS = self.ots
         stamp.post_query = local_tsa(good)
         stamp.download = self.no_network
+        self.pauses = []
+        stamp.pause = self.pauses.append
         for var in ("FAKE_OTS_DOWN", "FAKE_OTS_CONFIRMED"):
             os.environ.pop(var, None)
 
     def tearDown(self):
-        stamp.OTS, stamp.post_query, stamp.download = self.saved
+        stamp.OTS, stamp.post_query, stamp.download, stamp.pause = self.saved
         shutil.rmtree(self.pub)
         shutil.rmtree(self.priv)
 
@@ -195,6 +197,55 @@ class StampTests(unittest.TestCase):
         c = self.run_quietly()
         self.assertEqual((c["signed"], c["failed"]), (0, 2))
         self.assertFalse(os.path.exists(self.fp_census + ".tsr"))
+        self.assertEqual(self.pauses, [stamp.TSA_RETRY_PAUSE] * 2)     # each tried twice
+        self.assertIn("did not verify, so it was not written; then, after a pause, the reply did not verify", c["notes"][-1])
+
+    def refuse(self, which):
+        """FreeTSA as seen on 16 and 18 November: answers, except on the requests numbered in `which`."""
+        good, n = stamp.post_query, [0]
+
+        def answer(body):
+            n[0] += 1
+            if n[0] in which:
+                raise OSError("HTTP Error 429: Too Many Requests")
+            return good(body)
+        stamp.post_query = answer
+        return n
+
+    def test_a_refused_request_is_tried_once_more_after_a_pause(self):
+        n = self.refuse({2})                     # the second fingerprint's first try
+        c = self.run_quietly()
+        self.assertEqual((c["signed"], c["retried"], c["failed"]), (2, 1, 0))
+        self.assertEqual((n[0], self.pauses), (3, [stamp.TSA_RETRY_PAUSE]))
+        for fp in (self.fp_census, self.fp_assess):
+            self.assertTrue(os.path.exists(fp + ".tsr"))
+        self.assertIn("signed on the second try; the first failed: HTTP Error 429", " ".join(c["notes"]))
+
+    def test_refused_twice_is_reported_and_tried_next_run(self):
+        self.refuse({2, 3})
+        c = self.run_quietly()
+        self.assertEqual((c["signed"], c["failed"]), (1, 1))
+        self.assertEqual(len(self.pauses), 1)                          # one retry, no more
+        stamp.post_query = local_tsa(os.path.join(self.keys, "good"))
+        c = self.run_quietly()
+        self.assertEqual((c["signed"], c["failed"]), (1, 0))
+
+    def test_in_github_actions_each_note_is_left_as_a_warning(self):
+        self.refuse({1, 2})
+        os.environ["GITHUB_ACTIONS"] = "true"
+        out = tempfile.TemporaryFile("w+")
+        old, sys.stdout = sys.stdout, out
+        try:
+            stamp.stamp_all(self.pub, self.priv, now=dt.datetime(2026, 10, 21, 15, 0))
+        finally:
+            sys.stdout = old
+            os.environ.pop("GITHUB_ACTIONS")
+        out.seek(0)
+        lines = out.read().splitlines()
+        warnings = [l for l in lines if l.startswith("::warning title=Timestamps::")]
+        self.assertEqual(len(warnings), 1)
+        self.assertIn("HTTP Error 429", warnings[0])
+        self.assertFalse(any("\n" in w[1:] for w in warnings))
 
     def test_without_certificates_nothing_is_signed_and_nothing_breaks(self):
         shutil.rmtree(os.path.join(self.priv, "data/stamps"))

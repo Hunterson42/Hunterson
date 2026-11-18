@@ -34,8 +34,14 @@ The first run that makes any proof writes data/hashes/stamping-began.txt, once.
 Fingerprints written before that moment prove existence from it, not from the
 day of their records.
 
-A service that fails is reported, and tried again on the next run. The script
-never exits with an error because of one, so the mirror always publishes.
+A request to FreeTSA that fails, or whose reply does not verify, is tried once
+more in the same run after a pause of 20 seconds, since FreeTSA has twice
+refused the third of three requests made in a row (16 and 18 November 2026).
+A service that still fails is reported, and tried again on the next run. Run
+inside GitHub Actions, each report is also left on the run as a warning, which
+can be read through GitHub's API, so the reason for a failure can be seen. The
+script never exits with an error because of a service, so the mirror always
+publishes.
 
 Needs openssl, and the OpenTimestamps client (pip install
 opentimestamps-client). Without the client, only the RFC 3161 proofs are made.
@@ -49,6 +55,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import time
 import urllib.request
 
 OTS = os.environ.get("HUNTERSON_OTS", "ots")
@@ -58,6 +65,9 @@ CERT_URLS = {
     "cacert.pem": "https://freetsa.org/files/cacert.pem",
 }
 NETWORK_TIMEOUT = 60
+TSA_ATTEMPTS = 2                # a FreeTSA request is tried once more if it fails...
+TSA_RETRY_PAUSE = float(os.environ.get("HUNTERSON_TSA_RETRY_PAUSE", "20"))   # ...after this many seconds
+pause = time.sleep              # replaced in the tests
 
 
 def sha256_file(path):
@@ -208,7 +218,22 @@ def verify_tsr(fingerprint, reply, certs):
     return r.returncode == 0 and "Verification: OK" in r.stdout
 
 
+def request_tsr(fingerprint, query, reply, certs):
+    """One request to FreeTSA. None if its reply, written to `reply`, verifies; otherwise the reason."""
+    try:
+        with open(query, "rb") as f:
+            body = f.read()
+        with open(reply, "wb") as f:
+            f.write(post_query(body))
+    except Exception as e:      # any network failure
+        return str(e) or e.__class__.__name__
+    if not verify_tsr(fingerprint, reply, certs):
+        return "the reply did not verify, so it was not written"
+    return None
+
+
 def sign_tsr(fingerprint, certs, counts):
+    name = os.path.basename(fingerprint)
     with tempfile.TemporaryDirectory() as tmp:
         query = os.path.join(tmp, "q.tsq")
         reply = os.path.join(tmp, "r.tsr")
@@ -217,19 +242,25 @@ def sign_tsr(fingerprint, certs, counts):
                      "-out", query], 60)
             if r.returncode != 0:
                 raise RuntimeError(r.stderr.strip()[:200])
-            with open(query, "rb") as f:
-                body = f.read()
-            with open(reply, "wb") as f:
-                f.write(post_query(body))
-        except Exception as e:      # any network or openssl failure: try again next run
+        except Exception as e:      # openssl failed: try again next run
             counts["failed"] += 1
-            counts["notes"].append(f"RFC 3161, {os.path.basename(fingerprint)}: {e}")
+            counts["notes"].append(f"RFC 3161, {name}: {e}")
             return
-        if not verify_tsr(fingerprint, reply, certs):
+        reasons = []
+        for attempt in range(TSA_ATTEMPTS):
+            if attempt:
+                pause(TSA_RETRY_PAUSE)
+            why = request_tsr(fingerprint, query, reply, certs)
+            if why is None:
+                break
+            reasons.append(why)
+        else:                       # every try failed: try again next run
             counts["failed"] += 1
-            counts["notes"].append(f"RFC 3161, {os.path.basename(fingerprint)}: the reply did not verify, "
-                                   "so it was not written")
+            counts["notes"].append(f"RFC 3161, {name}: " + "; then, after a pause, ".join(reasons))
             return
+        if reasons:
+            counts["retried"] += 1
+            counts["notes"].append(f"RFC 3161, {name}: signed on the second try; the first failed: {reasons[0]}")
         with open(reply, "rb") as f:
             write_atomic(fingerprint + ".tsr", f.read())
         counts["signed"] += 1
@@ -249,7 +280,7 @@ def mark_start(public_root, now):
 
 
 def stamp_all(public_root, private_root=None, now=None):
-    counts = {"stamped": 0, "signed": 0, "completed": 0, "pending": 0, "failed": 0, "notes": []}
+    counts = {"stamped": 0, "signed": 0, "retried": 0, "completed": 0, "pending": 0, "failed": 0, "notes": []}
     files = fingerprints(public_root)
 
     if ots_available():
@@ -273,10 +304,13 @@ def stamp_all(public_root, private_root=None, now=None):
         mark_start(public_root, now or dt.datetime.now(dt.timezone.utc))
 
     print(f"Timestamps: {counts['stamped']} stamped with OpenTimestamps, {counts['signed']} signed under "
-          f"RFC 3161, {counts['completed']} completed in Bitcoin, {counts['pending']} still pending, "
-          f"{counts['failed']} failed and to be tried again.")
+          f"RFC 3161 ({counts['retried']} on a second try), {counts['completed']} completed in Bitcoin, "
+          f"{counts['pending']} still pending, {counts['failed']} failed and to be tried again.")
+    in_actions = os.environ.get("GITHUB_ACTIONS") == "true"
     for note in counts["notes"]:
         print("NOTE: " + note)
+        if in_actions:              # left on the run, where GitHub's API can read it
+            print("::warning title=Timestamps::" + note.replace("%", "%25").replace("\r", "%0D").replace("\n", "%0A"))
     return counts
 
 
