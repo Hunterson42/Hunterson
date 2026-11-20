@@ -818,6 +818,37 @@
      "conversion_output_ratio": null,
      "conversion_input_ratio": null,
      "conversion_blended_ratio": null
+    },
+    {
+     "date": "2026-11-20",
+     "grade": "standard",
+     "status": "published",
+     "reference": "DeepSeek V4.1-Flash",
+     "output": "0.7922",
+     "input": "0.1949",
+     "blended": "0.2301",
+     "contributors": 14,
+     "panel": 16,
+     "reason": null,
+     "output_before_discounts": "1.0037",
+     "input_before_discounts": "0.2572",
+     "blended_before_discounts": "0.3011",
+     "rollover_ratio": null,
+     "url": "https://hunterson.org/standard/2026-11-20/",
+     "challenger": "DeepSeek V4.1-Flash-1017",
+     "challenger_input": "0.1673",
+     "challenger_output": "0.7278",
+     "challenger_contributors": 17,
+     "challenger_panel": 20,
+     "challenger_output_ratio": "0.9187",
+     "challenger_status": "shadow",
+     "challenger_input_ratio": "0.8584",
+     "challenger_blended_ratio": "0.8705",
+     "parallel_day": null,
+     "parallel_days": null,
+     "conversion_output_ratio": null,
+     "conversion_input_ratio": null,
+     "conversion_blended_ratio": null
     }
    ]
   }
