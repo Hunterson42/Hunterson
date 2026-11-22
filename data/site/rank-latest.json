@@ -1,8 +1,8 @@
 {
  "schema_version": 1,
- "date": "2026-11-21",
+ "date": "2026-11-22",
  "models_with_endpoints": 416,
- "models_with_five_plus_providers": 49,
+ "models_with_five_plus_providers": 51,
  "rows": [
   {
    "rank": 1,
@@ -24,17 +24,17 @@
   {
    "rank": 2,
    "model": "z-ai/glm-5.3",
-   "providers": 35,
-   "endpoints": 47,
+   "providers": 36,
+   "endpoints": 48,
    "quantisation": {
     "fp4": 18,
-    "unknown": 14,
+    "unknown": 15,
     "fp8": 10,
     "nvfp4": 5
    },
    "output_usd_per_m": {
     "low": 1.4,
-    "median": 4.4,
+    "median": 4.3921,
     "high": 6.6
    }
   },
@@ -75,22 +75,41 @@
   {
    "rank": 5,
    "model": "qwen/qwen3.8-27b",
-   "providers": 24,
-   "endpoints": 24,
+   "providers": 23,
+   "endpoints": 23,
    "quantisation": {
-    "fp8": 14,
+    "fp8": 13,
     "unknown": 6,
     "fp4": 3,
     "fp16": 1
    },
    "output_usd_per_m": {
     "low": 1.05,
-    "median": 2.25,
+    "median": 2.3,
     "high": 3.2
    }
   },
   {
    "rank": 6,
+   "model": "openai/gpt-oss-120b",
+   "providers": 21,
+   "endpoints": 24,
+   "quantisation": {
+    "fp4": 9,
+    "unknown": 8,
+    "bf16": 3,
+    "fp8": 2,
+    "int4": 1,
+    "fp16": 1
+   },
+   "output_usd_per_m": {
+    "low": 0.15,
+    "median": 0.55,
+    "high": 0.95
+   }
+  },
+  {
+   "rank": 7,
    "model": "deepseek/deepseek-v4-flash-0731",
    "providers": 20,
    "endpoints": 26,
@@ -108,7 +127,7 @@
    }
   },
   {
-   "rank": 7,
+   "rank": 8,
    "model": "moonshotai/kimi-k3",
    "providers": 20,
    "endpoints": 29,
@@ -125,7 +144,7 @@
    }
   },
   {
-   "rank": 8,
+   "rank": 9,
    "model": "moonshotai/kimi-k3.1-pro",
    "providers": 20,
    "endpoints": 28,
@@ -143,25 +162,6 @@
    }
   },
   {
-   "rank": 9,
-   "model": "openai/gpt-oss-120b",
-   "providers": 20,
-   "endpoints": 23,
-   "quantisation": {
-    "fp4": 9,
-    "unknown": 7,
-    "bf16": 3,
-    "fp8": 2,
-    "int4": 1,
-    "fp16": 1
-   },
-   "output_usd_per_m": {
-    "low": 0.15,
-    "median": 0.5,
-    "high": 0.95
-   }
-  },
-  {
    "rank": 10,
    "model": "z-ai/glm-5.2",
    "providers": 20,
@@ -172,7 +172,7 @@
     "unknown": 5
    },
    "output_usd_per_m": {
-    "low": 0.9504,
+    "low": 0.594,
     "median": 4.4,
     "high": 8.0
    }
@@ -201,8 +201,9 @@
    "endpoints": 15,
    "quantisation": {
     "bf16": 8,
-    "unknown": 4,
+    "unknown": 3,
     "fp8": 2,
+    "int4": 1,
     "fp4": 1
    },
    "output_usd_per_m": {
@@ -258,7 +259,7 @@
     "nvfp4": 2
    },
    "output_usd_per_m": {
-    "low": 0.4,
+    "low": 0.54,
     "median": 0.6,
     "high": 0.6
    }
@@ -423,6 +424,23 @@
   },
   {
    "rank": 26,
+   "model": "nvidia/nemotron-3-ultra-550b-a55b",
+   "providers": 6,
+   "endpoints": 8,
+   "quantisation": {
+    "fp4": 4,
+    "unknown": 2,
+    "bf16": 1,
+    "fp8": 1
+   },
+   "output_usd_per_m": {
+    "low": 1.76,
+    "median": 2.3,
+    "high": 3.3
+   }
+  },
+  {
+   "rank": 27,
    "model": "qwen/qwen3.5-35b-a3b",
    "providers": 6,
    "endpoints": 7,
@@ -438,7 +456,7 @@
    }
   },
   {
-   "rank": 27,
+   "rank": 28,
    "model": "qwen/qwen3.5-397b-a17b",
    "providers": 6,
    "endpoints": 8,
@@ -453,7 +471,7 @@
    }
   },
   {
-   "rank": 28,
+   "rank": 29,
    "model": "qwen/qwen3.5-9b",
    "providers": 6,
    "endpoints": 8,
@@ -470,7 +488,7 @@
    }
   },
   {
-   "rank": 29,
+   "rank": 30,
    "model": "qwen/qwen3.6-27b",
    "providers": 6,
    "endpoints": 8,
@@ -485,7 +503,7 @@
    }
   },
   {
-   "rank": 30,
+   "rank": 31,
    "model": "thinkingmachines/inkling-2-small",
    "providers": 6,
    "endpoints": 6,
@@ -501,7 +519,7 @@
    }
   },
   {
-   "rank": 31,
+   "rank": 32,
    "model": "anthropic/claude-haiku-5.5",
    "providers": 5,
    "endpoints": 5,
@@ -515,7 +533,7 @@
    }
   },
   {
-   "rank": 32,
+   "rank": 33,
    "model": "anthropic/claude-opus-4.5",
    "providers": 5,
    "endpoints": 5,
@@ -529,7 +547,7 @@
    }
   },
   {
-   "rank": 33,
+   "rank": 34,
    "model": "anthropic/claude-opus-4.6",
    "providers": 5,
    "endpoints": 5,
@@ -543,7 +561,7 @@
    }
   },
   {
-   "rank": 34,
+   "rank": 35,
    "model": "anthropic/claude-opus-4.7",
    "providers": 5,
    "endpoints": 5,
@@ -557,7 +575,7 @@
    }
   },
   {
-   "rank": 35,
+   "rank": 36,
    "model": "anthropic/claude-opus-4.8",
    "providers": 5,
    "endpoints": 6,
@@ -571,7 +589,7 @@
    }
   },
   {
-   "rank": 36,
+   "rank": 37,
    "model": "anthropic/claude-opus-5",
    "providers": 5,
    "endpoints": 6,
@@ -585,7 +603,7 @@
    }
   },
   {
-   "rank": 37,
+   "rank": 38,
    "model": "anthropic/claude-opus-5.5",
    "providers": 5,
    "endpoints": 6,
@@ -599,7 +617,7 @@
    }
   },
   {
-   "rank": 38,
+   "rank": 39,
    "model": "anthropic/claude-sonnet-4.5",
    "providers": 5,
    "endpoints": 5,
@@ -613,7 +631,7 @@
    }
   },
   {
-   "rank": 39,
+   "rank": 40,
    "model": "anthropic/claude-sonnet-4.6",
    "providers": 5,
    "endpoints": 5,
@@ -624,20 +642,6 @@
     "low": 15.0,
     "median": 15.0,
     "high": 15.0
-   }
-  },
-  {
-   "rank": 40,
-   "model": "anthropic/claude-sonnet-5",
-   "providers": 5,
-   "endpoints": 5,
-   "quantisation": {
-    "unknown": 5
-   },
-   "output_usd_per_m": {
-    "low": 10.0,
-    "median": 10.0,
-    "high": 10.0
    }
   }
  ]
