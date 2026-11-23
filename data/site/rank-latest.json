@@ -1,7 +1,7 @@
 {
  "schema_version": 1,
- "date": "2026-11-22",
- "models_with_endpoints": 416,
+ "date": "2026-11-23",
+ "models_with_endpoints": 417,
  "models_with_five_plus_providers": 51,
  "rows": [
   {
@@ -17,24 +17,24 @@
    },
    "output_usd_per_m": {
     "low": 0.1,
-    "median": 0.6,
+    "median": 0.62,
     "high": 2.4
    }
   },
   {
    "rank": 2,
    "model": "z-ai/glm-5.3",
-   "providers": 36,
-   "endpoints": 48,
+   "providers": 35,
+   "endpoints": 47,
    "quantisation": {
     "fp4": 18,
-    "unknown": 15,
+    "unknown": 14,
     "fp8": 10,
     "nvfp4": 5
    },
    "output_usd_per_m": {
-    "low": 1.4,
-    "median": 4.3921,
+    "low": 1.2,
+    "median": 4.4,
     "high": 6.6
    }
   },
@@ -78,14 +78,14 @@
    "providers": 23,
    "endpoints": 23,
    "quantisation": {
-    "fp8": 13,
-    "unknown": 6,
+    "fp8": 14,
+    "unknown": 5,
     "fp4": 3,
     "fp16": 1
    },
    "output_usd_per_m": {
     "low": 1.05,
-    "median": 2.3,
+    "median": 2.2,
     "high": 3.2
    }
   },
@@ -122,7 +122,7 @@
    },
    "output_usd_per_m": {
     "low": 0.132,
-    "median": 0.275,
+    "median": 0.28,
     "high": 1.32
    }
   },
@@ -156,7 +156,7 @@
     "bf16": 1
    },
    "output_usd_per_m": {
-    "low": 6.0,
+    "low": 6.2,
     "median": 10.0,
     "high": 22.0
    }
@@ -191,7 +191,7 @@
    "output_usd_per_m": {
     "low": 0.396,
     "median": 3.96,
-    "high": 8.0
+    "high": 14.0
    }
   },
   {
@@ -309,7 +309,7 @@
     "fp4": 1
    },
    "output_usd_per_m": {
-    "low": 1.3216,
+    "low": 1.3182,
     "median": 2.56,
     "high": 3.9
    }
@@ -317,17 +317,17 @@
   {
    "rank": 19,
    "model": "openai/gpt-oss-20b",
-   "providers": 10,
-   "endpoints": 12,
+   "providers": 9,
+   "endpoints": 11,
    "quantisation": {
     "fp4": 4,
-    "bf16": 3,
     "unknown": 3,
-    "fp8": 2
+    "fp8": 2,
+    "bf16": 2
    },
    "output_usd_per_m": {
-    "low": 0.085,
-    "median": 0.145,
+    "low": 0.0765,
+    "median": 0.15,
     "high": 0.3
    }
   },
@@ -349,21 +349,6 @@
   },
   {
    "rank": 21,
-   "model": "qwen/qwen3.6-35b-a3b",
-   "providers": 8,
-   "endpoints": 10,
-   "quantisation": {
-    "fp8": 9,
-    "fp4": 1
-   },
-   "output_usd_per_m": {
-    "low": 0.7,
-    "median": 0.925,
-    "high": 1.8
-   }
-  },
-  {
-   "rank": 22,
    "model": "z-ai/glm-5.1",
    "providers": 8,
    "endpoints": 8,
@@ -377,7 +362,7 @@
    }
   },
   {
-   "rank": 23,
+   "rank": 22,
    "model": "meta-llama/llama-3.3-70b-instruct",
    "providers": 7,
    "endpoints": 7,
@@ -390,6 +375,21 @@
     "low": 0.32,
     "median": 0.71,
     "high": 2.253
+   }
+  },
+  {
+   "rank": 23,
+   "model": "qwen/qwen3.6-35b-a3b",
+   "providers": 7,
+   "endpoints": 9,
+   "quantisation": {
+    "fp8": 8,
+    "fp4": 1
+   },
+   "output_usd_per_m": {
+    "low": 0.7,
+    "median": 0.95,
+    "high": 1.8
    }
   },
   {
