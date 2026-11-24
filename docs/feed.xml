@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><id>https://hunterson.org/</id><title>Hunterson Standard Inference, Europe</title><subtitle>The daily price, in US dollars per million tokens.</subtitle><link href="https://hunterson.org/"/><link rel="self" href="https://hunterson.org/feed.xml"/><updated>2026-11-23T14:37:12Z</updated><author><name>Malcolm Hunter</name></author><rights>Free to use with credit. See https://hunterson.org/licence/</rights>
+<feed xmlns="http://www.w3.org/2005/Atom"><id>https://hunterson.org/</id><title>Hunterson Standard Inference, Europe</title><subtitle>The daily price, in US dollars per million tokens.</subtitle><link href="https://hunterson.org/"/><link rel="self" href="https://hunterson.org/feed.xml"/><updated>2026-11-24T14:37:08Z</updated><author><name>Malcolm Hunter</name></author><rights>Free to use with credit. See https://hunterson.org/licence/</rights>
+<entry><id>https://hunterson.org/standard/2026-11-24/</id><title>24 November 2026: input $0.1905, output $0.7683 per million tokens</title><link href="https://hunterson.org/standard/2026-11-24/"/><updated>2026-11-24T14:37:08Z</updated><summary>Hunterson Standard Inference, Europe
+24 November 2026
+
+Input $0.1905, output $0.7683 per million tokens
+Unchanged
+Blended $0.2245. 12 contributors. DeepSeek V4.1-Flash.</summary></entry>
 <entry><id>https://hunterson.org/standard/2026-11-23/</id><title>23 November 2026: input $0.1905, output $0.7683 per million tokens</title><link href="https://hunterson.org/standard/2026-11-23/"/><updated>2026-11-23T14:37:12Z</updated><summary>Hunterson Standard Inference, Europe
 23 November 2026
 
