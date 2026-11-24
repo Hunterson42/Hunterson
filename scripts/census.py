@@ -20,6 +20,15 @@ there is written down as that model's error and the census carries on, and
 retrying them during an outage would only drag a failure out towards the
 runner's time limit.
 
+A run of GitHub's backup that starts after midnight for a schedule set on an
+earlier day must not take the new day's census, hours before the server would.
+GitHub runs late but never early, so a run that starts before the time of day
+its schedule names was set for an earlier day. The workflow asks
+`census.py --schedule-check "CRON"` before anything else, and such a run does
+nothing; the server at 06:15 UTC and the backups after it take the day. On 24
+November 2026 a run scheduled the day before started at 00:04 UTC and took that
+day's census six hours early.
+
 OPENROUTER_BASE points it at another address, for the tests only.
 """
 import datetime
@@ -61,6 +70,17 @@ def get_json_retrying(url, waits=LIST_WAITS, sleep=time.sleep):
                 raise
             print(f"{url}: {type(e).__name__}: {e}; trying again in {waits[tries - 1]} seconds", flush=True)
             sleep(waits[tries - 1])
+
+
+def scheduled_for_an_earlier_day(schedule, now):
+    """True when a run that GitHub started for `schedule`, its cron line such as "23 12 * * *", began
+    before the time of day that line names. GitHub runs late but never early, so the run was set for
+    an earlier day and has crossed midnight. Anything that is not a plain minute and hour, or no
+    schedule at all (a run started by hand), is never late."""
+    fields = (schedule or "").split()
+    if len(fields) < 2 or not fields[0].isdigit() or not fields[1].isdigit():
+        return False
+    return (now.hour, now.minute) < (int(fields[1]), int(fields[0]))
 
 
 def main():
@@ -115,5 +135,19 @@ def main():
     return 0
 
 
+def schedule_check(argv):
+    """`census.py --schedule-check "CRON" [--now HH:MM]`: prints "late" for a run set for an earlier day,
+    otherwise "due". --now is for the tests; the workflow uses the clock."""
+    now = datetime.datetime.now(datetime.timezone.utc)
+    if "--now" in argv:
+        h, m = argv[argv.index("--now") + 1].split(":")
+        now = now.replace(hour=int(h), minute=int(m))
+    print("late" if scheduled_for_an_earlier_day(argv[1] if len(argv) > 1 else "", now) else "due")
+    return 0
+
+
 if __name__ == "__main__":
+    import sys
+    if sys.argv[1:2] == ["--schedule-check"]:
+        raise SystemExit(schedule_check(sys.argv[1:]))
     raise SystemExit(main())

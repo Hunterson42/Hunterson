@@ -159,5 +159,52 @@ class CensusTest(unittest.TestCase):
             self.assertEqual(json.load(f)["models_list_tries"], 1)
 
 
+
+class LateScheduleTest(unittest.TestCase):
+    """A backup run that GitHub starts after midnight for a schedule set the day before does nothing, so it
+    cannot take the new day's census hours before the server (24 November 2026, taken at 00:04 UTC)."""
+
+    def at(self, hh, mm):
+        import datetime
+        return datetime.datetime(2026, 11, 24, hh, mm, tzinfo=datetime.timezone.utc)
+
+    def test_a_run_that_starts_before_its_scheduled_time_was_set_for_an_earlier_day(self):
+        late = census.scheduled_for_an_earlier_day
+        self.assertTrue(late("23 12 * * *", self.at(0, 4)))       # 24 November 2026
+        self.assertTrue(late("41 6 * * *", self.at(5, 59)))
+        self.assertTrue(late("41 9 * * *", self.at(9, 40)))
+
+    def test_a_run_on_time_or_late_the_same_day_is_due(self):
+        late = census.scheduled_for_an_earlier_day
+        for schedule, hh, mm in (("41 6 * * *", 6, 41), ("41 6 * * *", 11, 57), ("23 12 * * *", 21, 38),
+                                 ("41 9 * * *", 23, 59)):
+            self.assertFalse(late(schedule, self.at(hh, mm)), (schedule, hh, mm))
+
+    def test_a_run_by_hand_or_an_odd_schedule_is_never_late(self):
+        late = census.scheduled_for_an_earlier_day
+        for schedule in ("", None, "*/30 * * * *", "41"):
+            self.assertFalse(late(schedule, self.at(0, 4)), schedule)
+
+    def test_the_command_line_check(self):
+        def check(*args):
+            r = subprocess.run([sys.executable, os.path.join(ROOT, "scripts", "census.py"), "--schedule-check", *args],
+                               capture_output=True, text=True, timeout=30)
+            self.assertEqual(r.returncode, 0, r.stderr)
+            return r.stdout.strip()
+        self.assertEqual(check("23 12 * * *", "--now", "00:04"), "late")
+        self.assertEqual(check("41 6 * * *", "--now", "06:41"), "due")
+        self.assertEqual(check("", "--now", "00:04"), "due")
+
+    def test_the_workflow_asks_before_doing_anything(self):
+        with open(os.path.join(ROOT, ".github", "workflows", "main.yml")) as f:
+            wf = f.read()
+        self.assertIn("SCHEDULE: ${{ github.event.schedule }}", wf)
+        self.assertIn('census.py --schedule-check "$SCHEDULE")" = "late"', wf)
+        self.assertIn('echo "done=late"', wf)
+        self.assertEqual(wf.count("steps.check.outputs.done == 'false' || github.event_name == 'workflow_dispatch'"), 2)
+        self.assertNotIn("steps.check.outputs.done != 'true'", wf, "a late run would otherwise run the census")
+        self.assertLess(wf.index("--schedule-check"), wf.index("python scripts/census.py\n"))
+
+
 if __name__ == "__main__":
     unittest.main()
