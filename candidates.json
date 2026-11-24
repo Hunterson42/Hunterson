@@ -42,5 +42,8 @@
       {"openrouter_id": "qwen/qwen3.8-27b", "native_precision": "fp8", "reference": true},
       {"openrouter_id": "qwen/qwen3.6-27b", "native_precision": "fp8"}
     ]
-  }
+  },
+  "changes": [
+    {"from": "deepseek/deepseek-v4.1-flash", "to": "deepseek/deepseek-v4.1-flash-1017", "first_day": "2026-11-25", "run_completed": "2026-11-24"}
+  ]
 }

@@ -702,6 +702,8 @@ Section 4.5 of the methodology sets the parallel period: after the first publica
 
 During a period the incoming checkpoint is shown in the leading challenger's place, published rather than for information, with its own table of providers; the data files carry it in the challenger columns, with its status, the day of the period and the ratios. Built in pull request 42 (roadmap step 61).
 
+**Declared 24 November 2026.** DeepSeek V4.1-Flash-1017 completed its run on the census of 24 November, with 19 qualifying providers to the reference's 14. It led on every census day from 5 November, with no tie, by one provider on the first day and two or more on each day after. The change is declared in `candidates.json`: the period runs 30 assessment days from Wednesday 25 November 2026 to Thursday 7 January 2027, leaving out 25 December and 1 January, and V4.1-Flash-1017 is the reference from Friday 8 January 2027. It stays pinned at commit `1bae0e1`. Its later commit `08c8657`, of 10 November, adds the chat template as a file of its own without changing the format, and the input measured on every provider is unchanged, so under Rule 5 it is not a new version. The census of 24 November was taken at 00:04 UTC by the backup run on GitHub, which had started late, not at 06:15 UTC by the server; the listing the probe read at 05:12 UTC that day gave the same counts, 19 and 14.
+
 ---
 
 ## 2. Daily tracking

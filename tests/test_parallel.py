@@ -191,10 +191,31 @@ class ParallelPeriodTests(unittest.TestCase):
                 assess.declared_changes({"changes": [c]}, info)
         self.assertEqual(assess.declared_changes({}, info), [])
 
-    def test_the_repository_declares_no_change_yet(self):
+    def test_every_declared_change_records_its_completed_run(self):
         info = assess.checkpoints_info(T.load(os.path.join(ROOT, "candidates.json")))
         for c in assess.declared_changes(T.load(os.path.join(ROOT, "candidates.json")), info):
             self.assertTrue(c.get("run_completed"), "a change is declared only once the run of 20 days is complete")
+            self.assertLess(c["run_completed"], c["first_day"], "and before the period's first day")
+
+    def test_the_change_declared_on_24_november_runs_to_7_january(self):
+        """Rule 1.21: 1017's run was completed by the census of 24 November 2026. The period is 30 assessment
+        days from Wednesday 25 November, leaving out 25 December and 1 January, so its last day is Thursday
+        7 January 2027 and 1017 is the reference from Friday 8 January."""
+        cands = T.load(os.path.join(ROOT, "candidates.json"))
+        info = assess.checkpoints_info(cands)
+        (c,) = [c for c in assess.declared_changes(cands, info) if c["to"] == NEW]
+        self.assertEqual((c["from"], c["run_completed"]), (OLD, "2026-11-24"))
+        self.assertTrue(info[OLD]["reference"])
+        s = assess.settings(T.load(os.path.join(ROOT, "panel.json")))
+        days, last, emergency = assess.period_timeline(c, s, ROOT, c["first"] - dt.timedelta(days=1))
+        self.assertEqual((days[0], len(days), last, emergency), (dt.date(2026, 11, 25), 30, dt.date(2027, 1, 7), False))
+        for holiday in (dt.date(2026, 12, 25), dt.date(2027, 1, 1)):
+            self.assertNotIn(holiday, days)
+        self.assertEqual(assess.windows_between(last + dt.timedelta(days=1), last + dt.timedelta(days=14))[0],
+                         dt.date(2027, 1, 8))
+        for day in (dt.date(2026, 11, 23), dt.date(2026, 11, 24)):      # nothing changes before the first day
+            eff, current = assess.effective_info(info, [c], s, ROOT, day)
+            self.assertEqual((eff[OLD]["publishes"], eff[NEW]["publishes"], current), (True, False, []))
 
     # The site, the post and the data -------------------------------------------
 
