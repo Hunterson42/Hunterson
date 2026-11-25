@@ -1,0 +1,9 @@
+Hunterson Standard Inference, Europe
+25 November 2026
+
+Per million tokens:
+DeepSeek V4.1-Flash: input $0.1905, output $0.7583
+DeepSeek V4.1-Flash-1017: input $0.1645, output $0.7288
+Ratio 0.9611. Day 1 of 30: the reference is changing.
+
+https://hunterson.org/standard/2026-11-25/
