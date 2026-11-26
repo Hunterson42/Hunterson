@@ -57,6 +57,7 @@ import argparse
 import csv
 import datetime as dt
 import hashlib
+import datetime
 import html
 import io
 import json
@@ -95,6 +96,9 @@ GRADES = [
 ]
 TWEET_LIMIT = 280
 URL_WEIGHT = 23             # X counts every link as 23 characters
+# Prices against who delivered (methodology, section 16; decision D55), defined in this public note.
+LIKE_FOR_LIKE_NOTE = REPO_HOME + "/blob/main/notes/like-for-like.md"
+LIKE_FOR_LIKE_MIN = 5       # providers in both figures, the floor of five for a price
 
 
 class WriteOnceError(Exception):
@@ -157,6 +161,88 @@ def ratio(a, b):
     if not a or not b or Decimal(b) == 0:
         return None
     return str((Decimal(a) / Decimal(b)).quantize(Decimal("0.0001"), rounding=ROUND_HALF_UP))
+
+
+def signed_pct(x):
+    """A fraction as a signed percentage to two places, halves up: "+5.82", "-8.35", "0.00"."""
+    q = (x * 100).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+    return "0.00" if q == 0 else ("+%s" % q if q > 0 else str(q))
+
+
+def next_assessment_day(date):
+    """The assessment day after `date`: the next weekday that is not 25 December or 1 January."""
+    d = d_of(date)
+    while True:
+        d += datetime.timedelta(days=1)
+        if d.weekday() < 5 and (d.month, d.day) not in ((12, 25), (1, 1)):
+            return d.isoformat()
+
+
+def iqm4(values):
+    """The methodology's interquartile mean (section 7): a quarter of the count, rounded down, dropped at each end."""
+    v = sorted(values)
+    k = len(v) // 4
+    kept = v[k:len(v) - k] if k else v
+    return sum(kept, Decimal(0)) / len(kept)
+
+
+def like_for_like(day, before):
+    """What moved a figure since the assessment day before (methodology, section 16; notes/like-for-like.md):
+    the change in the price paid among the providers that contributed on both days, worked out by the same
+    interquartile mean from the prices paid as each day's page shows them, and the rest of the published change,
+    put down to who delivered. Each as a signed percentage, for input and for output. None unless both days
+    have a price, `before` is the assessment day just before for the same checkpoint, and at least five
+    providers contributed on both."""
+    if not day or not before or not day.get("price") or not before.get("price"):
+        return None
+    if before.get("checkpoint") != day.get("checkpoint") or next_assessment_day(before["date"]) != day["date"]:
+        return None
+
+    def paid(rec):
+        return {q["provider"]: q for q in rec.get("providers") or []
+                if q.get("result") == "contributor" and q.get("input") and q.get("output")}
+    a, b = paid(before), paid(day)
+    both = sorted(set(a) & set(b))
+    if len(both) < LIKE_FOR_LIKE_MIN:
+        return None
+    out = {"providers": len(both), "since": before["date"]}
+    for side in ("input", "output"):
+        prices = iqm4([Decimal(b[q][side]) for q in both]) / iqm4([Decimal(a[q][side]) for q in both])
+        total = Decimal(day["price"][side]) / Decimal(before["price"][side])
+        out[side] = {"prices": signed_pct(prices - 1), "delivered": signed_pct(total / prices - 1)}
+    return out
+
+
+def moved_words(v):
+    return "unchanged" if v == "0.00" else ("up %s%%" % v[1:] if v.startswith("+") else "down %s%%" % v[1:])
+
+
+def moved_text(lfl):
+    """"Prices paid by the 12 providers in both figures: input down 8.16%, output down 8.35%. Who delivered:
+    input up 6.42%, output up 5.82%." """
+    return ("Prices paid by the %d providers in both figures: input %s, output %s. Who delivered: input %s, output %s."
+            % (lfl["providers"], moved_words(lfl["input"]["prices"]), moved_words(lfl["output"]["prices"]),
+               moved_words(lfl["input"]["delivered"]), moved_words(lfl["output"]["delivered"])))
+
+
+def moved_any(lfl):
+    """Whether any part moved; when nothing did, the change line already says "Unchanged"."""
+    return bool(lfl) and any(lfl[side][part] != "0.00" for side in ("input", "output") for part in ("prices", "delivered"))
+
+
+def moved_html(lfl):
+    if not moved_any(lfl):
+        return ""
+    return ('<p class="fix-moved">What moved it since %s. %s <a href="%s">How this is worked out</a></p>'
+            % (day_month(lfl["since"]), e(moved_text(lfl)), LIKE_FOR_LIKE_NOTE))
+
+
+def day_before(days, idx):
+    """The assessment day just before days[idx], if it is in the record with a price; otherwise None."""
+    if idx <= 0:
+        return None
+    b = days[idx - 1]
+    return b if b.get("status") == "published" and next_assessment_day(b["date"]) == days[idx]["date"] else None
 
 
 def discount_depth(day):
@@ -290,6 +376,16 @@ def change_html(day, prev, g):
             glyph = "&#9650;" if direction == "up" else "&#9660;"
             out.append('<span class="dir" aria-hidden="true">%s</span>%s %s %s, or %s%%' % (glyph, label, direction, dollars, p))
     return '<p class="fix-change">%s, since %s</p>' % ("; ".join(out), day_month(prev["date"]))
+
+
+def change_and_moved_html(days, idx, prev, g):
+    """The change line, and beneath it what moved the figure, where section 16's split can be made."""
+    day = days[idx]
+    line = change_html(day, prev, g)
+    if not line or switch(day):
+        return line
+    moved = moved_html(like_for_like(day, day_before(days, idx)))
+    return line + "\n" + moved if moved else line
 
 
 def record_html(day):
@@ -556,7 +652,17 @@ def period_notice(day, root):
     return '<p class="notice" role="note">%s</p>' % text
 
 
-def incoming_html(day):
+def incoming_before(before, c):
+    """The incoming reference's record on the day before: its incoming or challenger record, same checkpoint."""
+    if not before or not c:
+        return None
+    for r in (before.get("incoming"), before.get("challenger")):
+        if r and r.get("checkpoint") == c.get("checkpoint") and r.get("price"):
+            return dict(r, date=before["date"])
+    return None
+
+
+def incoming_html(day, before=None):
     """In a parallel period, the incoming reference, published beside the reference: its figures and the
     ratio near the top of the page, and its providers below the reference's. Two pieces of HTML."""
     c = day.get("incoming")
@@ -573,6 +679,9 @@ def incoming_html(day):
         text += (" Its prices are %s times %s's for output, %s for input and %s blended." % (
             e(dr["output"]), old, e(dr["input"]), e(dr["blended"])) if dr else
             " %s has no price today, so there is no ratio." % old)
+        lfl = like_for_like(dict(c, date=day["date"]), incoming_before(before, c))
+        if moved_any(lfl):
+            text += " What moved it since %s. %s" % (day_month(lfl["since"]), moved_text(lfl))
     else:
         text = ("Published beside %s in this period, assessed in the same way. Today it had %d of %d contributors, "
                 "fewer than the five needed for a price, so there is no ratio." % (old, c["contributors"], c["panel"]))
@@ -672,10 +781,10 @@ def page(days, idx, kind, opts, template, g):
         "archive_url": e("%s%s/archive/" % (root, g["key"])), "foot_links": foot_links_html(root),
         "methodology_line": methodology_line(day.get("methodology_version"), root, opts),
         "notice": notice, "date_long": e(long_date(day["date"])), "date_line": e(date_line),
-        "figure": fig, "unit_line": unit, "change": change_html(day, prev, g).replace("{{root}}", root), "cite": cite,
+        "figure": fig, "unit_line": unit, "change": change_and_moved_html(days, idx, prev, g).replace("{{root}}", root), "cite": cite,
         "record": record_html(day), "about": about,
-        "challenger": incoming_html(day)[0] if day.get("incoming") else challenger_html(day, g),
-        "incoming_panel": incoming_html(day)[1],
+        "challenger": incoming_html(day, day_before(days, idx))[0] if day.get("incoming") else challenger_html(day, g),
+        "incoming_panel": incoming_html(day, day_before(days, idx))[1],
         "panel_heading": "The providers behind this figure", "panel_intro": e(intro), "panel_rows": panel_rows,
         "recent_rows": recent_html(days, idx, root, g), "series_json": series(days[:idx + 1]),
         "base_url": e(base), "contact": e(opts["contact"]),
@@ -750,7 +859,7 @@ def exports(by_grade, base):
 
 def export_rows(days, base, g):
     rows = []
-    for d in days:
+    for idx, d in enumerate(days):
         if d["status"] == "shadow" and not SHOW_SHADOW:
             continue
         p, u = d.get("price") or {}, d.get("undiscounted") or {}
@@ -777,6 +886,14 @@ def export_rows(days, base, g):
             "parallel_day": par.get("day"), "parallel_days": par.get("days"),
             "conversion_output_ratio": conv.get("output"), "conversion_input_ratio": conv.get("input"),
             "conversion_blended_ratio": conv.get("blended"),
+        })
+        lfl = like_for_like(d, day_before(days, idx)) or {}
+        rows[-1].update({
+            "like_for_like_providers": lfl.get("providers"),
+            "input_change_from_prices": (lfl.get("input") or {}).get("prices"),
+            "output_change_from_prices": (lfl.get("output") or {}).get("prices"),
+            "input_change_from_delivery": (lfl.get("input") or {}).get("delivered"),
+            "output_change_from_delivery": (lfl.get("output") or {}).get("delivered"),
         })
     return rows
 

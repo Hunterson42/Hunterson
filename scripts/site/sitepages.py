@@ -79,6 +79,11 @@ COLUMNS = {
     "conversion_output_ratio": "On the last day of a parallel period and on the day the reference changes: the average of the period's daily output ratios, over the days on which both were published. Multiply a price on the old reference by it to convert it to the new.",
     "conversion_input_ratio": "The same, for the input price.",
     "conversion_blended_ratio": "The same, for the blended price.",
+    "like_for_like_providers": "What moved the price (methodology, section 16): the number of providers that contributed both on this day and on the assessment day before. Blank unless both days have a price, they are consecutive assessment days with the same reference, and at least five providers contributed on both. Defined in notes/like-for-like.md in the public repository.",
+    "input_change_from_prices": "The change in the input price since the assessment day before that comes from prices: the change in the interquartile mean of the prices paid by the providers in like_for_like_providers, as a signed percentage, from the prices each day's page shows.",
+    "output_change_from_prices": "The same, for the output price.",
+    "input_change_from_delivery": "The rest of the change in the input price since the assessment day before, put down to who delivered: the published change divided by the change from prices, as a signed percentage.",
+    "output_change_from_delivery": "The same, for the output price.",
 }
 
 
