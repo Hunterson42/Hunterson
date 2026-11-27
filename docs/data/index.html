@@ -71,6 +71,11 @@
 <tr><td><code>conversion_output_ratio</code></td><td>On the last day of a parallel period and on the day the reference changes: the average of the period&#x27;s daily output ratios, over the days on which both were published. Multiply a price on the old reference by it to convert it to the new.</td></tr>
 <tr><td><code>conversion_input_ratio</code></td><td>The same, for the input price.</td></tr>
 <tr><td><code>conversion_blended_ratio</code></td><td>The same, for the blended price.</td></tr>
+<tr><td><code>like_for_like_providers</code></td><td>What moved the price (methodology, section 16): the number of providers that contributed both on this day and on the assessment day before. Blank unless both days have a price, they are consecutive assessment days with the same reference, and at least five providers contributed on both. Defined in notes/like-for-like.md in the public repository.</td></tr>
+<tr><td><code>input_change_from_prices</code></td><td>The change in the input price since the assessment day before that comes from prices: the change in the interquartile mean of the prices paid by the providers in like_for_like_providers, as a signed percentage, from the prices each day&#x27;s page shows.</td></tr>
+<tr><td><code>output_change_from_prices</code></td><td>The same, for the output price.</td></tr>
+<tr><td><code>input_change_from_delivery</code></td><td>The rest of the change in the input price since the assessment day before, put down to who delivered: the published change divided by the change from prices, as a signed percentage.</td></tr>
+<tr><td><code>output_change_from_delivery</code></td><td>The same, for the output price.</td></tr>
 </tbody></table></div>
 <h2>How to cite a figure</h2>
 <p>Cite the day's permanent page. For example: <q>Hunterson Standard Inference, Europe, 26 November 2026: input $0.1847, output $0.7357 per million tokens. https://hunterson.org/standard/2026-11-26/</q> Each day's page has this line ready to copy, and <a href="../cite/">how to cite Hunterson</a> gives a reference for a paper and the addresses.</p>

@@ -42,7 +42,12 @@
      "parallel_days": null,
      "conversion_output_ratio": null,
      "conversion_input_ratio": null,
-     "conversion_blended_ratio": null
+     "conversion_blended_ratio": null,
+     "like_for_like_providers": null,
+     "input_change_from_prices": null,
+     "output_change_from_prices": null,
+     "input_change_from_delivery": null,
+     "output_change_from_delivery": null
     },
     {
      "date": "2026-10-16",
@@ -73,7 +78,12 @@
      "parallel_days": null,
      "conversion_output_ratio": null,
      "conversion_input_ratio": null,
-     "conversion_blended_ratio": null
+     "conversion_blended_ratio": null,
+     "like_for_like_providers": null,
+     "input_change_from_prices": null,
+     "output_change_from_prices": null,
+     "input_change_from_delivery": null,
+     "output_change_from_delivery": null
     },
     {
      "date": "2026-10-19",
@@ -104,7 +114,12 @@
      "parallel_days": null,
      "conversion_output_ratio": null,
      "conversion_input_ratio": null,
-     "conversion_blended_ratio": null
+     "conversion_blended_ratio": null,
+     "like_for_like_providers": null,
+     "input_change_from_prices": null,
+     "output_change_from_prices": null,
+     "input_change_from_delivery": null,
+     "output_change_from_delivery": null
     },
     {
      "date": "2026-10-20",
@@ -135,7 +150,12 @@
      "parallel_days": null,
      "conversion_output_ratio": null,
      "conversion_input_ratio": null,
-     "conversion_blended_ratio": null
+     "conversion_blended_ratio": null,
+     "like_for_like_providers": null,
+     "input_change_from_prices": null,
+     "output_change_from_prices": null,
+     "input_change_from_delivery": null,
+     "output_change_from_delivery": null
     },
     {
      "date": "2026-10-21",
@@ -166,7 +186,12 @@
      "parallel_days": null,
      "conversion_output_ratio": null,
      "conversion_input_ratio": null,
-     "conversion_blended_ratio": null
+     "conversion_blended_ratio": null,
+     "like_for_like_providers": null,
+     "input_change_from_prices": null,
+     "output_change_from_prices": null,
+     "input_change_from_delivery": null,
+     "output_change_from_delivery": null
     },
     {
      "date": "2026-10-22",
@@ -197,7 +222,12 @@
      "parallel_days": null,
      "conversion_output_ratio": null,
      "conversion_input_ratio": null,
-     "conversion_blended_ratio": null
+     "conversion_blended_ratio": null,
+     "like_for_like_providers": null,
+     "input_change_from_prices": null,
+     "output_change_from_prices": null,
+     "input_change_from_delivery": null,
+     "output_change_from_delivery": null
     },
     {
      "date": "2026-10-23",
@@ -228,7 +258,12 @@
      "parallel_days": null,
      "conversion_output_ratio": null,
      "conversion_input_ratio": null,
-     "conversion_blended_ratio": null
+     "conversion_blended_ratio": null,
+     "like_for_like_providers": null,
+     "input_change_from_prices": null,
+     "output_change_from_prices": null,
+     "input_change_from_delivery": null,
+     "output_change_from_delivery": null
     },
     {
      "date": "2026-10-26",
@@ -259,7 +294,12 @@
      "parallel_days": null,
      "conversion_output_ratio": null,
      "conversion_input_ratio": null,
-     "conversion_blended_ratio": null
+     "conversion_blended_ratio": null,
+     "like_for_like_providers": null,
+     "input_change_from_prices": null,
+     "output_change_from_prices": null,
+     "input_change_from_delivery": null,
+     "output_change_from_delivery": null
     },
     {
      "date": "2026-10-27",
@@ -290,7 +330,12 @@
      "parallel_days": null,
      "conversion_output_ratio": null,
      "conversion_input_ratio": null,
-     "conversion_blended_ratio": null
+     "conversion_blended_ratio": null,
+     "like_for_like_providers": null,
+     "input_change_from_prices": null,
+     "output_change_from_prices": null,
+     "input_change_from_delivery": null,
+     "output_change_from_delivery": null
     },
     {
      "date": "2026-10-28",
@@ -321,7 +366,12 @@
      "parallel_days": null,
      "conversion_output_ratio": null,
      "conversion_input_ratio": null,
-     "conversion_blended_ratio": null
+     "conversion_blended_ratio": null,
+     "like_for_like_providers": null,
+     "input_change_from_prices": null,
+     "output_change_from_prices": null,
+     "input_change_from_delivery": null,
+     "output_change_from_delivery": null
     },
     {
      "date": "2026-10-29",
@@ -352,7 +402,12 @@
      "parallel_days": null,
      "conversion_output_ratio": null,
      "conversion_input_ratio": null,
-     "conversion_blended_ratio": null
+     "conversion_blended_ratio": null,
+     "like_for_like_providers": null,
+     "input_change_from_prices": null,
+     "output_change_from_prices": null,
+     "input_change_from_delivery": null,
+     "output_change_from_delivery": null
     },
     {
      "date": "2026-10-30",
@@ -383,7 +438,12 @@
      "parallel_days": null,
      "conversion_output_ratio": null,
      "conversion_input_ratio": null,
-     "conversion_blended_ratio": null
+     "conversion_blended_ratio": null,
+     "like_for_like_providers": null,
+     "input_change_from_prices": null,
+     "output_change_from_prices": null,
+     "input_change_from_delivery": null,
+     "output_change_from_delivery": null
     },
     {
      "date": "2026-11-02",
@@ -414,7 +474,12 @@
      "parallel_days": null,
      "conversion_output_ratio": null,
      "conversion_input_ratio": null,
-     "conversion_blended_ratio": null
+     "conversion_blended_ratio": null,
+     "like_for_like_providers": null,
+     "input_change_from_prices": null,
+     "output_change_from_prices": null,
+     "input_change_from_delivery": null,
+     "output_change_from_delivery": null
     },
     {
      "date": "2026-11-03",
@@ -445,7 +510,12 @@
      "parallel_days": null,
      "conversion_output_ratio": null,
      "conversion_input_ratio": null,
-     "conversion_blended_ratio": null
+     "conversion_blended_ratio": null,
+     "like_for_like_providers": null,
+     "input_change_from_prices": null,
+     "output_change_from_prices": null,
+     "input_change_from_delivery": null,
+     "output_change_from_delivery": null
     },
     {
      "date": "2026-11-04",
@@ -476,7 +546,12 @@
      "parallel_days": null,
      "conversion_output_ratio": null,
      "conversion_input_ratio": null,
-     "conversion_blended_ratio": null
+     "conversion_blended_ratio": null,
+     "like_for_like_providers": 8,
+     "input_change_from_prices": "0.00",
+     "output_change_from_prices": "0.00",
+     "input_change_from_delivery": "-15.27",
+     "output_change_from_delivery": "-15.39"
     },
     {
      "date": "2026-11-05",
@@ -507,7 +582,12 @@
      "parallel_days": null,
      "conversion_output_ratio": null,
      "conversion_input_ratio": null,
-     "conversion_blended_ratio": null
+     "conversion_blended_ratio": null,
+     "like_for_like_providers": 11,
+     "input_change_from_prices": "0.00",
+     "output_change_from_prices": "0.00",
+     "input_change_from_delivery": "+1.10",
+     "output_change_from_delivery": "+4.93"
     },
     {
      "date": "2026-11-06",
@@ -538,7 +618,12 @@
      "parallel_days": null,
      "conversion_output_ratio": null,
      "conversion_input_ratio": null,
-     "conversion_blended_ratio": null
+     "conversion_blended_ratio": null,
+     "like_for_like_providers": 15,
+     "input_change_from_prices": "+0.57",
+     "output_change_from_prices": "+0.26",
+     "input_change_from_delivery": "+0.01",
+     "output_change_from_delivery": "0.00"
     },
     {
      "date": "2026-11-09",
@@ -569,7 +654,12 @@
      "parallel_days": null,
      "conversion_output_ratio": null,
      "conversion_input_ratio": null,
-     "conversion_blended_ratio": null
+     "conversion_blended_ratio": null,
+     "like_for_like_providers": 13,
+     "input_change_from_prices": "-1.35",
+     "output_change_from_prices": "-2.56",
+     "input_change_from_delivery": "+7.92",
+     "output_change_from_delivery": "+8.74"
     },
     {
      "date": "2026-11-10",
@@ -600,7 +690,12 @@
      "parallel_days": null,
      "conversion_output_ratio": null,
      "conversion_input_ratio": null,
-     "conversion_blended_ratio": null
+     "conversion_blended_ratio": null,
+     "like_for_like_providers": 12,
+     "input_change_from_prices": "+6.12",
+     "output_change_from_prices": "+3.28",
+     "input_change_from_delivery": "-5.54",
+     "output_change_from_delivery": "-4.91"
     },
     {
      "date": "2026-11-11",
@@ -631,7 +726,12 @@
      "parallel_days": null,
      "conversion_output_ratio": null,
      "conversion_input_ratio": null,
-     "conversion_blended_ratio": null
+     "conversion_blended_ratio": null,
+     "like_for_like_providers": 14,
+     "input_change_from_prices": "-8.94",
+     "output_change_from_prices": "-9.32",
+     "input_change_from_delivery": "-0.02",
+     "output_change_from_delivery": "0.00"
     },
     {
      "date": "2026-11-12",
@@ -662,7 +762,12 @@
      "parallel_days": null,
      "conversion_output_ratio": null,
      "conversion_input_ratio": null,
-     "conversion_blended_ratio": null
+     "conversion_blended_ratio": null,
+     "like_for_like_providers": 13,
+     "input_change_from_prices": "+11.68",
+     "output_change_from_prices": "+10.76",
+     "input_change_from_delivery": "+4.02",
+     "output_change_from_delivery": "+4.05"
     },
     {
      "date": "2026-11-13",
@@ -693,7 +798,12 @@
      "parallel_days": null,
      "conversion_output_ratio": null,
      "conversion_input_ratio": null,
-     "conversion_blended_ratio": null
+     "conversion_blended_ratio": null,
+     "like_for_like_providers": 13,
+     "input_change_from_prices": "-10.77",
+     "output_change_from_prices": "-9.71",
+     "input_change_from_delivery": "+0.01",
+     "output_change_from_delivery": "-0.01"
     },
     {
      "date": "2026-11-16",
@@ -724,7 +834,12 @@
      "parallel_days": null,
      "conversion_output_ratio": null,
      "conversion_input_ratio": null,
-     "conversion_blended_ratio": null
+     "conversion_blended_ratio": null,
+     "like_for_like_providers": null,
+     "input_change_from_prices": null,
+     "output_change_from_prices": null,
+     "input_change_from_delivery": null,
+     "output_change_from_delivery": null
     },
     {
      "date": "2026-11-17",
@@ -755,7 +870,12 @@
      "parallel_days": null,
      "conversion_output_ratio": null,
      "conversion_input_ratio": null,
-     "conversion_blended_ratio": null
+     "conversion_blended_ratio": null,
+     "like_for_like_providers": null,
+     "input_change_from_prices": null,
+     "output_change_from_prices": null,
+     "input_change_from_delivery": null,
+     "output_change_from_delivery": null
     },
     {
      "date": "2026-11-18",
@@ -786,7 +906,12 @@
      "parallel_days": null,
      "conversion_output_ratio": null,
      "conversion_input_ratio": null,
-     "conversion_blended_ratio": null
+     "conversion_blended_ratio": null,
+     "like_for_like_providers": 12,
+     "input_change_from_prices": "0.00",
+     "output_change_from_prices": "0.00",
+     "input_change_from_delivery": "-4.88",
+     "output_change_from_delivery": "-4.39"
     },
     {
      "date": "2026-11-19",
@@ -817,7 +942,12 @@
      "parallel_days": null,
      "conversion_output_ratio": null,
      "conversion_input_ratio": null,
-     "conversion_blended_ratio": null
+     "conversion_blended_ratio": null,
+     "like_for_like_providers": 13,
+     "input_change_from_prices": "0.00",
+     "output_change_from_prices": "0.00",
+     "input_change_from_delivery": "0.00",
+     "output_change_from_delivery": "0.00"
     },
     {
      "date": "2026-11-20",
@@ -848,7 +978,12 @@
      "parallel_days": null,
      "conversion_output_ratio": null,
      "conversion_input_ratio": null,
-     "conversion_blended_ratio": null
+     "conversion_blended_ratio": null,
+     "like_for_like_providers": 13,
+     "input_change_from_prices": "0.00",
+     "output_change_from_prices": "0.00",
+     "input_change_from_delivery": "0.00",
+     "output_change_from_delivery": "-2.33"
     },
     {
      "date": "2026-11-23",
@@ -879,7 +1014,12 @@
      "parallel_days": null,
      "conversion_output_ratio": null,
      "conversion_input_ratio": null,
-     "conversion_blended_ratio": null
+     "conversion_blended_ratio": null,
+     "like_for_like_providers": 12,
+     "input_change_from_prices": "-8.16",
+     "output_change_from_prices": "-8.35",
+     "input_change_from_delivery": "+6.42",
+     "output_change_from_delivery": "+5.82"
     },
     {
      "date": "2026-11-24",
@@ -910,7 +1050,12 @@
      "parallel_days": null,
      "conversion_output_ratio": null,
      "conversion_input_ratio": null,
-     "conversion_blended_ratio": null
+     "conversion_blended_ratio": null,
+     "like_for_like_providers": 12,
+     "input_change_from_prices": "0.00",
+     "output_change_from_prices": "0.00",
+     "input_change_from_delivery": "0.00",
+     "output_change_from_delivery": "0.00"
     },
     {
      "date": "2026-11-25",
@@ -941,7 +1086,12 @@
      "parallel_days": 30,
      "conversion_output_ratio": null,
      "conversion_input_ratio": null,
-     "conversion_blended_ratio": null
+     "conversion_blended_ratio": null,
+     "like_for_like_providers": 12,
+     "input_change_from_prices": "0.00",
+     "output_change_from_prices": "-1.30",
+     "input_change_from_delivery": "0.00",
+     "output_change_from_delivery": "0.00"
     },
     {
      "date": "2026-11-26",
@@ -972,7 +1122,12 @@
      "parallel_days": 30,
      "conversion_output_ratio": null,
      "conversion_input_ratio": null,
-     "conversion_blended_ratio": null
+     "conversion_blended_ratio": null,
+     "like_for_like_providers": 12,
+     "input_change_from_prices": "0.00",
+     "output_change_from_prices": "0.00",
+     "input_change_from_delivery": "-3.04",
+     "output_change_from_delivery": "-2.98"
     }
    ]
   }
