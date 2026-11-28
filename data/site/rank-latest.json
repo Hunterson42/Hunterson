@@ -1,57 +1,57 @@
 {
  "schema_version": 1,
- "date": "2026-11-27",
- "models_with_endpoints": 417,
- "models_with_five_plus_providers": 47,
+ "date": "2026-11-28",
+ "models_with_endpoints": 416,
+ "models_with_five_plus_providers": 48,
  "rows": [
   {
    "rank": 1,
    "model": "deepseek/deepseek-v4.1-flash-1017",
    "providers": 43,
-   "endpoints": 56,
+   "endpoints": 57,
    "quantisation": {
+    "fp8": 24,
     "unknown": 23,
-    "fp8": 23,
     "fp4": 8,
     "mxfp4": 2
    },
    "output_usd_per_m": {
     "low": 0.1,
-    "median": 0.72,
-    "high": 2.4
+    "median": 0.666,
+    "high": 6.0
    }
   },
   {
    "rank": 2,
    "model": "z-ai/glm-5.3",
-   "providers": 36,
-   "endpoints": 50,
+   "providers": 37,
+   "endpoints": 51,
    "quantisation": {
     "fp4": 19,
-    "unknown": 17,
+    "unknown": 18,
     "fp8": 9,
     "nvfp4": 5
    },
    "output_usd_per_m": {
     "low": 1.4,
-    "median": 4.2921,
+    "median": 4.2,
     "high": 6.6
    }
   },
   {
    "rank": 3,
    "model": "z-ai/glm-5.3-flash",
-   "providers": 35,
-   "endpoints": 42,
+   "providers": 34,
+   "endpoints": 41,
    "quantisation": {
     "fp4": 13,
     "unknown": 12,
-    "fp8": 11,
+    "fp8": 10,
     "nvfp4": 6
    },
    "output_usd_per_m": {
     "low": 0.0815,
-    "median": 0.45,
+    "median": 0.4,
     "high": 0.75
    }
   },
@@ -59,17 +59,17 @@
    "rank": 4,
    "model": "deepseek/deepseek-v4.1-flash",
    "providers": 29,
-   "endpoints": 39,
+   "endpoints": 38,
    "quantisation": {
-    "fp8": 20,
+    "fp8": 19,
     "unknown": 15,
     "mxfp4": 2,
     "fp4": 2
    },
    "output_usd_per_m": {
-    "low": 0.336,
-    "median": 0.78,
-    "high": 6.0
+    "low": 0.2028,
+    "median": 0.735,
+    "high": 1.8
    }
   },
   {
@@ -94,16 +94,16 @@
    "rank": 6,
    "model": "qwen/qwen3.8-27b",
    "providers": 22,
-   "endpoints": 25,
+   "endpoints": 24,
    "quantisation": {
-    "fp8": 17,
+    "fp8": 16,
     "unknown": 4,
     "fp4": 3,
     "fp16": 1
    },
    "output_usd_per_m": {
     "low": 1.05,
-    "median": 2.0,
+    "median": 1.99,
     "high": 3.2
    }
   },
@@ -137,7 +137,7 @@
     "unknown": 6
    },
    "output_usd_per_m": {
-    "low": 1.44,
+    "low": 0.594,
     "median": 4.4,
     "high": 8.0
    }
@@ -155,8 +155,8 @@
     "fp32": 1
    },
    "output_usd_per_m": {
-    "low": 0.14,
-    "median": 0.28,
+    "low": 0.136,
+    "median": 0.27,
     "high": 1.32
    }
   },
@@ -189,7 +189,7 @@
     "mxfp4": 2
    },
    "output_usd_per_m": {
-    "low": 1.98,
+    "low": 1.976,
     "median": 3.96,
     "high": 5.94
    }
@@ -241,30 +241,13 @@
     "mxfp4": 1
    },
    "output_usd_per_m": {
-    "low": 0.14,
-    "median": 0.2775,
+    "low": 0.0599,
+    "median": 0.2725,
     "high": 0.56
    }
   },
   {
    "rank": 15,
-   "model": "minimax/minimax-m3.1-flash",
-   "providers": 11,
-   "endpoints": 12,
-   "quantisation": {
-    "unknown": 4,
-    "fp4": 4,
-    "nvfp4": 2,
-    "fp8": 2
-   },
-   "output_usd_per_m": {
-    "low": 0.3,
-    "median": 0.6,
-    "high": 0.6
-   }
-  },
-  {
-   "rank": 16,
    "model": "moonshotai/kimi-k2.6",
    "providers": 11,
    "endpoints": 13,
@@ -277,12 +260,12 @@
    },
    "output_usd_per_m": {
     "low": 1.8,
-    "median": 3.42,
+    "median": 3.41,
     "high": 5.25
    }
   },
   {
-   "rank": 17,
+   "rank": 16,
    "model": "nvidia/nemotron-3.5-super-vl",
    "providers": 11,
    "endpoints": 11,
@@ -299,6 +282,23 @@
    }
   },
   {
+   "rank": 17,
+   "model": "minimax/minimax-m3.1-flash",
+   "providers": 10,
+   "endpoints": 11,
+   "quantisation": {
+    "unknown": 4,
+    "fp4": 4,
+    "nvfp4": 2,
+    "fp8": 1
+   },
+   "output_usd_per_m": {
+    "low": 0.3,
+    "median": 0.6,
+    "high": 0.6
+   }
+  },
+  {
    "rank": 18,
    "model": "deepseek/deepseek-v4-pro",
    "providers": 9,
@@ -309,8 +309,8 @@
     "fp4": 1
    },
    "output_usd_per_m": {
-    "low": 1.5082,
-    "median": 2.716,
+    "low": 0.6388,
+    "median": 2.58,
     "high": 3.9
    }
   },
@@ -326,7 +326,7 @@
     "fp8": 1
    },
    "output_usd_per_m": {
-    "low": 0.0765,
+    "low": 0.085,
     "median": 0.15,
     "high": 0.3
    }
@@ -335,13 +335,13 @@
    "rank": 20,
    "model": "qwen/qwen3.6-35b-a3b",
    "providers": 8,
-   "endpoints": 10,
+   "endpoints": 12,
    "quantisation": {
-    "fp8": 9,
+    "fp8": 11,
     "fp4": 1
    },
    "output_usd_per_m": {
-    "low": 0.69,
+    "low": 0.45,
     "median": 0.895,
     "high": 1.8
    }
@@ -358,7 +358,7 @@
    "output_usd_per_m": {
     "low": 0.28,
     "median": 0.28,
-    "high": 0.8
+    "high": 0.48
    }
   },
   {
@@ -412,6 +412,23 @@
   },
   {
    "rank": 25,
+   "model": "nvidia/nemotron-3.5-lightning",
+   "providers": 6,
+   "endpoints": 6,
+   "quantisation": {
+    "bf16": 2,
+    "fp4": 2,
+    "int4": 1,
+    "unknown": 1
+   },
+   "output_usd_per_m": {
+    "low": 0.096,
+    "median": 0.2,
+    "high": 0.3
+   }
+  },
+  {
+   "rank": 26,
    "model": "qwen/qwen3.5-35b-a3b",
    "providers": 6,
    "endpoints": 7,
@@ -427,24 +444,24 @@
    }
   },
   {
-   "rank": 26,
+   "rank": 27,
    "model": "qwen/qwen3.5-9b",
    "providers": 6,
-   "endpoints": 9,
+   "endpoints": 10,
    "quantisation": {
-    "bf16": 6,
+    "bf16": 7,
     "fp4": 1,
     "fp8": 1,
     "unknown": 1
    },
    "output_usd_per_m": {
-    "low": 0.079,
+    "low": 0.0625,
     "median": 0.15,
     "high": 0.25
    }
   },
   {
-   "rank": 27,
+   "rank": 28,
    "model": "qwen/qwen3.6-27b",
    "providers": 6,
    "endpoints": 8,
@@ -459,7 +476,7 @@
    }
   },
   {
-   "rank": 28,
+   "rank": 29,
    "model": "thinkingmachines/inkling-2-small",
    "providers": 6,
    "endpoints": 8,
@@ -475,7 +492,7 @@
    }
   },
   {
-   "rank": 29,
+   "rank": 30,
    "model": "z-ai/glm-5.1",
    "providers": 6,
    "endpoints": 6,
@@ -483,13 +500,13 @@
     "fp8": 6
    },
    "output_usd_per_m": {
-    "low": 2.9,
-    "median": 3.96,
+    "low": 2.8248,
+    "median": 3.388,
     "high": 4.4
    }
   },
   {
-   "rank": 30,
+   "rank": 31,
    "model": "anthropic/claude-haiku-5.5",
    "providers": 5,
    "endpoints": 5,
@@ -503,7 +520,7 @@
    }
   },
   {
-   "rank": 31,
+   "rank": 32,
    "model": "anthropic/claude-opus-4.5",
    "providers": 5,
    "endpoints": 5,
@@ -517,7 +534,7 @@
    }
   },
   {
-   "rank": 32,
+   "rank": 33,
    "model": "anthropic/claude-opus-4.6",
    "providers": 5,
    "endpoints": 5,
@@ -531,7 +548,7 @@
    }
   },
   {
-   "rank": 33,
+   "rank": 34,
    "model": "anthropic/claude-opus-4.7",
    "providers": 5,
    "endpoints": 5,
@@ -545,7 +562,7 @@
    }
   },
   {
-   "rank": 34,
+   "rank": 35,
    "model": "anthropic/claude-opus-4.8",
    "providers": 5,
    "endpoints": 6,
@@ -559,7 +576,7 @@
    }
   },
   {
-   "rank": 35,
+   "rank": 36,
    "model": "anthropic/claude-opus-5",
    "providers": 5,
    "endpoints": 6,
@@ -573,7 +590,7 @@
    }
   },
   {
-   "rank": 36,
+   "rank": 37,
    "model": "anthropic/claude-opus-5.5",
    "providers": 5,
    "endpoints": 6,
@@ -587,7 +604,7 @@
    }
   },
   {
-   "rank": 37,
+   "rank": 38,
    "model": "anthropic/claude-sonnet-4.5",
    "providers": 5,
    "endpoints": 5,
@@ -601,7 +618,7 @@
    }
   },
   {
-   "rank": 38,
+   "rank": 39,
    "model": "anthropic/claude-sonnet-4.6",
    "providers": 5,
    "endpoints": 5,
@@ -615,22 +632,8 @@
    }
   },
   {
-   "rank": 39,
-   "model": "anthropic/claude-sonnet-5",
-   "providers": 5,
-   "endpoints": 5,
-   "quantisation": {
-    "unknown": 5
-   },
-   "output_usd_per_m": {
-    "low": 10.0,
-    "median": 10.0,
-    "high": 10.0
-   }
-  },
-  {
    "rank": 40,
-   "model": "anthropic/claude-sonnet-5.5",
+   "model": "anthropic/claude-sonnet-5",
    "providers": 5,
    "endpoints": 5,
    "quantisation": {
